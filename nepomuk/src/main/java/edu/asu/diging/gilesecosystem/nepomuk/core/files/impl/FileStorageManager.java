@@ -15,6 +15,8 @@ import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFileStorageManager;
 public class FileStorageManager implements IFileStorageManager {
 
     private String baseDirectory;
+    
+    private String fileTypeFolder;
 
     /*
      * (non-Javadoc)
@@ -47,14 +49,20 @@ public class FileStorageManager implements IFileStorageManager {
     @Override
     public String getAndCreateStoragePath(String username, String uploadId,
             String documentId) {
-        String path = baseDirectory + File.separator
-                + getFileFolderPath(username, uploadId, documentId);
+        String path = baseDirectory + File.separator 
+                + getFileFolderPathInBaseFolder(username, uploadId, documentId);
         createDirectory(path);
         return path;
     }
 
+    /**
+     * This method returns the path to a file relative to the file type folder,
+     * which is inside the base folder. This method should be used when creating 
+     * paths for Digilib (assuming that Digilib is configured to read from the 
+     * image folder).
+     */
     @Override
-    public String getFileFolderPath(String username, String uploadId,
+    public String getFileFolderPathInTypeFolder(String username, String uploadId,
             String fileId) {
         StringBuffer filePath = new StringBuffer();
         filePath.append(username);
@@ -63,6 +71,31 @@ public class FileStorageManager implements IFileStorageManager {
         filePath.append(File.separator);
         filePath.append(fileId);
 
+        return filePath.toString();
+    }
+    
+    /**
+     * This method returns the path to requested file relative to the base folder
+     * for all uploaded files (including the file type folder). This method should be used
+     * in most cases.
+     * 
+     * @param username
+     * @param uploadId
+     * @param fileId
+     * @return
+     */
+    @Override
+    public String getFileFolderPathInBaseFolder(String username, String uploadId,
+            String fileId) {
+        StringBuffer filePath = new StringBuffer();
+        filePath.append(fileTypeFolder);
+        filePath.append(File.separator);
+        filePath.append(username);
+        filePath.append(File.separator);
+        filePath.append(uploadId);
+        filePath.append(File.separator);
+        filePath.append(fileId);
+        
         return filePath.toString();
     }
 
@@ -81,6 +114,10 @@ public class FileStorageManager implements IFileStorageManager {
             dirFile.mkdirs();
         }
         return true;
+    }
+
+    public void setFileTypeFolder(String fileTypeFolder) {
+        this.fileTypeFolder = fileTypeFolder;
     }
 
 }

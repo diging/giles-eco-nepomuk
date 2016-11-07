@@ -45,4 +45,8 @@ public interface IFile extends IStorableObject {
 
     public abstract String getProcessedDate();
 
+    public abstract void setContentType(String contentType);
+
+    public abstract String getContentType();
+
 }

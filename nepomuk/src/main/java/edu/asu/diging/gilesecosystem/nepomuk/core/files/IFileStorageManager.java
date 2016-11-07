@@ -1,5 +1,7 @@
 package edu.asu.diging.gilesecosystem.nepomuk.core.files;
 
+import java.io.File;
+
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.NepomukFileStorageException;
 
 
@@ -15,7 +17,7 @@ public interface IFileStorageManager {
      * include the digilib base directory.
      * 
      */
-    public abstract String getFileFolderPath(String username, String uploadId,
+    public abstract String getFileFolderPathInTypeFolder(String username, String uploadId,
             String documentId);
 
     /**
@@ -32,5 +34,8 @@ public interface IFileStorageManager {
      */
     public abstract String getAndCreateStoragePath(String username,
             String uploadId, String documentId);
+
+    public abstract String getFileFolderPathInBaseFolder(String username, String uploadId,
+            String fileId);
 
 }

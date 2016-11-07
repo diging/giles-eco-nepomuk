@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,6 @@ import edu.asu.diging.gilesecosystem.nepomuk.core.domain.IFile;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.NepomukFileStorageException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.UnstorableObjectException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFileStorageManager;
-import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesDatabaseClient;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesManager;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileTypeHandler;
 
@@ -64,6 +64,11 @@ public abstract class AbstractFileHandler implements IFileTypeHandler {
     }
     
     public IFile processFile(IFile file, byte[] content) throws NepomukFileStorageException {
+        
+        Tika tika = new Tika();
+        String contentType = tika.detect(content);
+        file.setContentType(contentType);
+         
         getStorageManager().saveFile(file.getUsername(), file.getUploadId(),
                 file.getDocumentId(), file.getFilename(), content);
         
@@ -74,6 +79,11 @@ public abstract class AbstractFileHandler implements IFileTypeHandler {
             return null;
         }
         return file;
+    }
+    
+    public String getRelativePathOfFile(IFile file) {
+        String directory = getStorageManager().getFileFolderPathInBaseFolder(file.getUsername(), file.getUploadId(), file.getDocumentId());
+        return directory + File.separator + file.getFilename();
     }
     
     protected abstract IFileStorageManager getStorageManager();

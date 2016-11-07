@@ -30,18 +30,22 @@
 	
 	<bean id="imageStorageManager" class="edu.asu.diging.gilesecosystem.nepomuk.core.files.impl.FileStorageManager">
 		<property name="baseDirectory" value="${nepomuk.digilibBaseDir}" />
+		<property name="fileTypeFolder" value="${nepomuk.images.folder}"></property>
 	</bean>
 	
 	<bean id="pdfStorageManager" class="edu.asu.diging.gilesecosystem.nepomuk.core.files.impl.FileStorageManager">
-		<property name="baseDirectory" value="${nepomuk.pdfBaseDir}" />
+		<property name="baseDirectory" value="${nepomuk.baseDir}" />
+		<property name="fileTypeFolder" value="${nepomuk.pdfs.folder}"></property>
 	</bean>
 	
 	<bean id="textStorageManager" class="edu.asu.diging.gilesecosystem.nepomuk.core.files.impl.FileStorageManager">
-		<property name="baseDirectory" value="${nepomuk.textBaseDir}" />
+		<property name="baseDirectory" value="${nepomuk.baseDir}" />
+		<property name="fileTypeFolder" value="${nepomuk.texts.folder}"></property>
 	</bean>
 	
 	<bean id="otherStorageManager" class="edu.asu.diging.gilesecosystem.nepomuk.core.files.impl.FileStorageManager">
-		<property name="baseDirectory" value="${nepomuk.otherFilesBaseDir}" />
+		<property name="baseDirectory" value="${nepomuk.baseDir}" />
+		<property name="fileTypeFolder" value="${nepomuk.otherFiles.folder}"></property>
 	</bean>
 	
 	<bean id="messageSource"

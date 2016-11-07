@@ -1,6 +1,5 @@
 package edu.asu.diging.gilesecosystem.nepomuk.core.service.handlers;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
-import edu.asu.diging.gilesecosystem.nepomuk.core.domain.IFile;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFileStorageManager;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesDatabaseClient;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileTypeHandler;
@@ -40,13 +38,6 @@ public class DefaultFileHandler extends AbstractFileHandler implements IFileType
         List<FileType> types = new ArrayList<FileType>();
         types.add(FileType.OTHER);
         return types;
-    }
-
-
-    @Override
-    public String getRelativePathOfFile(IFile file) {
-        String directory = storageManager.getFileFolderPath(file.getUsername(), file.getUploadId(), file.getDocumentId());
-        return directory + File.separator + file.getFilename();
     }
 
     @Override

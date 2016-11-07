@@ -35,12 +35,4 @@
 		</beans:property>
 	</beans:bean>
 
-	<beans:bean id="multipartResolver"
-		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-
-		<!-- setting maximum upload size -->
-		<!-- 50 MB max upload size -->
-		<beans:property name="maxUploadSize" value="52428800" />
-	</beans:bean>
-
 </beans:beans>

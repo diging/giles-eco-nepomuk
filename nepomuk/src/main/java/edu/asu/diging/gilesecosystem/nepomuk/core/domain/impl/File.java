@@ -15,6 +15,7 @@ public class File implements IFile {
     private long size;
     private String filepath; 
     private FileType fileType;
+    private String contentType;
 
     public File() {
     }
@@ -164,6 +165,16 @@ public class File implements IFile {
     @Override
     public void setProcessedDate(String processedDate) {
         this.processedDate = processedDate;
+    }
+
+    @Override
+    public String getContentType() {
+        return contentType;
+    }
+
+    @Override
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
     
 }
