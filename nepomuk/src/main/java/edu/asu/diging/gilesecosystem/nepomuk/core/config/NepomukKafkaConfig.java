@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.IntegerDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
@@ -13,11 +14,16 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 
+import edu.asu.diging.gilesecosystem.kafka.KafkaConfig;
 import edu.asu.diging.gilesecosystem.nepomuk.core.kafka.impl.StorageRequestReceiver;
+import edu.asu.diging.gilesecosystem.nepomuk.core.service.properties.IPropertiesManager;
 
 @Configuration
 @EnableKafka
-public class KafkaConfig {
+public class NepomukKafkaConfig implements KafkaConfig {
+    
+    @Autowired
+    private IPropertiesManager propertyManager;
 
     @Bean
     public Map<String, Object> consumerConfigs() {
@@ -53,6 +59,11 @@ public class KafkaConfig {
     @Bean
     public StorageRequestReceiver receiver() {
         return new StorageRequestReceiver();
+    }
+
+    @Override
+    public String getHosts() {
+        return propertyManager.getProperty(IPropertiesManager.KAFKA_HOSTS);
     }
 }
 
