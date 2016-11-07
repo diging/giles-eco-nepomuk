@@ -14,9 +14,9 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 
-import edu.asu.diging.gilesecosystem.kafka.KafkaConfig;
 import edu.asu.diging.gilesecosystem.nepomuk.core.kafka.impl.StorageRequestReceiver;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.properties.IPropertiesManager;
+import edu.asu.diging.gilesecosystem.requests.kafka.KafkaConfig;
 
 @Configuration
 @EnableKafka
