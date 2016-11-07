@@ -14,33 +14,33 @@
 	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
 
 	<mvc:annotation-driven />
-	<context:component-scan base-package="edu.asu.diging.gilesecosystem" />
+	<context:component-scan base-package="edu.asu.diging.gilesecosystem.requests,edu.asu.diging.gilesecosystem.nepomuk.core" />
 	
 	<import resource="spring-security.xml" />
 	
-	<bean id="filesDatabaseManager" class="edu.asu.diging.gilesecosystem.nepomuk.db4o.impl.DatabaseManager"
+	<bean id="filesDatabaseManager" class="edu.asu.diging.gilesecosystem.nepomuk.core.db4o.impl.DatabaseManager"
 		init-method="init" destroy-method="close">
 		<property name="databasePath" value="${nepomuk.db.files}/files.db" />
 	</bean>
 
-	<bean id="appDatabaseManager" class="edu.asu.diging.gilesecosystem.nepomuk.db4o.impl.DatabaseManager"
+	<bean id="appDatabaseManager" class="edu.asu.diging.gilesecosystem.nepomuk.core.db4o.impl.DatabaseManager"
 		init-method="init" destroy-method="close">
 		<property name="databasePath" value="${nepomuk.db.files}/apps.db" />
 	</bean>
 	
-	<bean id="imageStorageManager" class="edu.asu.diging.gilesecosystem.nepomuk.files.impl.FileStorageManager">
+	<bean id="imageStorageManager" class="edu.asu.diging.gilesecosystem.nepomuk.core.files.impl.FileStorageManager">
 		<property name="baseDirectory" value="${nepomuk.digilibBaseDir}" />
 	</bean>
 	
-	<bean id="pdfStorageManager" class="edu.asu.diging.gilesecosystem.nepomuk.files.impl.FileStorageManager">
+	<bean id="pdfStorageManager" class="edu.asu.diging.gilesecosystem.nepomuk.core.files.impl.FileStorageManager">
 		<property name="baseDirectory" value="${nepomuk.pdfBaseDir}" />
 	</bean>
 	
-	<bean id="textStorageManager" class="edu.asu.diging.gilesecosystem.nepomuk.files.impl.FileStorageManager">
+	<bean id="textStorageManager" class="edu.asu.diging.gilesecosystem.nepomuk.core.files.impl.FileStorageManager">
 		<property name="baseDirectory" value="${nepomuk.textBaseDir}" />
 	</bean>
 	
-	<bean id="otherStorageManager" class="edu.asu.diging.gilesecosystem.nepomuk.files.impl.FileStorageManager">
+	<bean id="otherStorageManager" class="edu.asu.diging.gilesecosystem.nepomuk.core.files.impl.FileStorageManager">
 		<property name="baseDirectory" value="${nepomuk.otherFilesBaseDir}" />
 	</bean>
 	
