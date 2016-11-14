@@ -100,8 +100,10 @@ public class RequestProcessor implements IRequestProcessor {
             }
             
             String restEndpoint = propertiesManager.getProperty(IPropertiesManager.APP_BASE_URL) + propertiesManager.getProperty(IPropertiesManager.REST_ENDPOINT_PREFIX);
+            if (restEndpoint.endsWith("/")) {
+                restEndpoint = restEndpoint.substring(0, restEndpoint.length()-1);
+            }
             String fileEndpoint = restEndpoint + FilesController.GET_FILE_URL.replace(FilesController.FILE_ID_PLACEHOLDER, newFile.getId());
-            fileEndpoint = fileEndpoint.replace("//", "/");
             
             completedRequest.setRequestId(request.getRequestId());
             completedRequest.setDocumentId(request.getDocumentId());

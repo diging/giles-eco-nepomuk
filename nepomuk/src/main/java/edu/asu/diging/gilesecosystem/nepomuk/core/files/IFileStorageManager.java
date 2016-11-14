@@ -1,7 +1,5 @@
 package edu.asu.diging.gilesecosystem.nepomuk.core.files;
 
-import java.io.File;
-
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.NepomukFileStorageException;
 
 
