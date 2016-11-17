@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
+import edu.asu.diging.gilesecosystem.nepomuk.core.domain.IFile;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFileStorageManager;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesDatabaseClient;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileTypeHandler;
@@ -43,6 +44,10 @@ public class DefaultFileHandler extends AbstractFileHandler implements IFileType
     @Override
     protected IFileStorageManager getStorageManager() {
         return storageManager;
+    }
+
+    public String getRelativePathInTypeFolder(IFile file) {
+        return null;
     }
 
 }

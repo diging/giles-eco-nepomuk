@@ -86,6 +86,12 @@ public abstract class AbstractFileHandler implements IFileTypeHandler {
         return directory + File.separator + file.getFilename();
     }
     
+    @Override
+    public String getRelativePathInTypeFolder(IFile file) {
+        String directory = getStorageManager().getFileFolderPathInTypeFolder(file.getUsername(), file.getUploadId(), file.getDocumentId());
+        return directory + File.separator + file.getFilename();
+    }
+    
     protected abstract IFileStorageManager getStorageManager();
     
 }

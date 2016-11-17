@@ -1,5 +1,6 @@
 package edu.asu.diging.gilesecosystem.nepomuk.core.service;
 
+import java.io.File;
 import java.util.List;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.domain.IFile;
@@ -20,4 +21,6 @@ public interface IFileTypeHandler {
     String getRelativePathOfFile(IFile file);
      
     byte[] getFileContent(IFile file);
+
+    public abstract String getRelativePathInTypeFolder(IFile file);
 }
