@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="<c:url value="/resources/font-awesome-4.6.3/css/font-awesome.min.css" />" />
     <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
     
-    <title>Giles</title>
+    <title>Nepomuk</title>
 
     <!-- Bootstrap core CSS -->
     <link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css" />" rel="stylesheet">
@@ -53,6 +53,9 @@
           	<li role="presentation">
           		<a href="<c:url value="/" />" >Dashboard</a>
           	</li>
+            <li role="presentation">
+                <a href="<c:url value="/admin/apps" />" >Apps</a>
+            </li>
           </sec:authorize>
          
         </nav>
