@@ -24,5 +24,12 @@
 		<put-attribute name="content" value="/WEB-INF/views/home.jsp" />	
 	</definition>
 	
+	<!--  apps -->
+	<definition name="admin/apps" extends="base.definition">
+		<put-attribute name="content" value="/WEB-INF/views/admin/apps.jsp" />
+	</definition>
+		<definition name="admin/apps/register" extends="base.definition">
+		<put-attribute name="content" value="/WEB-INF/views/admin/register.jsp" />
+	</definition>
 	
 </tiles-definitions>

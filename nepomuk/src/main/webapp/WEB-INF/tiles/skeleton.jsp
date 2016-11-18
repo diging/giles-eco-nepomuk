@@ -53,11 +53,13 @@
           	<li role="presentation">
           		<a href="<c:url value="/" />" >Dashboard</a>
           	</li>
-            <li role="presentation">
-                <a href="<c:url value="/admin/apps" />" >Apps</a>
-            </li>
+            
           </sec:authorize>
-         
+          <sec:authorize access="hasRole('ROLE_ADMIN')">
+          <li role="presentation">
+                <a href="<c:url value="/admin/apps" />" >Apps</a>
+          </li>
+           </sec:authorize>
         </nav>
         
         <h1><a class="appName" href="<c:url value="/" />">Nepomuk</a></h1>
