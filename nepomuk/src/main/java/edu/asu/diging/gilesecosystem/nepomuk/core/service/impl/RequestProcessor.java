@@ -115,7 +115,7 @@ public class RequestProcessor implements IRequestProcessor {
             completedRequest.setUploadDate(request.getUploadDate());
             completedRequest.setUsername(request.getUsername());
             completedRequest.setDownloadUrl(fileEndpoint);
-            completedRequest.setPathToFile(handler.getRelativePathOfFile(newFile));
+            completedRequest.setDownloadPath(handler.getRelativePathOfFile(newFile));
             
             try {
                 requestProducer.sendRequest(completedRequest, propertiesManager.getProperty(IPropertiesManager.KAFKA_TOPIC_STORAGE_COMPLETE));
