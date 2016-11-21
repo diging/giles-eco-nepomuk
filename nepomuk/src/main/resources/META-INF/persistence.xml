@@ -12,5 +12,14 @@
       <property name="javax.persistence.jdbc.password" value="admin"/>
     </properties>
   </persistence-unit>
+  
+  <persistence-unit name="AppsPU" transaction-type="RESOURCE_LOCAL">
+    <provider>com.objectdb.jpa.Provider</provider>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="${nepomuk.db.files}/apps.odb"/>
+      <property name="javax.persistence.jdbc.user" value="admin"/>
+      <property name="javax.persistence.jdbc.password" value="admin"/>
+    </properties>
+  </persistence-unit>
  
 </persistence>
