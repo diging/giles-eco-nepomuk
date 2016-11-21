@@ -14,7 +14,7 @@
 		<spring-security-version>4.1.3.RELEASE</spring-security-version>
 
 		<admin.password>$2a$04$NXKVTx9XrpEST6CLn/ps7eP8YsK3t.5A/mvAoYpg.X8QqgOKtc1za</admin.password>
-		
+
 		<nepomuk.base.url>http://localhost:8082/nepomuk/</nepomuk.base.url>
 		<log.level>debug</log.level>
 		<nepomuk.db.files></nepomuk.db.files>
@@ -24,21 +24,29 @@
 		<nepomuk.texts.folder></nepomuk.texts.folder>
 		<nepomuk.pdfs.folder></nepomuk.pdfs.folder>
 		<nepomuk.otherFiles.folder></nepomuk.otherFiles.folder>
-		
+
 		<nepomuk.giles.accessToken></nepomuk.giles.accessToken>
 		<nepomuk.kafka.hosts>localhost:9092</nepomuk.kafka.hosts>
-		
+
 	</properties>
 
+	<repositories>
+		<repository>
+			<id>objectdb</id>
+			<name>ObjectDB Repository</name>
+			<url>http://m2.objectdb.com</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
-	
+
 		<!-- Giles Ecosystem -->
 		<dependency>
 			<groupId>edu.asu.diging.giles-eco</groupId>
 			<artifactId>requests</artifactId>
 			<version>0.1</version>
 		</dependency>
-		
+
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -69,12 +77,37 @@
 			<version>${org.springframework-version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>3.0.5.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>3.0.5.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>aopalliance</groupId>
+			<artifactId>aopalliance</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.6.10</version>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<!-- Spring Security -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -116,6 +149,23 @@
 			<groupId>com.db4o</groupId>
 			<artifactId>db4o-full-java5</artifactId>
 			<version>8.0</version>
+		</dependency>
+
+		<!-- ObjectDB/JPA -->
+		<dependency>
+			<groupId>com.objectdb</groupId>
+			<artifactId>objectdb</artifactId>
+			<version>2.6.3</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.transaction</groupId>
+			<artifactId>jta</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>javax.persistence</artifactId>
+			<version>2.1.0</version>
 		</dependency>
 
 		<!-- Logging -->
@@ -200,7 +250,7 @@
 			<artifactId>spring-kafka</artifactId>
 			<version>1.0.1.RELEASE</version>
 		</dependency>
-		
+
 		<!-- Tiles -->
 		<dependency>
 			<groupId>org.apache.tiles</groupId>
@@ -227,8 +277,8 @@
 			<artifactId>tiles-jsp</artifactId>
 			<version>3.0.1</version>
 		</dependency>
-		
-		<!-- Jackson-->
+
+		<!-- Jackson -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
@@ -244,7 +294,7 @@
 			<artifactId>jackson-annotations</artifactId>
 			<version>2.8.4</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
@@ -255,6 +305,7 @@
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.1.0</version>
 		</dependency>
+
 	</dependencies>
 
 	<build>

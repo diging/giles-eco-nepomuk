@@ -1,4 +1,4 @@
-package edu.asu.diging.gilesecosystem.nepomuk.core.db4o;
+package edu.asu.diging.gilesecosystem.nepomuk.core.store;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.UnstorableObjectException;
 

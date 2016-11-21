@@ -1,6 +1,6 @@
 package edu.asu.diging.gilesecosystem.nepomuk.core.domain;
 
-import edu.asu.diging.gilesecosystem.nepomuk.core.db4o.IStorableObject;
+import edu.asu.diging.gilesecosystem.nepomuk.core.store.IStorableObject;
 import edu.asu.diging.gilesecosystem.requests.FileType;
 
 public interface IFile extends IStorableObject {
