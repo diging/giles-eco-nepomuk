@@ -10,7 +10,6 @@ public class RegisteredApp implements IRegisteredApp {
     private String name;
     private String providerId;
     private List<String> tokenIds;
-    private String providerClientId;
     
     /* (non-Javadoc)
      * @see edu.asu.giles.apps.impl.IRegisteredApp#getId()
@@ -40,14 +39,6 @@ public class RegisteredApp implements IRegisteredApp {
     public void setName(String name) {
         this.name = name;
     }
-    @Override
-    public String getProviderId() {
-        return providerId;
-    }
-    @Override
-    public void setProviderId(String providerId) {
-        this.providerId = providerId;
-    }
     /* (non-Javadoc)
      * @see edu.asu.giles.apps.impl.IRegisteredApp#getTokenIds()
      */
@@ -61,15 +52,6 @@ public class RegisteredApp implements IRegisteredApp {
     @Override
     public void setTokenIds(List<String> tokenIds) {
         this.tokenIds = tokenIds;
-    }
-    @Override
-    public String getProviderClientId() {
-        return providerClientId;
-    }
-    @Override
-    public void setProviderClientId(String providerClientId) {
-        this.providerClientId = providerClientId;
-    }
-       
+    }     
     
 }

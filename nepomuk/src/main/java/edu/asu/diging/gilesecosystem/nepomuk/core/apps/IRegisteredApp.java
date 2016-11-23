@@ -18,12 +18,4 @@ public interface IRegisteredApp extends IStorableObject {
 
     public abstract void setTokenIds(List<String> tokenIds);
 
-    public abstract void setProviderId(String providerId);
-
-    public abstract String getProviderId();
-
-    public abstract void setProviderClientId(String providerClientId);
-
-    public abstract String getProviderClientId();
-
 }

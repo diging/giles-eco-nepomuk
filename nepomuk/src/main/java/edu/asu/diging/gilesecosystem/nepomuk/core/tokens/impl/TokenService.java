@@ -87,7 +87,6 @@ public class TokenService implements ITokenService {
                 .setSubject(app.getName())
                 .claim("appId", app.getId())
                 .claim("tokenId", tokenId)
-                .claim("providerId", app.getProviderId())
                 .signWith(SignatureAlgorithm.HS256, propertiesManager.getProperty(IPropertiesManager.SIGNING_KEY_APPS))
                 .compact();
         
@@ -95,7 +94,6 @@ public class TokenService implements ITokenService {
         token.setToken(compactJws);
         token.setId(tokenId);
         token.setAppId(app.getId());
-        token.setProviderId(app.getProviderId());
         return token;
     }
     
@@ -109,7 +107,6 @@ public class TokenService implements ITokenService {
             
             appToken.setAppId(claims.get("appId", String.class));
             appToken.setId(claims.get("tokenId", String.class));
-            appToken.setProviderId(claims.get("providerId", String.class));
         
         } catch (io.jsonwebtoken.ExpiredJwtException e) {
             return null;

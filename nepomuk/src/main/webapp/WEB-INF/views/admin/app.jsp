@@ -13,10 +13,6 @@
 	<dd>${app.id}</dd>
 </dl>
 
-<dl>
-	<dt>Provider Client ID</dt>
-	<dd>${app.providerClientId}</dd>
-</dl>
 
 <c:if test="${not empty token}" >
 <div class="panel panel-warning">

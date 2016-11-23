@@ -16,7 +16,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.apps.IRegisteredApp;
 import edu.asu.diging.gilesecosystem.nepomuk.core.apps.impl.RegisteredApp;
-import edu.asu.diging.gilesecosystem.nepomuk.core.service.IIdentityProviderRegistry;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.apps.IRegisteredAppManager;
 import edu.asu.diging.gilesecosystem.nepomuk.core.validators.RegisteredAppValidator;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.TokenGenerationErrorException;
@@ -30,9 +29,6 @@ public class AddRegisteredAppController {
     @Autowired
     private IRegisteredAppManager appManager;
     
-    @Autowired
-    private IIdentityProviderRegistry providerRegistry;
-    
     @InitBinder("app")
     public void init(WebDataBinder binder) {
         binder.addValidators(new RegisteredAppValidator());
@@ -41,9 +37,6 @@ public class AddRegisteredAppController {
     @RequestMapping(value = "/admin/apps/register", method = RequestMethod.GET)
     public String showRegisterAppPage(Model model) {
         model.addAttribute("app", new RegisteredApp());
-        
-        model.addAttribute("providers", providerRegistry.getProviders());
-        
         return "admin/apps/register";
     }
     
@@ -51,7 +44,6 @@ public class AddRegisteredAppController {
     public String registerApp(@Validated @ModelAttribute("app") RegisteredApp app, BindingResult results, Model model, RedirectAttributes redirectAttrs) {
         
         if (results.hasErrors()) {
-            model.addAttribute("providers", providerRegistry.getProviders());
             return "admin/apps/register";
         }
         
