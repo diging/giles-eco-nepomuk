@@ -20,8 +20,7 @@
 	<spring:bind path="providerId">
 	<div class="form-group ${status.error ? 'has-error' : ''}">
 		<label for="name">Identity Provider</label>
-		<form:select class="form-control" id="providerId" path="providerId" items="${providers}"></form:select>
-		<small><form:errors path="providerId" cssClass="error"></form:errors></small>
+        <form:input type="text" class="form-control" id="providerId" path="providerId"></form:input>
 	</div>
 	</spring:bind>
 	

@@ -16,7 +16,7 @@ public class RegisteredAppValidator implements Validator {
     @Override
     public void validate(Object arg0, Errors arg1) {
         ValidationUtils.rejectIfEmpty(arg1, "name", "app_name_required");
-        ValidationUtils.rejectIfEmpty(arg1, "providerId", "app_providerId_required");
+        //ValidationUtils.rejectIfEmpty(arg1, "providerId", "app_providerId_required");
     }
 
 }

@@ -27,7 +27,6 @@
 		
 		<nepomuk.giles.accessToken></nepomuk.giles.accessToken>
 		<nepomuk.kafka.hosts>localhost:9092</nepomuk.kafka.hosts>
-
 		
 	</properties>
 
@@ -201,8 +200,7 @@
 			<artifactId>spring-kafka</artifactId>
 			<version>1.0.1.RELEASE</version>
 		</dependency>
-		
-		
+				
 		<!-- Tiles -->
 		<dependency>
 			<groupId>org.apache.tiles</groupId>
@@ -257,9 +255,7 @@
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.1.0</version>
 		</dependency>
-		
-		
-		
+				
 		<!-- Token generation -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
