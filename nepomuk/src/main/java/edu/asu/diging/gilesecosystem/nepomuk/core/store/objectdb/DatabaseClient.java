@@ -33,7 +33,7 @@ public abstract class DatabaseClient<T extends IStorableObject> implements IData
     }
     
     protected List<? extends T> searchByProperty(String propName, String propValue, Class<? extends T> clazz) {
-        TypedQuery<? extends T> docs = getClient().createQuery("SELECT t FROM " + clazz.getName()  + " WHERE t." + propName + " = '" + propValue + "'", clazz);
+        TypedQuery<? extends T> docs = getClient().createQuery("SELECT t FROM " + clazz.getName()  + " t WHERE t." + propName + " = '" + propValue + "'", clazz);
         return docs.getResultList();
     }
     
