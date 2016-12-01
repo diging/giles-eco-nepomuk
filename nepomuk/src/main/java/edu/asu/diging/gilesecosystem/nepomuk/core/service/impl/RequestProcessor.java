@@ -92,7 +92,7 @@ public class RequestProcessor implements IRequestProcessor {
         if (newFile != null) {
             ICompletedStorageRequest completedRequest;
             try {
-                completedRequest = requestFactory.createRequest(request.getUploadId());
+                completedRequest = requestFactory.createRequest(request.getRequestId(), request.getUploadId());
             } catch (InstantiationException | IllegalAccessException e) {
                 // this should never happen, so we just fail silently...
                 logger.error("Could not create request.", e);
@@ -105,9 +105,9 @@ public class RequestProcessor implements IRequestProcessor {
             }
             String fileEndpoint = restEndpoint + FilesController.GET_FILE_URL.replace(FilesController.FILE_ID_PLACEHOLDER, newFile.getId());
             
-            completedRequest.setRequestId(request.getRequestId());
             completedRequest.setDocumentId(request.getDocumentId());
-            completedRequest.setFileId(newFile.getId());
+            completedRequest.setStoredFileId(newFile.getId());
+            completedRequest.setFileId(request.getFileId());
             completedRequest.setFilename(request.getFilename());
             completedRequest.setFileType(request.getFileType());
             completedRequest.setStatus(RequestStatus.COMPLETE);
