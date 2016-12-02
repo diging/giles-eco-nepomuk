@@ -54,6 +54,11 @@
           		<a href="<c:url value="/" />" >Dashboard</a>
           	</li>
           </sec:authorize>
+          <sec:authorize access="hasRole('ROLE_ADMIN')">
+          	<li role="presentation">
+          		<a href="<c:url value="/admin/system/config" />" >System Config</a>
+          	</li>
+          </sec:authorize>
          
         </nav>
         
