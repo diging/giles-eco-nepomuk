@@ -14,24 +14,39 @@
 		<spring-security-version>4.1.3.RELEASE</spring-security-version>
 
 		<admin.password>$2a$04$NXKVTx9XrpEST6CLn/ps7eP8YsK3t.5A/mvAoYpg.X8QqgOKtc1za</admin.password>
-		<pdf.conversion.dpi>600</pdf.conversion.dpi>
-		<pdf.conversion.type>RGB</pdf.conversion.type>
-		<pdf.conversion.format>tiff</pdf.conversion.format>
-		<tesseract.bin></tesseract.bin>
-		<tesseract.data></tesseract.data>
-		<tesseract.create.hocr>false</tesseract.create.hocr>
-		<ocr.worker.count>1</ocr.worker.count>
-		<ocr.images.from.pdfs>true</ocr.images.from.pdfs>
 
+		<nepomuk.base.url>http://localhost:8082/nepomuk/</nepomuk.base.url>
 		<log.level>debug</log.level>
 		<nepomuk.db.files></nepomuk.db.files>
 		<nepomuk.digilibBaseDir></nepomuk.digilibBaseDir>
-		<nepomuk.pdfBaseDir></nepomuk.pdfBaseDir>
-		<nepomuk.textBaseDir></nepomuk.textBaseDir>
-		
+		<nepomuk.images.folder></nepomuk.images.folder>
+		<nepomuk.baseDir></nepomuk.baseDir>
+		<nepomuk.texts.folder></nepomuk.texts.folder>
+		<nepomuk.pdfs.folder></nepomuk.pdfs.folder>
+		<nepomuk.otherFiles.folder></nepomuk.otherFiles.folder>
+
+		<nepomuk.giles.accessToken></nepomuk.giles.accessToken>
+		<nepomuk.kafka.hosts>localhost:9092</nepomuk.kafka.hosts>
+
 	</properties>
 
+	<repositories>
+		<repository>
+			<id>objectdb</id>
+			<name>ObjectDB Repository</name>
+			<url>http://m2.objectdb.com</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
+
+		<!-- Giles Ecosystem -->
+		<dependency>
+			<groupId>edu.asu.diging.giles-eco</groupId>
+			<artifactId>requests</artifactId>
+			<version>0.1</version>
+		</dependency>
+
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -62,12 +77,37 @@
 			<version>${org.springframework-version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>3.0.5.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>3.0.5.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>aopalliance</groupId>
+			<artifactId>aopalliance</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.6.10</version>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<!-- Spring Security -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -104,11 +144,21 @@
 			<version>1.8.9</version>
 		</dependency>
 
-		<!-- DB4O -->
+		<!-- ObjectDB/JPA -->
 		<dependency>
-			<groupId>com.db4o</groupId>
-			<artifactId>db4o-full-java5</artifactId>
-			<version>8.0</version>
+			<groupId>com.objectdb</groupId>
+			<artifactId>objectdb</artifactId>
+			<version>2.6.3</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.transaction</groupId>
+			<artifactId>jta</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>javax.persistence</artifactId>
+			<version>2.1.0</version>
 		</dependency>
 
 		<!-- Logging -->
@@ -161,23 +211,6 @@
 			<version>20.0</version>
 		</dependency>
 
-		<!-- PDF library -->
-		<dependency>
-			<groupId>org.apache.pdfbox</groupId>
-			<artifactId>pdfbox</artifactId>
-			<version>2.0.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.pdfbox</groupId>
-			<artifactId>pdfbox-tools</artifactId>
-			<version>2.0.2</version>
-		</dependency>
-		<dependency>
-			<groupId>com.github.jai-imageio</groupId>
-			<artifactId>jai-imageio-core</artifactId>
-			<version>1.3.1</version>
-		</dependency>
-
 		<!-- tessaract/tika -->
 		<dependency>
 			<groupId>org.apache.tika</groupId>
@@ -188,13 +221,6 @@
 			<groupId>org.apache.tika</groupId>
 			<artifactId>tika-parsers</artifactId>
 			<version>1.13</version>
-		</dependency>
-
-		<!-- Apache Commons FileUpload -->
-		<dependency>
-			<groupId>commons-fileupload</groupId>
-			<artifactId>commons-fileupload</artifactId>
-			<version>1.3.2</version>
 		</dependency>
 
 		<!-- Apache Commons IO -->
@@ -217,7 +243,7 @@
 			<artifactId>spring-kafka</artifactId>
 			<version>1.0.1.RELEASE</version>
 		</dependency>
-		
+
 		<!-- Tiles -->
 		<dependency>
 			<groupId>org.apache.tiles</groupId>
@@ -244,7 +270,24 @@
 			<artifactId>tiles-jsp</artifactId>
 			<version>3.0.1</version>
 		</dependency>
-		
+
+		<!-- Jackson -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.8.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.8.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>2.8.4</version>
+		</dependency>
+
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
@@ -260,6 +303,17 @@
 
 	<build>
 		<finalName>nepomuk</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<excludes>
+					<exclude>**/*.woff</exclude>
+					<exclude>**/*.ttf</exclude>
+					<exclude>**/*.woff2</exclude>
+				</excludes>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

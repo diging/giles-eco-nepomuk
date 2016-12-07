@@ -12,27 +12,19 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
 
 	<mvc:annotation-driven />
-	<context:component-scan base-package="edu.asu.diging.gilesecosystem.nepomuk.web" />
-	
+	<context:component-scan base-package="edu.asu.diging.gilesecosystem.nepomuk.rest" />
 
-	<!-- Handles HTTP GET requests for /resources/** by efficiently serving 
-		up static resources in the ${webappRoot}/resources directory -->
-	<mvc:resources mapping="/resources/**" location="/resources/" />
-	<se:global-method-security
-		pre-post-annotations="enabled" />
-		
-	<beans:bean id="tilesViewResolver"
-		class="org.springframework.web.servlet.view.UrlBasedViewResolver">
-		<beans:property name="viewClass"
-			value="org.springframework.web.servlet.view.tiles3.TilesView" />
-	</beans:bean>
-	<beans:bean id="tilesConfigurer"
-		class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
-		<beans:property name="definitions">
+	<beans:bean
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<beans:property name="messageConverters">
 			<beans:list>
-				<beans:value>/WEB-INF/tiles-defs.xml</beans:value>
+				<beans:ref bean="jsonMessageConverter" />
 			</beans:list>
 		</beans:property>
 	</beans:bean>
 
+	<!-- Configure bean to convert JSON to POJO and vice versa -->
+	<beans:bean id="jsonMessageConverter"
+		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+	</beans:bean>
 </beans:beans>
