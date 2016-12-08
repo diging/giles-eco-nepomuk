@@ -35,9 +35,6 @@ public class RegisteredAppDatabaseClient extends DatabaseClient<IRegisteredApp> 
         return "APP";
     } 
     
-    /* (non-Javadoc)
-     * @see edu.asu.giles.apps.impl.IRegisteredAppDatabaseClient#getAppById(java.lang.String)
-     */
     @Override
     public IRegisteredApp getAppById(String id) {
         IRegisteredApp app = new RegisteredApp();

@@ -40,9 +40,6 @@ public class TokenService implements ITokenService {
     @Autowired
     private IPropertiesManager propertiesManager;
 
-    /* (non-Javadoc)
-     * @see edu.asu.giles.tokens.impl.ITokenService#generateToken(java.lang.String)
-     */
     @Override
     public String generateApiToken(User user) {
         String compactJws = Jwts.builder()
@@ -54,9 +51,6 @@ public class TokenService implements ITokenService {
         return compactJws;
     }
     
-    /* (non-Javadoc)
-     * @see edu.asu.giles.tokens.impl.ITokenService#getTokenContents(java.lang.String)
-     */
     @Override
     public IApiTokenContents getApiTokenContents(String token) {
         IApiTokenContents contents = new ApiTokenContents();

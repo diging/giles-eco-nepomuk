@@ -28,13 +28,6 @@ public class RegisteredAppsManager implements IRegisteredAppManager {
     @Autowired
     private ITokenService tokenService;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * edu.asu.giles.service.apps.impl.IRegisteredAppManager#storeApp(edu.asu
-     * .giles.apps.IRegisteredApp)
-     */
     @Override
     public IRegisteredApp storeApp(IRegisteredApp app) {
 
@@ -61,12 +54,6 @@ public class RegisteredAppsManager implements IRegisteredAppManager {
         databaseClient.delete(app);
     }
     
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * edu.asu.giles.service.apps.impl.IRegisteredAppManager#getRegisteredApps()
-     */
     @Override
     public List<IRegisteredApp> getRegisteredApps() {
         IRegisteredApp[] apps = databaseClient.getAllRegisteredApps();

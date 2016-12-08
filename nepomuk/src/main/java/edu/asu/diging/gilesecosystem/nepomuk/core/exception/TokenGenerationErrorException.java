@@ -2,9 +2,6 @@ package edu.asu.diging.gilesecosystem.nepomuk.core.exception;
 
 public class TokenGenerationErrorException extends Exception {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = -916612146295359249L;
 
     public TokenGenerationErrorException() {

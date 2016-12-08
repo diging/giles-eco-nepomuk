@@ -8,47 +8,33 @@ public class RegisteredApp implements IRegisteredApp {
 
     private String id;
     private String name;
-    private String providerId;
     private List<String> tokenIds;
     
-    /* (non-Javadoc)
-     * @see edu.asu.giles.apps.impl.IRegisteredApp#getId()
-     */
     @Override
     public String getId() {
         return id;
     }
-    /* (non-Javadoc)
-     * @see edu.asu.giles.apps.impl.IRegisteredApp#setId(java.lang.String)
-     */
+
     @Override
     public void setId(String id) {
         this.id = id;
     }
-    /* (non-Javadoc)
-     * @see edu.asu.giles.apps.impl.IRegisteredApp#getName()
-     */
+
     @Override
     public String getName() {
         return name;
     }
-    /* (non-Javadoc)
-     * @see edu.asu.giles.apps.impl.IRegisteredApp#setName(java.lang.String)
-     */
+
     @Override
     public void setName(String name) {
         this.name = name;
     }
-    /* (non-Javadoc)
-     * @see edu.asu.giles.apps.impl.IRegisteredApp#getTokenIds()
-     */
+
     @Override
     public List<String> getTokenIds() {
         return tokenIds;
     }
-    /* (non-Javadoc)
-     * @see edu.asu.giles.apps.impl.IRegisteredApp#setTokenIds(java.util.List)
-     */
+
     @Override
     public void setTokenIds(List<String> tokenIds) {
         this.tokenIds = tokenIds;

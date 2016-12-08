@@ -10,10 +10,6 @@ public interface IAppToken extends ITokenContents {
 
     public abstract void setToken(String token);
 
-    public abstract void setProviderId(String providerId);
-
-    public abstract String getProviderId();
-
     public abstract void setAppId(String appId);
 
     public abstract String getAppId();
