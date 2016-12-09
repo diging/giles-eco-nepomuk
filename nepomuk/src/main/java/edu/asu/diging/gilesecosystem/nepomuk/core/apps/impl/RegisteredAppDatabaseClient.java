@@ -1,48 +1,36 @@
 package edu.asu.diging.gilesecosystem.nepomuk.core.apps.impl;
 
-import javax.annotation.PostConstruct;
+import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+
 import org.springframework.stereotype.Component;
-
-import com.db4o.ObjectContainer;
-import com.db4o.ObjectSet;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.apps.IRegisteredApp;
 import edu.asu.diging.gilesecosystem.nepomuk.core.apps.IRegisteredAppDatabaseClient;
-import edu.asu.diging.gilesecosystem.nepomuk.core.db4o.impl.DatabaseClient;
-import edu.asu.diging.gilesecosystem.nepomuk.core.db4o.impl.DatabaseManager;
-import edu.asu.diging.gilesecosystem.nepomuk.core.exception.UnstorableObjectException;
-import edu.asu.diging.gilesecosystem.nepomuk.core.apps.impl.RegisteredApp;
+import edu.asu.diging.gilesecosystem.util.exceptions.UnstorableObjectException;
+import edu.asu.diging.gilesecosystem.util.store.objectdb.DatabaseClient;
 
+@Transactional
 @Component
 public class RegisteredAppDatabaseClient extends DatabaseClient<IRegisteredApp> implements IRegisteredAppDatabaseClient {
 
-    private ObjectContainer client;
-
-    @Autowired
-    @Qualifier("appDatabaseManager")
-    private DatabaseManager userDatabase;
-    
-    @PostConstruct
-    public void init() {
-        client = userDatabase.getClient();
-    }
+    @PersistenceContext(unitName="AppsPU")
+    private EntityManager em;
     
     @Override
     protected String getIdPrefix() {
         return "APP";
-    } 
+    }
     
     @Override
     public IRegisteredApp getAppById(String id) {
-        IRegisteredApp app = new RegisteredApp();
-        app.setId(id);
-        
-        return queryByExampleGetFirst(app);
+        return em.find(RegisteredApp.class, id);
     }
-      
+    
     @Override
     public void storeModifiedApp(IRegisteredApp app) throws UnstorableObjectException {
         IRegisteredApp storedApp = getAppById(app.getId());
@@ -53,7 +41,8 @@ public class RegisteredAppDatabaseClient extends DatabaseClient<IRegisteredApp> 
     
     @Override
     public IRegisteredApp[] getAllRegisteredApps() {
-        ObjectSet<IRegisteredApp> results = client.query(IRegisteredApp.class);
+        TypedQuery<IRegisteredApp> query = em.createQuery("SELECT a FROM RegisteredApp a", IRegisteredApp.class);
+        List<IRegisteredApp> results = query.getResultList();
         if (results == null) {
             return new IRegisteredApp[0];
         }
@@ -61,12 +50,13 @@ public class RegisteredAppDatabaseClient extends DatabaseClient<IRegisteredApp> 
     }
 
     @Override
-    protected ObjectContainer getClient() {
-        return client;
-    }
-
-    @Override
     protected IRegisteredApp getById(String id) {
         return getAppById(id);
     }
+
+    @Override
+    protected EntityManager getClient() {
+        return em;
+    }
+
 }

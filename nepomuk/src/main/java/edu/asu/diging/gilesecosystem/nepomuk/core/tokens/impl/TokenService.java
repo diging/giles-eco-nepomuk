@@ -16,7 +16,8 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.users.User;
 import edu.asu.diging.gilesecosystem.nepomuk.core.apps.IRegisteredApp;
-import edu.asu.diging.gilesecosystem.nepomuk.core.service.properties.IPropertiesManager;
+import edu.asu.diging.gilesecosystem.nepomuk.core.service.properties.Properties;
+import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
 import edu.asu.diging.gilesecosystem.nepomuk.core.tokens.IApiTokenContents;
 import edu.asu.diging.gilesecosystem.nepomuk.core.tokens.IAppToken;
 import edu.asu.diging.gilesecosystem.nepomuk.core.tokens.ITokenService;
@@ -45,7 +46,7 @@ public class TokenService implements ITokenService {
         String compactJws = Jwts.builder()
                 .setSubject(user.getUsername())
                 .setExpiration(new Date((new Date()).getTime() + timeTillExpiration))
-                .signWith(SignatureAlgorithm.HS512, propertiesManager.getProperty(IPropertiesManager.SIGNING_KEY))
+                .signWith(SignatureAlgorithm.HS512, propertiesManager.getProperty(Properties.SIGNING_KEY))
                 .compact();
         
         return compactJws;
@@ -56,7 +57,7 @@ public class TokenService implements ITokenService {
         IApiTokenContents contents = new ApiTokenContents();
         contents.setExpired(true);
         try {
-            Jws<Claims> jws = Jwts.parser().setSigningKey(propertiesManager.getProperty(IPropertiesManager.SIGNING_KEY)).parseClaimsJws(token);
+            Jws<Claims> jws = Jwts.parser().setSigningKey(propertiesManager.getProperty(Properties.SIGNING_KEY)).parseClaimsJws(token);
             Claims claims = jws.getBody(); 
             contents.setUsername(claims.getSubject());
             Date expirationTime = claims.getExpiration();
@@ -81,7 +82,7 @@ public class TokenService implements ITokenService {
                 .setSubject(app.getName())
                 .claim("appId", app.getId())
                 .claim("tokenId", tokenId)
-                .signWith(SignatureAlgorithm.HS256, propertiesManager.getProperty(IPropertiesManager.SIGNING_KEY_APPS))
+                .signWith(SignatureAlgorithm.HS256, propertiesManager.getProperty(Properties.SIGNING_KEY_APPS))
                 .compact();
         
         IAppToken token = new AppToken();
@@ -96,7 +97,7 @@ public class TokenService implements ITokenService {
         IAppToken appToken = new AppToken();
         
         try {
-            Jws<Claims> jws = Jwts.parser().setSigningKey(propertiesManager.getProperty(IPropertiesManager.SIGNING_KEY_APPS)).parseClaimsJws(token);
+            Jws<Claims> jws = Jwts.parser().setSigningKey(propertiesManager.getProperty(Properties.SIGNING_KEY_APPS)).parseClaimsJws(token);
             Claims claims = jws.getBody(); 
             
             appToken.setAppId(claims.get("appId", String.class));

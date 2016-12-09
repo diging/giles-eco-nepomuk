@@ -1,10 +1,7 @@
 package edu.asu.diging.gilesecosystem.nepomuk.core.apps;
 
-import com.db4o.ObjectSet;
-
-import edu.asu.diging.gilesecosystem.nepomuk.core.db4o.IDatabaseClient;
-import edu.asu.diging.gilesecosystem.nepomuk.core.exception.UnstorableObjectException;
-import edu.asu.diging.gilesecosystem.nepomuk.core.apps.IRegisteredApp;
+import edu.asu.diging.gilesecosystem.util.exceptions.UnstorableObjectException;
+import edu.asu.diging.gilesecosystem.util.store.IDatabaseClient;
 
 public interface IRegisteredAppDatabaseClient extends IDatabaseClient<IRegisteredApp> {
     

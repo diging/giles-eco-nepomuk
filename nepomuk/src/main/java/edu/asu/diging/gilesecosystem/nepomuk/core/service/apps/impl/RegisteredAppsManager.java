@@ -13,7 +13,7 @@ import edu.asu.diging.gilesecosystem.nepomuk.core.apps.IRegisteredApp;
 import edu.asu.diging.gilesecosystem.nepomuk.core.apps.IRegisteredAppDatabaseClient;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.apps.IRegisteredAppManager;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.TokenGenerationErrorException;
-import edu.asu.diging.gilesecosystem.nepomuk.core.exception.UnstorableObjectException;
+import edu.asu.diging.gilesecosystem.util.exceptions.UnstorableObjectException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.tokens.IAppToken;
 import edu.asu.diging.gilesecosystem.nepomuk.core.tokens.ITokenService;
 

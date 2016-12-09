@@ -1,14 +1,19 @@
 package edu.asu.diging.gilesecosystem.nepomuk.core.domain.impl;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 import edu.asu.diging.gilesecosystem.nepomuk.core.domain.IFile;
 import edu.asu.diging.gilesecosystem.requests.FileType;
 
+@Entity
 public class File implements IFile {
 
     private String uploadId;
     private String filename;
     private String username;
     private String documentId;
+    @Id
     private String id;
     private String uploadDate;
     private String processedDate;

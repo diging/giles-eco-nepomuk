@@ -59,7 +59,12 @@
           <li role="presentation">
                 <a href="<c:url value="/admin/apps" />" >Apps</a>
           </li>
-           </sec:authorize>
+          <li role="presentation">
+                <a href="<c:url value="/admin/system/config" />" >System Config</a>
+            </li>
+      	
+          </sec:authorize>
+         
         </nav>
         
         <h1><a class="appName" href="<c:url value="/" />">Nepomuk</a></h1>

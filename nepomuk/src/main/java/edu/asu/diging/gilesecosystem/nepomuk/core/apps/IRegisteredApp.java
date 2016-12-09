@@ -2,7 +2,7 @@ package edu.asu.diging.gilesecosystem.nepomuk.core.apps;
 
 import java.util.List;
 
-import edu.asu.diging.gilesecosystem.nepomuk.core.db4o.IStorableObject;
+import edu.asu.diging.gilesecosystem.util.store.IStorableObject;
 
 public interface IRegisteredApp extends IStorableObject {
 

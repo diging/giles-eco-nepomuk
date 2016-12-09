@@ -2,13 +2,19 @@ package edu.asu.diging.gilesecosystem.nepomuk.core.apps.impl;
 
 import java.util.List;
 
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+
 import edu.asu.diging.gilesecosystem.nepomuk.core.apps.IRegisteredApp;
 
+@Entity
 public class RegisteredApp implements IRegisteredApp {
 
-    private String id;
+    @Id private String id;
     private String name;
-    private List<String> tokenIds;
+    @Basic(fetch = FetchType.EAGER) private List<String> tokenIds;
     
     @Override
     public String getId() {

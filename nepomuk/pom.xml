@@ -24,21 +24,34 @@
 		<nepomuk.texts.folder></nepomuk.texts.folder>
 		<nepomuk.pdfs.folder></nepomuk.pdfs.folder>
 		<nepomuk.otherFiles.folder></nepomuk.otherFiles.folder>
-		
+
 		<nepomuk.giles.accessToken></nepomuk.giles.accessToken>
 		<nepomuk.kafka.hosts>localhost:9092</nepomuk.kafka.hosts>
-		
+
 	</properties>
 
+	<repositories>
+		<repository>
+			<id>objectdb</id>
+			<name>ObjectDB Repository</name>
+			<url>http://m2.objectdb.com</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
-	
+
 		<!-- Giles Ecosystem -->
 		<dependency>
 			<groupId>edu.asu.diging.giles-eco</groupId>
 			<artifactId>requests</artifactId>
 			<version>0.1</version>
 		</dependency>
-		
+		<dependency>
+			<groupId>edu.asu.diging.giles-eco</groupId>
+			<artifactId>util</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -67,6 +80,31 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
 			<version>${org.springframework-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>3.0.5.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>3.0.5.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>aopalliance</groupId>
+			<artifactId>aopalliance</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.6.10</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -111,11 +149,21 @@
 			<version>1.8.9</version>
 		</dependency>
 
-		<!-- DB4O -->
+		<!-- ObjectDB/JPA -->
 		<dependency>
-			<groupId>com.db4o</groupId>
-			<artifactId>db4o-full-java5</artifactId>
-			<version>8.0</version>
+			<groupId>com.objectdb</groupId>
+			<artifactId>objectdb</artifactId>
+			<version>2.6.3</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.transaction</groupId>
+			<artifactId>jta</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>javax.persistence</artifactId>
+			<version>2.1.0</version>
 		</dependency>
 
 		<!-- Logging -->

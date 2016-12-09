@@ -14,7 +14,7 @@ import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesDatabaseClient;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesManager;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileHandlerRegistry;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileTypeHandler;
-import edu.asu.diging.gilesecosystem.nepomuk.core.service.properties.IPropertiesManager;
+import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
 
 @PropertySource("classpath:/config.properties")
 @Service
@@ -47,10 +47,7 @@ public class FilesManager implements IFilesManager {
 
     @Override
     public IFile getFileByPath(String path) {
-        IFile file = new edu.asu.diging.gilesecosystem.nepomuk.core.domain.impl.File();
-        file.setFilepath(path);
-
-        List<IFile> files = databaseClient.getFilesByExample(file);
+        List<IFile> files = databaseClient.getFilesByProperty("filepath", path);
         if (files == null || files.isEmpty()) {
             return null;
         }

@@ -1,21 +1,19 @@
-package edu.asu.diging.gilesecosystem.nepomuk.core.db4o.impl;
+package edu.asu.diging.gilesecosystem.nepomuk.core.store.objectdb;
 
+import java.util.List;
 import java.util.Random;
 
-import com.db4o.ObjectContainer;
-import com.db4o.ObjectSet;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
-import edu.asu.diging.gilesecosystem.nepomuk.core.db4o.IDatabaseClient;
-import edu.asu.diging.gilesecosystem.nepomuk.core.db4o.IStorableObject;
+import org.springframework.transaction.annotation.Transactional;
+
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.UnstorableObjectException;
+import edu.asu.diging.gilesecosystem.nepomuk.core.store.IDatabaseClient;
+import edu.asu.diging.gilesecosystem.nepomuk.core.store.IStorableObject;
 
 public abstract class DatabaseClient<T extends IStorableObject> implements IDatabaseClient<T> {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see edu.asu.giles.files.impl.IDatabaseClient#generateFileId()
-     */
     @Override
     public String generateId() {
         String id = null;
@@ -29,38 +27,36 @@ public abstract class DatabaseClient<T extends IStorableObject> implements IData
         return id;
     }
     
-    protected T queryByExampleGetFirst(T example) {
-        ObjectSet<T> docs = getClient().queryByExample(example);
-        if (docs != null && docs.size() > 0) {
-            return docs.get(0);
-        }
-        return null;
+    protected List<? extends T> searchByProperty(String propName, String propValue, Class<? extends T> clazz) {
+        TypedQuery<? extends T> docs = getClient().createQuery("SELECT t FROM " + clazz.getName()  + " t WHERE t." + propName + " = '" + propValue + "'", clazz);
+        return docs.getResultList();
     }
     
+    @Transactional
     @Override
     public T store(T element) throws UnstorableObjectException {
         if (element.getId() == null) {
             throw new UnstorableObjectException("The object does not have an id.");
         }
         
-        ObjectContainer client = getClient();
-        client.store(element);
-        client.commit();
+        EntityManager em = getClient();
+        em.persist(element);
+        em.flush();
         return element;
     }
     
+    @Transactional
     @Override
     public void delete(T element) {
-        ObjectContainer client = getClient();
-        client.delete(element);
-        client.commit();
+        EntityManager em = getClient();
+        em.remove(element);
     }
 
     protected abstract String getIdPrefix();
 
     protected abstract Object getById(String id);
     
-    protected abstract ObjectContainer getClient();
+    protected abstract EntityManager getClient();
 
     /**
      * This methods generates a new 6 character long id. Note that this method
