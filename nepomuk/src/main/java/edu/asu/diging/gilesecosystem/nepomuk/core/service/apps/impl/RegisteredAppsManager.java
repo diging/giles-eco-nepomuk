@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.apps.IRegisteredApp;
 import edu.asu.diging.gilesecosystem.nepomuk.core.apps.IRegisteredAppDatabaseClient;
@@ -17,6 +18,7 @@ import edu.asu.diging.gilesecosystem.util.exceptions.UnstorableObjectException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.tokens.IAppToken;
 import edu.asu.diging.gilesecosystem.nepomuk.core.tokens.ITokenService;
 
+@Transactional("txmanager_apps")
 @Service
 public class RegisteredAppsManager implements IRegisteredAppManager {
 

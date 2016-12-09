@@ -68,8 +68,12 @@
 	</bean>
 
 	<!-- Use @Transaction annotations for managing transactions -->
-	<tx:annotation-driven transaction-manager="myTxManager" />
+	<tx:annotation-driven proxy-target-class="true" transaction-manager="myTxManager" />
 
+	 <bean id="txmanager_apps"
+		class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="emf_apps" />
+	</bean>
 
 	<bean id="messageSource"
 		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">

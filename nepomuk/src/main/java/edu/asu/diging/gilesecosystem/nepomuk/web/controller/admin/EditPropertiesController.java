@@ -1,4 +1,4 @@
-package edu.asu.diging.gilesecosystem.nepomuk.web;
+package edu.asu.diging.gilesecosystem.nepomuk.web.controller.admin;
 
 import java.util.HashMap;
 import java.util.Map;

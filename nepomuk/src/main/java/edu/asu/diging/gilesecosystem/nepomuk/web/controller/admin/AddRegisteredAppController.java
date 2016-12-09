@@ -1,4 +1,4 @@
-package edu.asu.diging.gilesecosystem.nepomuk.core.controllers.admin;
+package edu.asu.diging.gilesecosystem.nepomuk.web.controller.admin;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
