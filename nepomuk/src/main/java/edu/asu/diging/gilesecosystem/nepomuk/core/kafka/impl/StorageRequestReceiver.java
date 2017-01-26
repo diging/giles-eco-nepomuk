@@ -11,7 +11,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IRequestProcessor;
-import edu.asu.diging.gilesecosystem.nepomuk.core.service.properties.IPropertiesManager;
+import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
 import edu.asu.diging.gilesecosystem.requests.IStorageRequest;
 import edu.asu.diging.gilesecosystem.requests.impl.StorageRequest;
 

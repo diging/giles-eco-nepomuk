@@ -29,5 +29,23 @@
 		<put-attribute name="content" value="/WEB-INF/views/config/system_config.jsp" />
 	</definition>
 	
+	<!--  apps -->
+	<definition name="admin/apps" extends="base.definition">
+		<put-attribute name="content" value="/WEB-INF/views/admin/apps.jsp" />
+	</definition>
+	<definition name="admin/apps/register" extends="base.definition">
+		<put-attribute name="content" value="/WEB-INF/views/admin/register.jsp" />
+	</definition>
+	<definition name="admin/apps/app" extends="base.definition">
+		<put-attribute name="content" value="/WEB-INF/views/admin/app.jsp" />
+	</definition>
+	<definition name="admin/apps/delete" extends="base.definition">
+		<put-attribute name="content" value="/WEB-INF/views/admin/deleteApp.jsp" />
+	</definition>
+	
+	<!-- error pages -->
+	<definition name="notFound" extends="base.definition">
+		<put-attribute name="content" value="/WEB-INF/views/notFound.jsp" />	
+	</definition>
 	
 </tiles-definitions>

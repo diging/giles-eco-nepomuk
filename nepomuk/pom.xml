@@ -14,7 +14,7 @@
 		<spring-security-version>4.1.3.RELEASE</spring-security-version>
 
 		<admin.password>$2a$04$NXKVTx9XrpEST6CLn/ps7eP8YsK3t.5A/mvAoYpg.X8QqgOKtc1za</admin.password>
-
+		
 		<nepomuk.base.url>http://localhost:8082/nepomuk/</nepomuk.base.url>
 		<log.level>debug</log.level>
 		<nepomuk.db.files></nepomuk.db.files>
@@ -45,6 +45,11 @@
 			<groupId>edu.asu.diging.giles-eco</groupId>
 			<artifactId>requests</artifactId>
 			<version>0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.asu.diging.giles-eco</groupId>
+			<artifactId>util</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
 		<!-- Spring -->
@@ -107,7 +112,7 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
-
+		
 		<!-- Spring Security -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -270,8 +275,8 @@
 			<artifactId>tiles-jsp</artifactId>
 			<version>3.0.1</version>
 		</dependency>
-
-		<!-- Jackson -->
+		
+		<!-- Jackson-->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
@@ -287,7 +292,7 @@
 			<artifactId>jackson-annotations</artifactId>
 			<version>2.8.4</version>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
@@ -298,7 +303,14 @@
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.1.0</version>
 		</dependency>
-
+				
+		<!-- Token generation -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.7.0</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
