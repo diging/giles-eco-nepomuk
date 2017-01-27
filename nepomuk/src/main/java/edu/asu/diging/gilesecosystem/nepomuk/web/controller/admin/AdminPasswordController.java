@@ -1,4 +1,4 @@
-package edu.asu.diging.gilesecosystem.nepomuk.web;
+package edu.asu.diging.gilesecosystem.nepomuk.web.controller.admin;
 
 import java.security.Principal;
 import java.util.Locale;
