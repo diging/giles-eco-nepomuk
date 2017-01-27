@@ -55,9 +55,13 @@
           	</li>
           </sec:authorize>
           <sec:authorize access="hasRole('ROLE_ADMIN')">
-          	<li role="presentation">
-          		<a href="<c:url value="/admin/system/config" />" >System Config</a>
-          	</li>
+          <li role="presentation">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">System Config<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                   <li><a href="<c:url value="/admin/system/config" />" >System Properties</a></li>
+                   <li><a href="<c:url value="/admin/system/admin" />">Admin Password</a></li>
+                </ul>
+            </li>
           </sec:authorize>
          
         </nav>

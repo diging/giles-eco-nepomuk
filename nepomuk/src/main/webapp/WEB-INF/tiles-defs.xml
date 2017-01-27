@@ -28,6 +28,10 @@
 	<definition name="admin/system/config" extends="base.definition">
 		<put-attribute name="content" value="/WEB-INF/views/config/system_config.jsp" />
 	</definition>
+    
+    <definition name="admin/system/admin" extends="base.definition">
+        <put-attribute name="content" value="/WEB-INF/views/config/admin_password.jsp" />
+    </definition>
 	
 	
 </tiles-definitions>
