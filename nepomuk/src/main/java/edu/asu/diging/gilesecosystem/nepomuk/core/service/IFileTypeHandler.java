@@ -22,4 +22,5 @@ public interface IFileTypeHandler {
     byte[] getFileContent(IFile file);
 
     public abstract String getRelativePathInTypeFolder(IFile file);
+    
 }
