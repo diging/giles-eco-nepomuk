@@ -11,17 +11,18 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+
+import edu.asu.diging.gilesecosystem.util.users.IAdminUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityContext extends WebSecurityConfigurerAdapter {
     
     @Autowired
-    private UserDetailsService userDetailsService;
+    private IAdminUserDetailsService userDetailsService;
     
     @Override
     public void configure(WebSecurity web) throws Exception {

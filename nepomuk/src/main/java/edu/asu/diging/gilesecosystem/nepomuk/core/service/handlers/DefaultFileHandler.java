@@ -14,7 +14,7 @@ import edu.asu.diging.gilesecosystem.nepomuk.core.domain.IFile;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFileStorageManager;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesDatabaseClient;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileTypeHandler;
-import edu.asu.diging.gilesecosystem.nepomuk.core.service.properties.IPropertiesManager;
+import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
 import edu.asu.diging.gilesecosystem.requests.FileType;
 
 @PropertySource("classpath:/config.properties")
