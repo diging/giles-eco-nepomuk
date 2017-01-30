@@ -49,7 +49,7 @@
       <div class="page-header">
       <nav>
           <ul class="nav nav-pills pull-right">
-          <sec:authorize access="hasRole('ROLE_USER')">
+          <sec:authorize access="hasRole('ROLE_ADMIN')">
           	<li role="presentation">
           		<a href="<c:url value="/" />" >Dashboard</a>
           	</li>
@@ -63,9 +63,6 @@
                <li><a href="<c:url value="/admin/system/admin" />">Admin Password</a></li>
             </ul>
           </li>
-          </li>
-          <li role="presentation">
-              <a href="<c:url value="/admin/apps" />" >Apps</a>
           </li>
           </sec:authorize>
          
