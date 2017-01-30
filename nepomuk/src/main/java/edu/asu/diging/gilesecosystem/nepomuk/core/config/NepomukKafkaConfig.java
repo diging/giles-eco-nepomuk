@@ -14,9 +14,12 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
-
+import edu.asu.diging.gilesecosystem.nepomuk.core.service.properties.Properties;
 import edu.asu.diging.gilesecosystem.nepomuk.core.kafka.impl.StorageRequestReceiver;
-import edu.asu.diging.gilesecosystem.nepomuk.core.service.properties.IPropertiesManager;
+import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
+
+
+
 import edu.asu.diging.gilesecosystem.requests.kafka.KafkaConfig;
 
 @Configuration
@@ -65,7 +68,7 @@ public class NepomukKafkaConfig implements KafkaConfig {
 
     @Override
     public String getHosts() {
-        return propertyManager.getProperty(IPropertiesManager.KAFKA_HOSTS);
+        return propertyManager.getProperty(Properties.KAFKA_HOSTS);
     }
 
     @Override

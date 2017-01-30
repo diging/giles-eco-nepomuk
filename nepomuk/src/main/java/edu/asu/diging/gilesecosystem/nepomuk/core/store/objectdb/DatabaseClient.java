@@ -14,11 +14,6 @@ import edu.asu.diging.gilesecosystem.nepomuk.core.store.IStorableObject;
 
 public abstract class DatabaseClient<T extends IStorableObject> implements IDatabaseClient<T> {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see edu.asu.giles.files.impl.IDatabaseClient#generateFileId()
-     */
     @Override
     public String generateId() {
         String id = null;

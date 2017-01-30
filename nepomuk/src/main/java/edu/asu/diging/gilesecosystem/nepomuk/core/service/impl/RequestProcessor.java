@@ -27,7 +27,7 @@ import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesManager;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileHandlerRegistry;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileTypeHandler;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IRequestProcessor;
-import edu.asu.diging.gilesecosystem.nepomuk.core.service.properties.IPropertiesManager;
+import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
 import edu.asu.diging.gilesecosystem.nepomuk.rest.FilesController;
 import edu.asu.diging.gilesecosystem.requests.ICompletedStorageRequest;
 import edu.asu.diging.gilesecosystem.requests.IRequestFactory;
@@ -36,6 +36,7 @@ import edu.asu.diging.gilesecosystem.requests.RequestStatus;
 import edu.asu.diging.gilesecosystem.requests.exceptions.MessageCreationException;
 import edu.asu.diging.gilesecosystem.requests.impl.CompletedStorageRequest;
 import edu.asu.diging.gilesecosystem.requests.kafka.IRequestProducer;
+import edu.asu.diging.gilesecosystem.nepomuk.core.service.properties.Properties;
 
 @Service
 public class RequestProcessor implements IRequestProcessor {
@@ -99,7 +100,7 @@ public class RequestProcessor implements IRequestProcessor {
                 return;
             }
             
-            String restEndpoint = propertiesManager.getProperty(IPropertiesManager.APP_BASE_URL) + propertiesManager.getProperty(IPropertiesManager.REST_ENDPOINT_PREFIX);
+            String restEndpoint = propertiesManager.getProperty(Properties.APP_BASE_URL) + propertiesManager.getProperty(Properties.REST_ENDPOINT_PREFIX);
             if (restEndpoint.endsWith("/")) {
                 restEndpoint = restEndpoint.substring(0, restEndpoint.length()-1);
             }
@@ -118,7 +119,7 @@ public class RequestProcessor implements IRequestProcessor {
             completedRequest.setDownloadPath(handler.getRelativePathOfFile(newFile));
             
             try {
-                requestProducer.sendRequest(completedRequest, propertiesManager.getProperty(IPropertiesManager.KAFKA_TOPIC_STORAGE_COMPLETE));
+                requestProducer.sendRequest(completedRequest, propertiesManager.getProperty(Properties.KAFKA_TOPIC_STORAGE_COMPLETE));
             } catch (MessageCreationException e) {
                 logger.error("Could not send message.", e);
             }
@@ -131,7 +132,7 @@ public class RequestProcessor implements IRequestProcessor {
         
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
-        headers.set("Authorization", "token " + propertiesManager.getProperty(IPropertiesManager.GILES_ACCESS_TOKEN));
+        headers.set("Authorization", "token " + propertiesManager.getProperty(Properties.GILES_ACCESS_TOKEN));
         HttpEntity<String> entity = new HttpEntity<String>(headers);
 
         ResponseEntity<byte[]> response = restTemplate.exchange(url, HttpMethod.GET, entity, byte[].class);
