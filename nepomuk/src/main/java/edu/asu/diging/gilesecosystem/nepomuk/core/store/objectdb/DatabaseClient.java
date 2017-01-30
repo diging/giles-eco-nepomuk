@@ -14,11 +14,6 @@ import edu.asu.diging.gilesecosystem.nepomuk.core.store.IStorableObject;
 
 public abstract class DatabaseClient<T extends IStorableObject> implements IDatabaseClient<T> {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see edu.asu.giles.files.impl.IDatabaseClient#generateFileId()
-     */
     @Override
     public String generateId() {
         String id = null;
@@ -33,7 +28,8 @@ public abstract class DatabaseClient<T extends IStorableObject> implements IData
     }
     
     protected List<? extends T> searchByProperty(String propName, String propValue, Class<? extends T> clazz) {
-        TypedQuery<? extends T> docs = getClient().createQuery("SELECT t FROM " + clazz.getName()  + " t WHERE t." + propName + " = '" + propValue + "'", clazz);
+        String query = "SELECT t FROM " + clazz.getName()  + " t WHERE t." + propName + " = '" + propValue + "'";
+        TypedQuery<? extends T> docs = getClient().createQuery(query, clazz);
         return docs.getResultList();
     }
     

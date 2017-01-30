@@ -15,8 +15,7 @@
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 
 	<mvc:annotation-driven />
-	<context:component-scan
-		base-package="edu.asu.diging.gilesecosystem.requests,edu.asu.diging.gilesecosystem.nepomuk.core" />
+	<context:component-scan base-package="edu.asu.diging.gilesecosystem.requests,edu.asu.diging.gilesecosystem.nepomuk.core,edu.asu.diging.gilesecosystem.util" />
 
 	<import resource="spring-security.xml" />
 
@@ -68,8 +67,12 @@
 	</bean>
 
 	<!-- Use @Transaction annotations for managing transactions -->
-	<tx:annotation-driven transaction-manager="myTxManager" />
+	<tx:annotation-driven proxy-target-class="true" transaction-manager="myTxManager" />
 
+	 <bean id="txmanager_apps"
+		class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="emf_apps" />
+	</bean>
 
 	<bean id="messageSource"
 		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
