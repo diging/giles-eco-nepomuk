@@ -49,7 +49,7 @@
       <div class="page-header">
       <nav>
           <ul class="nav nav-pills pull-right">
-          <sec:authorize access="hasRole('ROLE_USER')">
+          <sec:authorize access="hasRole('ROLE_ADMIN')">
           	<li role="presentation">
           		<a href="<c:url value="/" />" >Dashboard</a>
           	</li>
@@ -57,14 +57,23 @@
           </sec:authorize>
           <sec:authorize access="hasRole('ROLE_ADMIN')">
           <li role="presentation">
-                <a href="<c:url value="/admin/apps" />" >Apps</a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">System Config<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+               <li><a href="<c:url value="/admin/system/config" />" >System Properties</a></li>
+               <li><a href="<c:url value="/admin/system/admin" />">Admin Password</a></li>
+            </ul>
           </li>
-          <li role="presentation">
-                <a href="<c:url value="/admin/system/config" />" >System Config</a>
-            </li>
-      	
+          </li>
           </sec:authorize>
          
+          <sec:authorize access="isAuthenticated()">
+          <li role="presentation">
+             <form action="<c:url value="/logout" />" method="POST">
+             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+             <button class="btn-link" type="submit" title="Logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</button>
+             </form>
+          </li>
+          </sec:authorize>
         </nav>
         
         <h1><a class="appName" href="<c:url value="/" />">Nepomuk</a></h1>
@@ -112,7 +121,7 @@
 		    <input placeholder="Password" class="form-control input-sm" type="password" id="password" name="password"/>    
 		    <button type="submit" class="btn btn-default btn-sm">Log in</button>
 		</form>
-</sec:authorize>
+        </sec:authorize>
         </p>
         </div>
         </div>

@@ -12,6 +12,7 @@
         <org.slf4j-version>1.7.5</org.slf4j-version>
         <org.springframework-version>4.3.1.RELEASE</org.springframework-version>
         <spring-security-version>4.1.3.RELEASE</spring-security-version>
+
         <admin.password>$2a$04$NXKVTx9XrpEST6CLn/ps7eP8YsK3t.5A/mvAoYpg.X8QqgOKtc1za</admin.password>
         <nepomuk.base.url>http://localhost:8082/nepomuk/</nepomuk.base.url>
         <log.level>debug</log.level>
@@ -24,7 +25,6 @@
         <nepomuk.otherFiles.folder></nepomuk.otherFiles.folder>
         <nepomuk.giles.accessToken></nepomuk.giles.accessToken>
         <nepomuk.kafka.hosts>localhost:9092</nepomuk.kafka.hosts>
-
     </properties>
 
     <repositories>
@@ -37,17 +37,17 @@
 
     <dependencies>
 
-		<!-- Giles Ecosystem -->
-		<dependency>
-			<groupId>edu.asu.diging.giles-eco</groupId>
-			<artifactId>requests</artifactId>
-			<version>0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>edu.asu.diging.giles-eco</groupId>
-			<artifactId>util</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
+        <!-- Giles Ecosystem -->
+        <dependency>
+            <groupId>edu.asu.diging.giles-eco</groupId>
+            <artifactId>requests</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.asu.diging.giles-eco</groupId>
+            <artifactId>util</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 
         <!-- Spring -->
         <dependency>
@@ -125,6 +125,7 @@
             <artifactId>spring-security-taglibs</artifactId>
             <version>${spring-security-version}</version>
         </dependency>
+
         <!-- Spring AOP + AspectJ -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -250,6 +251,7 @@
             <artifactId>spring-kafka</artifactId>
             <version>1.0.1.RELEASE</version>
         </dependency>
+
         <!-- Tiles -->
         <dependency>
             <groupId>org.apache.tiles</groupId>
@@ -316,6 +318,7 @@
             <artifactId>mockito-all</artifactId>
             <version>1.8.5</version>
         </dependency>
+
     </dependencies>
 
     <build>
