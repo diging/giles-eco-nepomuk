@@ -7,4 +7,6 @@ public interface ITokenService {
 
     public abstract IAppToken generateAppToken(IRegisteredApp app);
 
+    public abstract IAppToken getAppTokenContents(String token);
+
 }

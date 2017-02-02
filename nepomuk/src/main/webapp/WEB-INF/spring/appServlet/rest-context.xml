@@ -27,4 +27,6 @@
 	<beans:bean id="jsonMessageConverter"
 		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
 	</beans:bean>
+	
+	<aop:aspectj-autoproxy proxy-target-class="true" />
 </beans:beans>
