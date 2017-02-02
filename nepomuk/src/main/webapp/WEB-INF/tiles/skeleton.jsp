@@ -64,10 +64,12 @@
             </ul>
           </li>
           </li>
-               
+
+<!--                
           <li role="presentation">
                 <a href="<c:url value="/admin/apps" />" >Apps</a>
           </li>
+ -->
           
           </sec:authorize>
          
