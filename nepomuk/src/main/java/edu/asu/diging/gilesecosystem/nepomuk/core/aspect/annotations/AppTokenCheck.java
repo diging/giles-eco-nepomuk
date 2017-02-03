@@ -9,6 +9,4 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface AppTokenCheck {
     String value() default "accessToken";
-    
-    String providerToken() default "providerToken";
 }

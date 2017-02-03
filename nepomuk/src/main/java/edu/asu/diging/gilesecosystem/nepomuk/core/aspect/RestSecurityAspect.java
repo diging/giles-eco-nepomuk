@@ -2,7 +2,6 @@ package edu.asu.diging.gilesecosystem.nepomuk.core.aspect;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +29,6 @@ import edu.asu.diging.gilesecosystem.nepomuk.core.aspect.annotations.AppTokenChe
 import edu.asu.diging.gilesecosystem.nepomuk.core.aspect.tokens.IChecker;
 import edu.asu.diging.gilesecosystem.nepomuk.core.aspect.tokens.impl.AppTokenChecker;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.InvalidTokenException;
-import edu.asu.diging.gilesecosystem.nepomuk.core.exception.ServerMisconfigurationException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.tokens.ITokenContents;
 
 
@@ -47,7 +45,6 @@ public class RestSecurityAspect {
     
     @PostConstruct
     public void init() {
-        System.out.println("In PostConstruct");
         tokenCheckers = new HashMap<>();       
         checkers.forEach(checker -> tokenCheckers.put(checker.getId(), checker));
     }
@@ -62,7 +59,7 @@ public class RestSecurityAspect {
         String token = userTokenObj.token;
         TokenHolder holder = new TokenHolder();
         
-        ResponseEntity<String> authResult = checkAuthorization(token, AppTokenChecker.ID, holder, null);
+        ResponseEntity<String> authResult = checkAuthorization(token, AppTokenChecker.ID, holder);
         if (authResult != null) {
             return authResult;
         }
@@ -70,7 +67,7 @@ public class RestSecurityAspect {
         return joinPoint.proceed();
     }
     
-    private ResponseEntity<String> checkAuthorization(String token, String provider, TokenHolder tokenHolder, String appId) {
+    private ResponseEntity<String> checkAuthorization(String token, String provider, TokenHolder tokenHolder) {
         if (token == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -78,23 +75,9 @@ public class RestSecurityAspect {
         CheckerResult validationResult = null;
         
         try {
-            validationResult = tokenCheckers.get(provider).validateToken(token, appId);
+            validationResult = tokenCheckers.get(provider).validateToken(token);
             tokenHolder.checkResult = validationResult;
             tokenHolder.tokenContents = validationResult.getPayload();
-        } catch (GeneralSecurityException e) {
-            logger.error("Security issue with token.", e);
-            Map<String, String> msgs = new HashMap<String, String>();
-            msgs.put("errorMsg", e.getLocalizedMessage());
-            msgs.put("provider", provider);
-            
-            return generateResponse(msgs, HttpStatus.UNAUTHORIZED);
-        } catch (IOException e) {
-            logger.error("Network issue.", e);
-            Map<String, String> msgs = new HashMap<String, String>();
-            msgs.put("errorMsg", e.getLocalizedMessage());
-            msgs.put("provider", provider);
-            
-            return generateResponse(msgs, HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (InvalidTokenException e) {
             logger.error("Token is invalid.", e);
             Map<String, String> msgs = new HashMap<String, String>();
@@ -102,13 +85,6 @@ public class RestSecurityAspect {
             msgs.put("provider", provider);
             
             return generateResponse(msgs, HttpStatus.UNAUTHORIZED);
-        } catch (ServerMisconfigurationException e) {
-            logger.error("Server or apps are misconfigured.", e);
-            Map<String, String> msgs = new HashMap<String, String>();
-            msgs.put("errorMsg", e.getLocalizedMessage());
-            msgs.put("provider", provider);
-            
-            return generateResponse(msgs, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         
         if (validationResult == null || validationResult.getPayload() == null) {

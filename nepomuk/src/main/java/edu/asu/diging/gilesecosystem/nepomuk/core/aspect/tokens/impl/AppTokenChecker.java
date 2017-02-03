@@ -34,8 +34,7 @@ public class AppTokenChecker implements IChecker {
     }
 
     @Override
-    public CheckerResult validateToken(String token, String appId) throws GeneralSecurityException,
-            IOException, InvalidTokenException {
+    public CheckerResult validateToken(String token) throws InvalidTokenException {
         IAppToken appToken;
         
         try {
