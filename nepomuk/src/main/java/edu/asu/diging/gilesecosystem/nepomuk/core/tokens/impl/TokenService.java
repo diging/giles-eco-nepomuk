@@ -1,7 +1,11 @@
 package edu.asu.diging.gilesecosystem.nepomuk.core.tokens.impl;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
+
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -44,5 +48,26 @@ public class TokenService implements ITokenService {
         token.setId(tokenId);
         token.setAppId(app.getId());
         return token;
+    }
+    
+    @Override
+    public IAppToken getAppTokenContents(String token) {
+        IAppToken appToken = new AppToken();
+        
+        try {
+            Jws<Claims> jws = Jwts.parser().setSigningKey(propertiesManager.getProperty(Properties.SIGNING_KEY_APPS)).parseClaimsJws(token);
+            Claims claims = jws.getBody(); 
+            
+            appToken.setAppId(claims.get("appId", String.class));
+            appToken.setId(claims.get("tokenId", String.class));
+        
+        } catch (io.jsonwebtoken.ExpiredJwtException e) {
+            // currently app tokens don't expire, so we'll just return null
+            return null;
+        } catch (SignatureException e) {
+            return null;
+        } 
+        
+        return appToken;
     }
 }

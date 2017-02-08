@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.asu.diging.gilesecosystem.nepomuk.core.aspect.annotations.AppTokenCheck;
 import edu.asu.diging.gilesecosystem.nepomuk.core.domain.IFile;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesManager;
 
@@ -28,10 +29,11 @@ public class FilesController {
     @Autowired
     private IFilesManager filesManager;
     
+    @AppTokenCheck
     @RequestMapping(value = GET_FILE_URL)
     public ResponseEntity<String> getFile(@PathVariable String fileId, HttpServletResponse response,
             HttpServletRequest request) {
-        
+
         IFile file = filesManager.getFile(fileId);
         if (file == null) {
             return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
