@@ -19,7 +19,7 @@ import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
 @Controller
 public class SigningSecretController {
     
-private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private ISigningSecretGenerator secretGenerator;

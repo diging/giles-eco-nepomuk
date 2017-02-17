@@ -32,7 +32,7 @@
     <definition name="admin/system/admin" extends="base.definition">
         <put-attribute name="content" value="/WEB-INF/views/config/admin_password.jsp" />
     </definition>
-	<definition name="admin/system/auth" extends="base.definition">
+    <definition name="admin/system/auth" extends="base.definition">
         <put-attribute name="content" value="/WEB-INF/views/admin/generate_secret.jsp" />
     </definition>
     <definition name="admin/system/auth/done" extends="base.definition">
