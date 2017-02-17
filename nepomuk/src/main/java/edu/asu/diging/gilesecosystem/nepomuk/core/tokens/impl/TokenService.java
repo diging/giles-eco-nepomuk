@@ -40,7 +40,7 @@ public class TokenService implements ITokenService {
                 .setSubject(app.getName())
                 .claim("appId", app.getId())
                 .claim("tokenId", tokenId)
-                .signWith(SignatureAlgorithm.HS256, propertiesManager.getProperty(Properties.SIGNING_KEY_APPS))
+                .signWith(SignatureAlgorithm.HS256, propertiesManager.getProperty(Properties.NEPOMUK_SIGNING_KEY))
                 .compact();
         
         IAppToken token = new AppToken();
@@ -55,7 +55,7 @@ public class TokenService implements ITokenService {
         IAppToken appToken = new AppToken();
         
         try {
-            Jws<Claims> jws = Jwts.parser().setSigningKey(propertiesManager.getProperty(Properties.SIGNING_KEY_APPS)).parseClaimsJws(token);
+            Jws<Claims> jws = Jwts.parser().setSigningKey(propertiesManager.getProperty(Properties.NEPOMUK_SIGNING_KEY)).parseClaimsJws(token);
             Claims claims = jws.getBody(); 
             
             appToken.setAppId(claims.get("appId", String.class));
