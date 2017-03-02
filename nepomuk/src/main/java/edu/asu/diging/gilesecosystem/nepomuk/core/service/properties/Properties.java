@@ -3,9 +3,8 @@ package edu.asu.diging.gilesecosystem.nepomuk.core.service.properties;
 
 public interface Properties {
 
-    public final static String SIGNING_KEY = "jwt_signing_secret";
-    public final static String SIGNING_KEY_APPS = "jwt_signing_secret_apps";
- 
+    public final static String NEPOMUK_SIGNING_KEY = "nepomuk_signing_secret";
+    
     public final static String APP_BASE_URL = "app_base_url";
     public final static String REST_ENDPOINT_PREFIX = "rest_endpoint";
     public final static String GILES_ACCESS_TOKEN = "giles_access_token";

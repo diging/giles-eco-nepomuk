@@ -25,6 +25,7 @@
         <nepomuk.otherFiles.folder></nepomuk.otherFiles.folder>
         <nepomuk.giles.accessToken></nepomuk.giles.accessToken>
         <nepomuk.kafka.hosts>localhost:9092</nepomuk.kafka.hosts>
+        <nepomuk.signing.secret></nepomuk.signing.secret>
     </properties>
 
     <repositories>
