@@ -28,6 +28,11 @@
         <nepomuk.otherFiles.folder></nepomuk.otherFiles.folder>
         <nepomuk.giles.accessToken></nepomuk.giles.accessToken>
         <nepomuk.kafka.hosts>localhost:9092</nepomuk.kafka.hosts>
+        
+        <!-- Tomcat deployment -->
+        <tomcat.server.id></tomcat.server.id>
+        <tomcat.path></tomcat.path>
+        <tomcat.app></tomcat.app>
     </properties>
 
     <repositories>
@@ -376,6 +381,16 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <url>${tomcat.path}</url>
+                    <server>${tomcat.server.id}</server>
+                    <path>/${tomcat.app}</path>
                 </configuration>
             </plugin>
         </plugins>
