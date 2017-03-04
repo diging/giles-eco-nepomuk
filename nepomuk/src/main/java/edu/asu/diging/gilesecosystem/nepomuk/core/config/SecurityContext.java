@@ -47,7 +47,7 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
                     return false;
                 }
                 logger.debug("Request method: " + arg0.getMethod());
-                if (arg0.getMethod() == "GET") {
+                if (arg0.getMethod().equals("GET")) {
                     return false;
                 }
                 return true;
