@@ -2,6 +2,8 @@ package edu.asu.diging.gilesecosystem.nepomuk.core.config;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +22,8 @@ import edu.asu.diging.gilesecosystem.util.users.IAdminUserDetailsService;
 @Configuration
 @EnableWebSecurity
 public class SecurityContext extends WebSecurityConfigurerAdapter {
+    
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     
     @Autowired
     private IAdminUserDetailsService userDetailsService;
@@ -42,6 +46,7 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
                 if (arg0.getRequestURI().indexOf("/rest/") > -1) {
                     return false;
                 }
+                logger.debug("Request method: " + arg0.getMethod());
                 if (arg0.getMethod() == "GET") {
                     return false;
                 }
