@@ -6,8 +6,6 @@ import java.util.Arrays;
 
 import javax.annotation.PostConstruct;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.domain.IFile;
@@ -27,7 +26,8 @@ import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesManager;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileHandlerRegistry;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileTypeHandler;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IRequestProcessor;
-import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
+import edu.asu.diging.gilesecosystem.nepomuk.core.service.ISystemMessageHandler;
+import edu.asu.diging.gilesecosystem.nepomuk.core.service.properties.Properties;
 import edu.asu.diging.gilesecosystem.nepomuk.rest.FilesController;
 import edu.asu.diging.gilesecosystem.requests.ICompletedStorageRequest;
 import edu.asu.diging.gilesecosystem.requests.IRequestFactory;
@@ -36,13 +36,11 @@ import edu.asu.diging.gilesecosystem.requests.RequestStatus;
 import edu.asu.diging.gilesecosystem.requests.exceptions.MessageCreationException;
 import edu.asu.diging.gilesecosystem.requests.impl.CompletedStorageRequest;
 import edu.asu.diging.gilesecosystem.requests.kafka.IRequestProducer;
-import edu.asu.diging.gilesecosystem.nepomuk.core.service.properties.Properties;
+import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
 
 @Service
 public class RequestProcessor implements IRequestProcessor {
     
-    private final Logger logger = LoggerFactory.getLogger(getClass());
-
     @Autowired
     private IFilesManager filesManager;
     
@@ -57,6 +55,9 @@ public class RequestProcessor implements IRequestProcessor {
     
     @Autowired
     private IRequestProducer requestProducer;
+    
+    @Autowired
+    private ISystemMessageHandler systemMessageHandler;
     
     @Autowired
     private IRequestFactory<ICompletedStorageRequest, CompletedStorageRequest> requestFactory;
@@ -85,8 +86,7 @@ public class RequestProcessor implements IRequestProcessor {
         try {
             newFile = handler.processFile(newFile, content);
         } catch (NepomukFileStorageException e) {
-            logger.error("Could not store file.", e);
-            // FIXME: do something appropriate here
+            systemMessageHandler.handleError("File could not be stored.", e);
             return;
         }
         
@@ -96,7 +96,7 @@ public class RequestProcessor implements IRequestProcessor {
                 completedRequest = requestFactory.createRequest(request.getRequestId(), request.getUploadId());
             } catch (InstantiationException | IllegalAccessException e) {
                 // this should never happen, so we just fail silently...
-                logger.error("Could not create request.", e);
+                systemMessageHandler.handleError("Request could not be created.", e);
                 return;
             }
             
@@ -121,7 +121,7 @@ public class RequestProcessor implements IRequestProcessor {
             try {
                 requestProducer.sendRequest(completedRequest, propertiesManager.getProperty(Properties.KAFKA_TOPIC_STORAGE_COMPLETE));
             } catch (MessageCreationException e) {
-                logger.error("Could not send message.", e);
+                systemMessageHandler.handleError("Request could not be send.", e);
             }
         }
     }
@@ -135,7 +135,14 @@ public class RequestProcessor implements IRequestProcessor {
         headers.set("Authorization", "token " + propertiesManager.getProperty(Properties.GILES_ACCESS_TOKEN));
         HttpEntity<String> entity = new HttpEntity<String>(headers);
 
-        ResponseEntity<byte[]> response = restTemplate.exchange(url, HttpMethod.GET, entity, byte[].class);
+        ResponseEntity<byte[]> response = null;
+        try {
+            response = restTemplate.exchange(url, HttpMethod.GET, entity, byte[].class);
+        } catch (RestClientException ex) {
+            systemMessageHandler.handleError("File could not be downloaded from Giles.", ex);
+            return null;
+        }
+        
         if(response.getStatusCode().equals(HttpStatus.OK)) {    
             return response.getBody();
         }
