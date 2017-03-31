@@ -34,15 +34,12 @@ public class SystemMessageHandler implements ISystemMessageHandler {
     
     @Autowired
     private IPropertiesManager propertiesManager;
-
-    @Autowired
-    private ISystemMessageHandler systemMessageHandler;
     
     @PostConstruct
     public void setup() {
         requestFactory.config(SystemMessageRequest.class);
     }
-    
+
     /* (non-Javadoc)
      * @see edu.asu.diging.gilesecosystem.nepomuk.core.service.impl.ISystemMessageHandler#handleError(java.lang.Exception)
      */
@@ -54,7 +51,6 @@ public class SystemMessageHandler implements ISystemMessageHandler {
             request = requestFactory.createRequest(UUID.randomUUID().toString(), null);
         } catch (InstantiationException | IllegalAccessException e) {
             logger.error("Could not create request.", e);
-            systemMessageHandler.handleError("Could not create request.", e);
             return;
         } 
         request.setApplicationId(propertiesManager.getProperty(Properties.APPLICATION_ID));
@@ -70,7 +66,6 @@ public class SystemMessageHandler implements ISystemMessageHandler {
             requestProducer.sendRequest(request, propertiesManager.getProperty(Properties.KAFKA_TOPIC_SYSTEM_MESSAGES));
         } catch (MessageCreationException e) {
             logger.error("Could not send request.", e);
-            systemMessageHandler.handleError("Could not send request.", e);
         }
     }
 }
