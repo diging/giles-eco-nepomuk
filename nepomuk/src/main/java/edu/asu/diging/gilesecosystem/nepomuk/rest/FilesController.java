@@ -16,11 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.domain.IFile;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesManager;
+import edu.asu.diging.gilesecosystem.nepomuk.core.service.ISystemMessageHandler;
 
 @RestController
 public class FilesController {
     
     private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    @Autowired
+    private ISystemMessageHandler systemMessageHandler;
     
     public final static String FILE_ID_PLACEHOLDER = "{fileId}";
     public final static String GET_FILE_URL = "/files/" + FILE_ID_PLACEHOLDER;
@@ -46,6 +50,7 @@ public class FilesController {
             response.getOutputStream().close();
         } catch (IOException e) {
             logger.error("Could not write to output stream.", e);
+            systemMessageHandler.handleError("Could not write to output stream.", e);
             return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
