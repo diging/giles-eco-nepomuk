@@ -20,9 +20,6 @@ public class FileStorageManager implements IFileStorageManager {
     
     private String fileTypeFolder;
 
-    @Autowired
-    private ISystemMessageHandler systemMessageHandler;
-
     /*
      * (non-Javadoc)
      * 
@@ -41,14 +38,12 @@ public class FileStorageManager implements IFileStorageManager {
         try {
             stream = new BufferedOutputStream(new FileOutputStream(file));
         } catch (FileNotFoundException e) {
-            systemMessageHandler.handleError("Could not store file.", e);
             throw new NepomukFileStorageException("Could not store file.", e);
         }
         try {
             stream.write(bytes);
             stream.close();
         } catch (IOException e) {
-            systemMessageHandler.handleError("Could not store file.", e);
             throw new NepomukFileStorageException("Could not store file.", e);
         }
     }

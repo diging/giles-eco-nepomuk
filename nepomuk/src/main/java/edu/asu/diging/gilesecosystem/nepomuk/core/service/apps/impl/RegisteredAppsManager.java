@@ -79,7 +79,6 @@ public class RegisteredAppsManager implements IRegisteredAppManager {
         try {
             databaseClient.storeModifiedApp(app);
         } catch (UnstorableObjectException e) {
-            systemMessageHandler.handleError("Token was generated but app could not be stored.", e);
             throw new TokenGenerationErrorException("Token was generated but app could not be stored.", e);
         }
         
