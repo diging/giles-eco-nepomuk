@@ -39,7 +39,7 @@ public class SystemMessageHandler implements ISystemMessageHandler {
     public void setup() {
         requestFactory.config(SystemMessageRequest.class);
     }
-    
+
     /* (non-Javadoc)
      * @see edu.asu.diging.gilesecosystem.nepomuk.core.service.impl.ISystemMessageHandler#handleError(java.lang.Exception)
      */
