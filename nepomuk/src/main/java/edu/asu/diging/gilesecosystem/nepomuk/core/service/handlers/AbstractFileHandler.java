@@ -64,6 +64,10 @@ public abstract class AbstractFileHandler implements IFileTypeHandler {
     }
     
     public IFile processFile(IFile file, byte[] content) throws NepomukFileStorageException {
+        if (content == null) {
+            logger.warn("File " + file.getGilesFileId() + " does not have any content.");
+            return null;
+        }
         
         Tika tika = new Tika();
         String contentType = tika.detect(content);

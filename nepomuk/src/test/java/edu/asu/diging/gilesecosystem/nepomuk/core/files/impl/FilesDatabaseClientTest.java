@@ -19,6 +19,7 @@ import org.mockito.MockitoAnnotations;
 import edu.asu.diging.gilesecosystem.nepomuk.core.domain.IFile;
 import edu.asu.diging.gilesecosystem.nepomuk.core.domain.impl.File;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.UnstorableObjectException;
+import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesDatabaseClient;
 
 public class FilesDatabaseClientTest {
 
@@ -29,7 +30,7 @@ public class FilesDatabaseClientTest {
     private TypedQuery<File> typedQuery;
 
     @InjectMocks
-    private FilesDatabaseClient clientToTest;
+    private IFilesDatabaseClient clientToTest;
 
     private final String ID = "id";
     private final String ID2 = "id2";

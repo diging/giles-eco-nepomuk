@@ -81,6 +81,7 @@ public class RequestProcessor implements IRequestProcessor {
         newFile.setUsername(request.getUsername());
         newFile.setFilename(request.getFilename());
         newFile.setFileType(request.getFileType());
+        newFile.setGilesFileId(request.getFileId());
         
         byte[] content = downloadFile(request.getDownloadUrl());
         try {

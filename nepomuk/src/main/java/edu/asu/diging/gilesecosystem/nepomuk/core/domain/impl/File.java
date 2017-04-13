@@ -1,5 +1,6 @@
 package edu.asu.diging.gilesecosystem.nepomuk.core.domain.impl;
 
+import javax.jdo.annotations.Index;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -9,19 +10,19 @@ import edu.asu.diging.gilesecosystem.requests.FileType;
 @Entity
 public class File implements IFile {
 
-    private String uploadId;
-    private String filename;
-    private String username;
-    private String documentId;
-    @Id
-    private String id;
+    @Index private String uploadId;
+    @Index private String filename;
+    @Index private String username;
+    @Index private String documentId;
+    @Id @Index private String id;
     private String uploadDate;
     private String processedDate;
     private long size;
     private String filepath; 
     private FileType fileType;
     private String contentType;
-
+    @Index private String gilesFileId;
+    
     public File() {
     }
 
@@ -180,6 +181,16 @@ public class File implements IFile {
     @Override
     public void setContentType(String contentType) {
         this.contentType = contentType;
+    }
+
+    @Override
+    public String getGilesFileId() {
+        return gilesFileId;
+    }
+
+    @Override
+    public void setGilesFileId(String gilesFileId) {
+        this.gilesFileId = gilesFileId;
     }
     
 }

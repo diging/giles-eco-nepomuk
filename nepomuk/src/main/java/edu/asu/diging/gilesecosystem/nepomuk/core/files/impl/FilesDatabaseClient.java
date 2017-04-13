@@ -6,12 +6,14 @@ import java.util.List;
 import javax.annotation.PreDestroy;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.domain.IFile;
 import edu.asu.diging.gilesecosystem.nepomuk.core.domain.impl.File;
+import edu.asu.diging.gilesecosystem.nepomuk.core.exception.NoUniqueResultException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.UnstorableObjectException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesDatabaseClient;
 import edu.asu.diging.gilesecosystem.nepomuk.core.store.objectdb.DatabaseClient;
@@ -73,6 +75,21 @@ public class FilesDatabaseClient extends DatabaseClient<IFile> implements
             return null;
         }
         return files.get(0);
+    }
+    
+    @Override
+    public IFile getFile(String uploadId, String documentId, String filename) throws NoUniqueResultException {
+        String query = "SELECT t FROM " + File.class.getName()  + " t WHERE t.uploadId = '" + uploadId + "' and t.documentId = '" + documentId + "' and t.filename = '" + filename + "'";
+        TypedQuery<File> docs = em.createQuery(query, File.class);
+        
+        List<File> results = docs.getResultList();
+        if (results.size() > 1) {
+            throw new NoUniqueResultException("There are more than one result for file: " + uploadId + ", " + documentId + ", " + filename);
+        }
+        if (results.isEmpty()) {
+            return null;
+        }
+        return results.get(0);
     }
 
     @Override

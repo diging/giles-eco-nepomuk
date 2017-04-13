@@ -9,6 +9,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.domain.IFile;
+import edu.asu.diging.gilesecosystem.nepomuk.core.exception.NoUniqueResultException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.UnstorableObjectException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesDatabaseClient;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesManager;
@@ -71,7 +72,11 @@ public class FilesManager implements IFilesManager {
         return file;
     }
 
-
+    @Override
+    public IFile getFile(String uploadId, String documentId, String filename) throws NoUniqueResultException {
+        return databaseClient.getFile(uploadId, documentId, filename);
+    }
+    
     @Override
     public String getRelativePathOfFile(IFile file) {
         IFileTypeHandler handler = fileHandlerRegistry.getHandler(file
