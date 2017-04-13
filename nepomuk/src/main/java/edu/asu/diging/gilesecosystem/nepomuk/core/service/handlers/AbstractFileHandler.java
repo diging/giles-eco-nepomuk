@@ -19,13 +19,17 @@ import edu.asu.diging.gilesecosystem.nepomuk.core.exception.UnstorableObjectExce
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFileStorageManager;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesManager;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileTypeHandler;
+import edu.asu.diging.gilesecosystem.nepomuk.core.service.ISystemMessageHandler;
 
 public abstract class AbstractFileHandler implements IFileTypeHandler {
     
     private Logger logger = LoggerFactory.getLogger(getClass());
-    
+
     @Autowired
     private IFilesManager filesManager;
+
+    @Autowired
+    private ISystemMessageHandler systemMessageHandler;
     
     protected byte[] getFileContentFromUrl(URL url) throws IOException {
         URLConnection con = url.openConnection();
@@ -58,6 +62,7 @@ public abstract class AbstractFileHandler implements IFileTypeHandler {
         try {
             return getFileContentFromUrl(fileObject.toURI().toURL());
         } catch (IOException e) {
+            systemMessageHandler.handleError("Could not read file.", e);
             logger.error("Could not read file.", e);
             return null;
         }
@@ -80,6 +85,7 @@ public abstract class AbstractFileHandler implements IFileTypeHandler {
             filesManager.saveFile(file);
         } catch (UnstorableObjectException e) {
             logger.error("Could not store file.", e);
+            systemMessageHandler.handleError("Could not store file.", e);
             return null;
         }
         return file;
