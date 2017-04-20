@@ -49,4 +49,8 @@ public interface IFile extends IStorableObject {
 
     public abstract String getContentType();
 
+    public abstract void setGilesFileId(String gilesFileId);
+
+    public abstract String getGilesFileId();
+
 }

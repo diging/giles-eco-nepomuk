@@ -3,6 +3,7 @@ package edu.asu.diging.gilesecosystem.nepomuk.core.files;
 import java.util.List;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.domain.IFile;
+import edu.asu.diging.gilesecosystem.nepomuk.core.exception.NoUniqueResultException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.UnstorableObjectException;
 
 public interface IFilesManager {
@@ -29,4 +30,7 @@ public interface IFilesManager {
     public abstract String getRelativePathOfFile(IFile file);
 
     public abstract byte[] getFileContent(IFile file);
+
+    public abstract IFile getFile(String uploadId, String documentId, String filename)
+            throws NoUniqueResultException;
 }
