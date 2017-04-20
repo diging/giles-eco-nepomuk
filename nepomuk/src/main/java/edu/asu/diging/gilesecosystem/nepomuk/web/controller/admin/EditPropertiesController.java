@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import edu.asu.diging.gilesecosystem.nepomuk.core.service.ISystemMessageHandler;
+import edu.asu.diging.gilesecosystem.nepomuk.core.config.NepomukExceptionConfig;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.properties.Properties;
 import edu.asu.diging.gilesecosystem.util.exceptions.PropertiesStorageException;
 import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
@@ -32,7 +32,7 @@ public class EditPropertiesController {
     private IPropertiesManager propertyManager;
 
     @Autowired
-    private ISystemMessageHandler systemMessageHandler;
+    private NepomukExceptionConfig exceptionConfig;
     
     @InitBinder
     protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder, WebDataBinder validateBinder) {
@@ -68,7 +68,7 @@ public class EditPropertiesController {
         try {
             propertyManager.updateProperties(propertiesMap);
         } catch (PropertiesStorageException e) {
-            systemMessageHandler.handleError("An unexpected error occurred. System Configuration could not be saved.", e);
+            exceptionConfig.getMessageHandler().handleError("An unexpected error occurred. System Configuration could not be saved.", e);
             model.addAttribute("show_alert", true);
             model.addAttribute("alert_type", "danger");
             model.addAttribute("alert_msg", "An unexpected error occurred. System Configuration could not be saved.");

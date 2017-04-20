@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import edu.asu.diging.gilesecosystem.nepomuk.core.config.NepomukExceptionConfig;
 import edu.asu.diging.gilesecosystem.nepomuk.core.domain.IFile;
 import edu.asu.diging.gilesecosystem.nepomuk.core.domain.impl.File;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.NepomukFileStorageException;
@@ -26,7 +27,6 @@ import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesManager;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileHandlerRegistry;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileTypeHandler;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IRequestProcessor;
-import edu.asu.diging.gilesecosystem.nepomuk.core.service.ISystemMessageHandler;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.properties.Properties;
 import edu.asu.diging.gilesecosystem.nepomuk.rest.FilesController;
 import edu.asu.diging.gilesecosystem.requests.ICompletedStorageRequest;
@@ -57,7 +57,7 @@ public class RequestProcessor implements IRequestProcessor {
     private IRequestProducer requestProducer;
     
     @Autowired
-    private ISystemMessageHandler systemMessageHandler;
+    private NepomukExceptionConfig exceptionConfig;
     
     @Autowired
     private IRequestFactory<ICompletedStorageRequest, CompletedStorageRequest> requestFactory;
@@ -87,7 +87,7 @@ public class RequestProcessor implements IRequestProcessor {
         try {
             newFile = handler.processFile(newFile, content);
         } catch (NepomukFileStorageException e) {
-            systemMessageHandler.handleError("File could not be stored.", e);
+            exceptionConfig.getMessageHandler().handleError("File could not be stored.", e);
             return;
         }
         
@@ -97,7 +97,7 @@ public class RequestProcessor implements IRequestProcessor {
                 completedRequest = requestFactory.createRequest(request.getRequestId(), request.getUploadId());
             } catch (InstantiationException | IllegalAccessException e) {
                 // this should never happen, so we just fail silently...
-                systemMessageHandler.handleError("Request could not be created.", e);
+                exceptionConfig.getMessageHandler().handleError("Request could not be created.", e);
                 return;
             }
             
@@ -122,7 +122,7 @@ public class RequestProcessor implements IRequestProcessor {
             try {
                 requestProducer.sendRequest(completedRequest, propertiesManager.getProperty(Properties.KAFKA_TOPIC_STORAGE_COMPLETE));
             } catch (MessageCreationException e) {
-                systemMessageHandler.handleError("Request could not be send.", e);
+                exceptionConfig.getMessageHandler().handleError("Request could not be send.", e);
             }
         }
     }
@@ -140,7 +140,7 @@ public class RequestProcessor implements IRequestProcessor {
         try {
             response = restTemplate.exchange(url, HttpMethod.GET, entity, byte[].class);
         } catch (RestClientException ex) {
-            systemMessageHandler.handleError("File could not be downloaded from Giles.", ex);
+            exceptionConfig.getMessageHandler().handleError("File could not be downloaded from Giles.", ex);
             return null;
         }
         

@@ -16,7 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.apps.IRegisteredApp;
 import edu.asu.diging.gilesecosystem.nepomuk.core.apps.impl.RegisteredApp;
-import edu.asu.diging.gilesecosystem.nepomuk.core.service.ISystemMessageHandler;
+import edu.asu.diging.gilesecosystem.nepomuk.core.config.NepomukExceptionConfig;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.apps.IRegisteredAppManager;
 import edu.asu.diging.gilesecosystem.nepomuk.core.validators.RegisteredAppValidator;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.TokenGenerationErrorException;
@@ -31,7 +31,7 @@ public class AddRegisteredAppController {
     private IRegisteredAppManager appManager;
 
     @Autowired
-    private ISystemMessageHandler systemMessageHandler;
+    private NepomukExceptionConfig exceptionConfig;
     
     @InitBinder("app")
     public void init(WebDataBinder binder) {
@@ -58,7 +58,7 @@ public class AddRegisteredAppController {
             token = appManager.createToken(newApp);
         } catch (TokenGenerationErrorException e) {
             logger.error("Token generation failed.", e);
-            systemMessageHandler.handleError("Token generation failed.", e);
+            exceptionConfig.getMessageHandler().handleError("Token generation failed.", e);
             redirectAttrs.addFlashAttribute("show_alert", true);
             redirectAttrs.addFlashAttribute("alert_type", "danger");
             redirectAttrs.addFlashAttribute("alert_msg", "You app has been registered, but token generation failed.");   
