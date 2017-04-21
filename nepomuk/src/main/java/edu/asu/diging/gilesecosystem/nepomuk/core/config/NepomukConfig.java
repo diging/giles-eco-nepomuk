@@ -12,7 +12,6 @@ import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
  * Class to initialize message handler class to send exception as kafka topic.
  * 
  * @author snilapwa
- *
  */
 @Configuration
 public class NepomukConfig {
