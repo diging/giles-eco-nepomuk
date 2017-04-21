@@ -15,7 +15,7 @@ import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
  *
  */
 @Configuration
-public class NepomukExceptionConfig {
+public class NepomukConfig {
 
     @Autowired
     private IPropertiesManager propertyManager;

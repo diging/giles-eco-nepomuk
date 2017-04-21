@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import edu.asu.diging.gilesecosystem.nepomuk.core.config.NepomukExceptionConfig;
 import edu.asu.diging.gilesecosystem.nepomuk.web.pages.AdminPassword;
 import edu.asu.diging.gilesecosystem.nepomuk.web.validators.AdminPasswordValidator;
+import edu.asu.diging.gilesecosystem.septemberutil.service.impl.SystemMessageHandler;
 import edu.asu.diging.gilesecosystem.util.exceptions.BadPasswordException;
 import edu.asu.diging.gilesecosystem.util.exceptions.UnauthorizedException;
 import edu.asu.diging.gilesecosystem.util.users.IAdminUserManager;
@@ -41,7 +41,7 @@ public class AdminPasswordController {
     private IAdminUserManager adminManager;
 
     @Autowired
-    private NepomukExceptionConfig exceptionConfig;
+    private SystemMessageHandler messageHandler;
 
     @InitBinder
     public void init(WebDataBinder binder) {
@@ -89,8 +89,7 @@ public class AdminPasswordController {
         } catch (BadPasswordException | UnauthorizedException e) {
             // this should never happen because it should be caught by the
             // validator
-            logger.error("Could not update password.", e);
-            exceptionConfig.getMessageHandler().handleError("Could not update password.", e);
+            messageHandler.handleError("Could not update password.", e);
         }
 
         if (success) {

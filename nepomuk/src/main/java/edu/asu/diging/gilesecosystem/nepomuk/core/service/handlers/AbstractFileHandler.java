@@ -13,13 +13,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import edu.asu.diging.gilesecosystem.nepomuk.core.config.NepomukExceptionConfig;
 import edu.asu.diging.gilesecosystem.nepomuk.core.domain.IFile;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.NepomukFileStorageException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.UnstorableObjectException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFileStorageManager;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesManager;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileTypeHandler;
+import edu.asu.diging.gilesecosystem.septemberutil.service.impl.SystemMessageHandler;
 
 public abstract class AbstractFileHandler implements IFileTypeHandler {
     
@@ -29,7 +29,7 @@ public abstract class AbstractFileHandler implements IFileTypeHandler {
     private IFilesManager filesManager;
 
     @Autowired
-    private NepomukExceptionConfig exceptionConfig;
+    private SystemMessageHandler messageHandler;
     
     protected byte[] getFileContentFromUrl(URL url) throws IOException {
         URLConnection con = url.openConnection();
@@ -62,8 +62,7 @@ public abstract class AbstractFileHandler implements IFileTypeHandler {
         try {
             return getFileContentFromUrl(fileObject.toURI().toURL());
         } catch (IOException e) {
-            exceptionConfig.getMessageHandler().handleError("Could not read file.", e);
-            logger.error("Could not read file.", e);
+            messageHandler.handleError("Could not read file.", e);
             return null;
         }
     }
@@ -84,8 +83,7 @@ public abstract class AbstractFileHandler implements IFileTypeHandler {
         try {
             filesManager.saveFile(file);
         } catch (UnstorableObjectException e) {
-            logger.error("Could not store file.", e);
-            exceptionConfig.getMessageHandler().handleError("Could not store file.", e);
+            messageHandler.handleError("Could not store file.", e);
             return null;
         }
         return file;
