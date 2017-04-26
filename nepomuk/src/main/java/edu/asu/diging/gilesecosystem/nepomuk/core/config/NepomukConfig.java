@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.properties.Properties;
+import edu.asu.diging.gilesecosystem.septemberutil.service.ISystemMessageHandler;
 import edu.asu.diging.gilesecosystem.septemberutil.service.impl.SystemMessageHandler;
 import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
 
@@ -20,7 +21,7 @@ public class NepomukConfig {
     private IPropertiesManager propertyManager;
     
     @Bean
-    public SystemMessageHandler getMessageHandler() {
+    public ISystemMessageHandler getMessageHandler() {
         return new SystemMessageHandler(propertyManager.getProperty(Properties.APPLICATION_ID));
     }
 }
