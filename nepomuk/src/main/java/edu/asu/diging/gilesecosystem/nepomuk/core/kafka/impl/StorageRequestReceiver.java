@@ -13,8 +13,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IRequestProcessor;
 import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
 import edu.asu.diging.gilesecosystem.requests.IStorageRequest;
+import edu.asu.diging.gilesecosystem.requests.ISystemMessageRequest;
 import edu.asu.diging.gilesecosystem.requests.impl.StorageRequest;
-import edu.asu.diging.gilesecosystem.septemberutil.service.impl.SystemMessageHandler;
+import edu.asu.diging.gilesecosystem.septemberutil.properties.MessageType;
+import edu.asu.diging.gilesecosystem.septemberutil.service.ISystemMessageHandler;
 
 @PropertySource("classpath:/config.properties")
 public class StorageRequestReceiver {
@@ -28,7 +30,7 @@ public class StorageRequestReceiver {
     private IPropertiesManager propertiesManager;
 
     @Autowired
-    private SystemMessageHandler messageHandler;
+    private ISystemMessageHandler messageHandler;
     
     @KafkaListener(topics = "${topic_storage_request}")
     public void receiveMessage(String message) {
@@ -37,7 +39,7 @@ public class StorageRequestReceiver {
         try {
             request = mapper.readValue(message, StorageRequest.class);
         } catch (IOException e) {
-            messageHandler.handleError("Could not unmarshall request.", e);
+            messageHandler.handleMessage("Could not unmarshall request.", e, MessageType.ERROR);
             // FIXME: handel this case
             return;
         }

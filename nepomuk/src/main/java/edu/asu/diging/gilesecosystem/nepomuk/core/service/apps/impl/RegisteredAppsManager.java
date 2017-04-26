@@ -17,7 +17,8 @@ import edu.asu.diging.gilesecosystem.nepomuk.core.exception.TokenGenerationError
 import edu.asu.diging.gilesecosystem.util.exceptions.UnstorableObjectException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.tokens.IAppToken;
 import edu.asu.diging.gilesecosystem.nepomuk.core.tokens.ITokenService;
-import edu.asu.diging.gilesecosystem.septemberutil.service.impl.SystemMessageHandler;
+import edu.asu.diging.gilesecosystem.septemberutil.properties.MessageType;
+import edu.asu.diging.gilesecosystem.septemberutil.service.ISystemMessageHandler;
 
 @Transactional("txmanager_apps")
 @Service
@@ -32,7 +33,7 @@ public class RegisteredAppsManager implements IRegisteredAppManager {
     private ITokenService tokenService;
 
     @Autowired
-    private SystemMessageHandler messageHandler;
+    private ISystemMessageHandler messageHandler;
 
     @Override
     public IRegisteredApp storeApp(IRegisteredApp app) {
@@ -43,7 +44,7 @@ public class RegisteredAppsManager implements IRegisteredAppManager {
         try {
             databaseClient.store(app);
         } catch (UnstorableObjectException e) {
-            messageHandler.handleError("Could not store app.", e);
+            messageHandler.handleMessage("Could not store app.", e, MessageType.ERROR);
             return null;
         }
         return app;
