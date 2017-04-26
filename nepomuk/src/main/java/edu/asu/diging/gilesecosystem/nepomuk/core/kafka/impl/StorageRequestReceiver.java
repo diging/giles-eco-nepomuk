@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IRequestProcessor;
 import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
 import edu.asu.diging.gilesecosystem.requests.IStorageRequest;
-import edu.asu.diging.gilesecosystem.requests.ISystemMessageRequest;
 import edu.asu.diging.gilesecosystem.requests.impl.StorageRequest;
 import edu.asu.diging.gilesecosystem.septemberutil.properties.MessageType;
 import edu.asu.diging.gilesecosystem.septemberutil.service.ISystemMessageHandler;
