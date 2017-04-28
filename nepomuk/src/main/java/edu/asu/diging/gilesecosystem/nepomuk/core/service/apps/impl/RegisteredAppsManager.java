@@ -19,7 +19,7 @@ import edu.asu.diging.gilesecosystem.util.exceptions.UnstorableObjectException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.tokens.IAppToken;
 import edu.asu.diging.gilesecosystem.nepomuk.core.tokens.ITokenService;
 
-@Transactional("txmanager_apps")
+@Transactional
 @Service
 public class RegisteredAppsManager implements IRegisteredAppManager {
 

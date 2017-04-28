@@ -1,27 +1,36 @@
-package edu.asu.diging.gilesecosystem.nepomuk.core.domain.impl;
+package edu.asu.diging.gilesecosystem.nepomuk.core.model.impl;
 
-import javax.jdo.annotations.Index;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.Table;
 
-import edu.asu.diging.gilesecosystem.nepomuk.core.domain.IFile;
+import edu.asu.diging.gilesecosystem.nepomuk.core.model.IFile;
 import edu.asu.diging.gilesecosystem.requests.FileType;
 
 @Entity
+@Table(indexes={
+        @Index(columnList="uploadId", name="IDX_UPLOAD_ID"),
+        @Index(columnList="username", name="IDX_USERNAME"),
+        @Index(columnList="documentId", name="IDX_USERNAME"),
+        @Index(columnList="gilesFileId", name="IDX_GILES_FILE_ID"),
+        @Index(columnList="filename", name="IDX_FILENAME"),
+})
 public class File implements IFile {
 
-    @Index private String uploadId;
-    @Index private String filename;
-    @Index private String username;
-    @Index private String documentId;
     @Id private String id;
+    
+    private String uploadId;
+    private String filename;
+    private String username;
+    private String documentId;
     private String uploadDate;
     private String processedDate;
     private long size;
     private String filepath; 
     private FileType fileType;
     private String contentType;
-    @Index private String gilesFileId;
+    private String gilesFileId;
     
     public File() {
     }

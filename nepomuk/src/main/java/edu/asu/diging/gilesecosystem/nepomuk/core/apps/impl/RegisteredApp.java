@@ -2,10 +2,12 @@ package edu.asu.diging.gilesecosystem.nepomuk.core.apps.impl;
 
 import java.util.List;
 
-import javax.persistence.Basic;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.apps.IRegisteredApp;
 
@@ -14,7 +16,9 @@ public class RegisteredApp implements IRegisteredApp {
 
     @Id private String id;
     private String name;
-    @Basic(fetch = FetchType.EAGER) private List<String> tokenIds;
+    
+    @ElementCollection @LazyCollection(LazyCollectionOption.FALSE) 
+    private List<String> tokenIds;
     
     @Override
     public String getId() {
