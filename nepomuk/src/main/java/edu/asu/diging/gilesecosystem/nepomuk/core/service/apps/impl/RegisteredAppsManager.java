@@ -12,12 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.apps.IRegisteredApp;
 import edu.asu.diging.gilesecosystem.nepomuk.core.apps.IRegisteredAppDatabaseClient;
-import edu.asu.diging.gilesecosystem.nepomuk.core.service.ISystemMessageHandler;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.apps.IRegisteredAppManager;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.TokenGenerationErrorException;
 import edu.asu.diging.gilesecosystem.util.exceptions.UnstorableObjectException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.tokens.IAppToken;
 import edu.asu.diging.gilesecosystem.nepomuk.core.tokens.ITokenService;
+import edu.asu.diging.gilesecosystem.septemberutil.properties.MessageType;
+import edu.asu.diging.gilesecosystem.septemberutil.service.ISystemMessageHandler;
 
 @Transactional("txmanager_apps")
 @Service
@@ -32,7 +33,7 @@ public class RegisteredAppsManager implements IRegisteredAppManager {
     private ITokenService tokenService;
 
     @Autowired
-    private ISystemMessageHandler systemMessageHandler;
+    private ISystemMessageHandler messageHandler;
 
     @Override
     public IRegisteredApp storeApp(IRegisteredApp app) {
@@ -43,8 +44,7 @@ public class RegisteredAppsManager implements IRegisteredAppManager {
         try {
             databaseClient.store(app);
         } catch (UnstorableObjectException e) {
-            logger.error("Could not store app.", e);
-            systemMessageHandler.handleError("Could not store app.", e);
+            messageHandler.handleMessage("Could not store app.", e, MessageType.ERROR);
             return null;
         }
         return app;

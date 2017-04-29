@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.asu.diging.gilesecosystem.nepomuk.core.domain.IFile;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.NoUniqueResultException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesManager;
-import edu.asu.diging.gilesecosystem.nepomuk.core.service.ISystemMessageHandler;
+import edu.asu.diging.gilesecosystem.septemberutil.properties.MessageType;
+import edu.asu.diging.gilesecosystem.septemberutil.service.ISystemMessageHandler;
 
 @RestController
 public class FilesController {
@@ -25,7 +26,7 @@ public class FilesController {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private ISystemMessageHandler systemMessageHandler;
+    private ISystemMessageHandler messageHandler;
     
     public final static String FILE_ID_PLACEHOLDER = "{fileId}";
     public final static String GET_FILE_URL = "/files/" + FILE_ID_PLACEHOLDER;
@@ -55,8 +56,7 @@ public class FilesController {
             response.getOutputStream().write(content);
             response.getOutputStream().close();
         } catch (IOException e) {
-            logger.error("Could not write to output stream.", e);
-            systemMessageHandler.handleError("Could not write to output stream.", e);
+            messageHandler.handleMessage("Could not write to output stream.", e, MessageType.ERROR);
             return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
