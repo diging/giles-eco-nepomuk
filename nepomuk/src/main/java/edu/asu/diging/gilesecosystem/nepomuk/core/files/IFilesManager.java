@@ -33,4 +33,6 @@ public interface IFilesManager {
 
     public abstract IFile getFile(String uploadId, String documentId, String filename)
             throws NoUniqueResultException;
+
+    List<String> getKnownUsernames();
 }

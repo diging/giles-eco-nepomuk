@@ -81,5 +81,10 @@ public class FilesManager implements IFilesManager {
                 .getFileType());
         return handler.getRelativePathOfFile(file);
     }
+    
+    @Override
+    public List<String> getKnownUsernames() {
+        return databaseClient.getUsernames();
+    }
 
 }

@@ -51,5 +51,13 @@
 	<definition name="notFound" extends="base.definition">
 		<put-attribute name="content" value="/WEB-INF/views/notFound.jsp" />	
 	</definition>
+    
+    <!-- Migration -->
+    <definition name="admin/migrate" extends="base.definition">
+        <put-attribute name="content" value="/WEB-INF/views/admin/migrate/migrate.jsp" />
+    </definition>
+    <definition name="admin/migrate/running" extends="base.definition">
+        <put-attribute name="content" value="/WEB-INF/views/admin/migrate/running.jsp" />
+    </definition>
 	
 </tiles-definitions>

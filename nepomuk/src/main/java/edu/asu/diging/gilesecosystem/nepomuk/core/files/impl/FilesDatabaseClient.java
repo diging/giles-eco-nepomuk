@@ -114,4 +114,10 @@ public class FilesDatabaseClient extends DatabaseClient<IFile> implements
         return results;
     }
 
+    @Override
+    public List<String> getUsernames() {
+        String query = "SELECT DISTINCT(t.username) FROM " + File.class.getName()  + " t";
+        TypedQuery<String> docs = em.createQuery(query, String.class);
+        return docs.getResultList();       
+    }
 }
