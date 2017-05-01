@@ -19,7 +19,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @EnableJpaRepositories(basePackages = {
-        "edu.asu.diging.gilesecosystem.web"
+        "edu.asu.diging.gilesecosystem.nepomuk"
 })
 @EnableTransactionManagement
 public class PersistentContext {
