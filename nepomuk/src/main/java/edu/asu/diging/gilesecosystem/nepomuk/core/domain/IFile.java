@@ -3,6 +3,16 @@ package edu.asu.diging.gilesecosystem.nepomuk.core.domain;
 import edu.asu.diging.gilesecosystem.nepomuk.core.store.IStorableObject;
 import edu.asu.diging.gilesecosystem.requests.FileType;
 
+/**
+ * 
+ * @deprecated
+ *      Use {@link edu.asu.diging.gilesecosystem.nepomuk.core.model.IFile} instead. 
+ *      This interface only exists for migration purposes.
+ *      
+ * @author jdamerow
+ *
+ */
+@Deprecated
 public interface IFile extends IStorableObject {
 
     public abstract String getUploadId();

@@ -7,6 +7,16 @@ import javax.persistence.Id;
 import edu.asu.diging.gilesecosystem.nepomuk.core.domain.IFile;
 import edu.asu.diging.gilesecosystem.requests.FileType;
 
+/**
+ * 
+ * @deprecated
+ *      Use {@link edu.asu.diging.gilesecosystem.nepomuk.core.model.impl.File} instead. 
+ *      This class only exists for migration purposes.
+ *      
+ * @author jdamerow
+ *
+ */
+@Deprecated
 @Entity
 public class File implements IFile {
 
