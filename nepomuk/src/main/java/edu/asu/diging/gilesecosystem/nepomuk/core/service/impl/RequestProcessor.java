@@ -19,8 +19,6 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.NepomukFileStorageException;
-import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFileStorageManager;
-import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesManager;
 import edu.asu.diging.gilesecosystem.nepomuk.core.model.IFile;
 import edu.asu.diging.gilesecosystem.nepomuk.core.model.impl.File;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileHandlerRegistry;
@@ -41,12 +39,6 @@ import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
 
 @Service
 public class RequestProcessor implements IRequestProcessor {
-    
-    @Autowired
-    private IFilesManager filesManager;
-    
-    @Autowired
-    private IFileStorageManager fileStorageManager;
     
     @Autowired
     private IFileHandlerRegistry fileHandlerRegistry;

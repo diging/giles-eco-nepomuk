@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFileStorageManager;
 import edu.asu.diging.gilesecosystem.requests.FileType;
-import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
 
 @PropertySource("classpath:/config.properties")
 @Service
@@ -20,9 +19,6 @@ public class TextFileHandler extends AbstractFileHandler {
     @Qualifier("textStorageManager")
     private IFileStorageManager textStorageManager;
     
-    @Autowired
-    private IPropertiesManager propertyManager;
-
     @Override
     public List<FileType> getHandledFileTypes() {
         List<FileType> types = new ArrayList<FileType>();

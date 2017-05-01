@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.UnstorableObjectException;
-import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesManager;
 
 @Service
 public class MigrationManager {

@@ -11,11 +11,9 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFileStorageManager;
-import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesDatabaseClient;
 import edu.asu.diging.gilesecosystem.nepomuk.core.model.IFile;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileTypeHandler;
 import edu.asu.diging.gilesecosystem.requests.FileType;
-import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
 
 @PropertySource("classpath:/config.properties")
 @Service
@@ -26,13 +24,6 @@ public class DefaultFileHandler extends AbstractFileHandler implements IFileType
     @Autowired
     @Qualifier("otherStorageManager")
     private IFileStorageManager storageManager;
-    
-    @Autowired
-    private IPropertiesManager propertyManager;
-    
-    @Autowired
-    private IFilesDatabaseClient databaseClient;
-    
     
     @Override
     public List<FileType> getHandledFileTypes() {
