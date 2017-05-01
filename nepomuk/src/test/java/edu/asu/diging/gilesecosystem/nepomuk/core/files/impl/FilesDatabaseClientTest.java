@@ -7,8 +7,6 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import junit.framework.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -16,10 +14,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import edu.asu.diging.gilesecosystem.nepomuk.core.domain.IFile;
-import edu.asu.diging.gilesecosystem.nepomuk.core.domain.impl.File;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.UnstorableObjectException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesDatabaseClient;
+import edu.asu.diging.gilesecosystem.nepomuk.core.model.IFile;
+import edu.asu.diging.gilesecosystem.nepomuk.core.model.impl.File;
+import junit.framework.Assert;
 
 public class FilesDatabaseClientTest {
 
@@ -86,7 +85,7 @@ public class FilesDatabaseClientTest {
     public void test_getFilesByUploadId_success() {
         Mockito.when(
                 em.createQuery(
-                        "SELECT t FROM edu.asu.diging.gilesecosystem.nepomuk.core.domain.impl.File t WHERE t.uploadId = '"
+                        "SELECT t FROM edu.asu.diging.gilesecosystem.nepomuk.core.model.impl.File t WHERE t.uploadId = '"
                                 + UPLOAD_ID + "'", File.class)).thenReturn(typedQuery);
 
         File file = new File();
@@ -120,7 +119,7 @@ public class FilesDatabaseClientTest {
     public void test_getFilesByUploadId_noResults() {
         Mockito.when(
                 em.createQuery(
-                        "SELECT t FROM edu.asu.diging.gilesecosystem.nepomuk.core.domain.impl.File t WHERE t.uploadId = '"
+                        "SELECT t FROM edu.asu.diging.gilesecosystem.nepomuk.core.model.impl.File t WHERE t.uploadId = '"
                                 + UPLOAD_ID + "'", File.class)).thenReturn(typedQuery);
 
         List<File> files = new ArrayList<>();
@@ -134,7 +133,7 @@ public class FilesDatabaseClientTest {
     public void test_getFilesByUsername_success() {
         Mockito.when(
                 em.createQuery(
-                        "SELECT t FROM edu.asu.diging.gilesecosystem.nepomuk.core.domain.impl.File t WHERE t.username = '"
+                        "SELECT t FROM edu.asu.diging.gilesecosystem.nepomuk.core.model.impl.File t WHERE t.username = '"
                                 + USERNAME + "'", File.class)).thenReturn(typedQuery);
 
         File file = new File();
@@ -168,7 +167,7 @@ public class FilesDatabaseClientTest {
     public void test_getFilesByUsername_noResults() {
         Mockito.when(
                 em.createQuery(
-                        "SELECT t FROM edu.asu.diging.gilesecosystem.nepomuk.core.domain.impl.File t WHERE t.username = '"
+                        "SELECT t FROM edu.asu.diging.gilesecosystem.nepomuk.core.model.impl.File t WHERE t.username = '"
                                 + USERNAME + "'", File.class)).thenReturn(typedQuery);
 
         List<File> files = new ArrayList<>();
@@ -183,7 +182,7 @@ public class FilesDatabaseClientTest {
     public void test_getFile_success() {
         Mockito.when(
                 em.createQuery(
-                        "SELECT t FROM edu.asu.diging.gilesecosystem.nepomuk.core.domain.impl.File t WHERE t.filename = '"
+                        "SELECT t FROM edu.asu.diging.gilesecosystem.nepomuk.core.model.impl.File t WHERE t.filename = '"
                                 + FILENAME + "'", File.class)).thenReturn(typedQuery);
         
         File file = new File();
@@ -206,7 +205,7 @@ public class FilesDatabaseClientTest {
     public void test_getFile_noResult() {
         Mockito.when(
                 em.createQuery(
-                        "SELECT t FROM edu.asu.diging.gilesecosystem.nepomuk.core.domain.impl.File t WHERE t.filename = '"
+                        "SELECT t FROM edu.asu.diging.gilesecosystem.nepomuk.core.model.impl.File t WHERE t.filename = '"
                                 + FILENAME + "'", File.class)).thenReturn(typedQuery);
         
         List<File> files = new ArrayList<>();
@@ -222,7 +221,7 @@ public class FilesDatabaseClientTest {
     public void test_getFilesByProperty_success() {
         Mockito.when(
                 em.createQuery(
-                        "SELECT t FROM edu.asu.diging.gilesecosystem.nepomuk.core.domain.impl.File t WHERE t.filePath = '"
+                        "SELECT t FROM edu.asu.diging.gilesecosystem.nepomuk.core.model.impl.File t WHERE t.filePath = '"
                                 + FILEPATH + "'", File.class)).thenReturn(typedQuery);
         
         File file = new File();
@@ -256,7 +255,7 @@ public class FilesDatabaseClientTest {
     public void test_getFilesByProperty_noResults() {
         Mockito.when(
                 em.createQuery(
-                        "SELECT t FROM edu.asu.diging.gilesecosystem.nepomuk.core.domain.impl.File t WHERE t.filePath = '"
+                        "SELECT t FROM edu.asu.diging.gilesecosystem.nepomuk.core.model.impl.File t WHERE t.filePath = '"
                                 + FILEPATH + "'", File.class)).thenReturn(typedQuery);
         
         List<File> files = new ArrayList<>();

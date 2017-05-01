@@ -1,7 +1,7 @@
 package edu.asu.diging.gilesecosystem.nepomuk.core.files.impl;
 
-import edu.asu.diging.gilesecosystem.nepomuk.core.domain.IFile;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.NepomukFileStorageException;
+import edu.asu.diging.gilesecosystem.nepomuk.core.model.IFile;
 
 public class StorageStatus {
 

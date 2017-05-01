@@ -20,7 +20,7 @@ import edu.asu.diging.gilesecosystem.nepomuk.core.tokens.ITokenService;
 import edu.asu.diging.gilesecosystem.septemberutil.properties.MessageType;
 import edu.asu.diging.gilesecosystem.septemberutil.service.ISystemMessageHandler;
 
-@Transactional("txmanager_apps")
+@Transactional
 @Service
 public class RegisteredAppsManager implements IRegisteredAppManager {
 

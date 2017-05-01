@@ -11,18 +11,18 @@ import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.diging.gilesecosystem.nepomuk.core.domain.IFile;
-import edu.asu.diging.gilesecosystem.nepomuk.core.domain.impl.File;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.NoUniqueResultException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.UnstorableObjectException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesDatabaseClient;
+import edu.asu.diging.gilesecosystem.nepomuk.core.model.IFile;
+import edu.asu.diging.gilesecosystem.nepomuk.core.model.impl.File;
 import edu.asu.diging.gilesecosystem.nepomuk.core.store.objectdb.DatabaseClient;
 
 @Component
 public class FilesDatabaseClient extends DatabaseClient<IFile> implements
         IFilesDatabaseClient {
 
-    @PersistenceContext(unitName="FilesPU")
+    @PersistenceContext(unitName="entityManagerFactory")
     private EntityManager em;
 
     @PreDestroy
@@ -114,4 +114,10 @@ public class FilesDatabaseClient extends DatabaseClient<IFile> implements
         return results;
     }
 
+    @Override
+    public List<String> getUsernames() {
+        String query = "SELECT DISTINCT(t.username) FROM " + File.class.getName()  + " t";
+        TypedQuery<String> docs = em.createQuery(query, String.class);
+        return docs.getResultList();       
+    }
 }

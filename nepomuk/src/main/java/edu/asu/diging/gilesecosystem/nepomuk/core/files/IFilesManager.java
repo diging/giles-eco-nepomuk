@@ -2,9 +2,9 @@ package edu.asu.diging.gilesecosystem.nepomuk.core.files;
 
 import java.util.List;
 
-import edu.asu.diging.gilesecosystem.nepomuk.core.domain.IFile;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.NoUniqueResultException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.UnstorableObjectException;
+import edu.asu.diging.gilesecosystem.nepomuk.core.model.IFile;
 
 public interface IFilesManager {
 
@@ -33,4 +33,6 @@ public interface IFilesManager {
 
     public abstract IFile getFile(String uploadId, String documentId, String filename)
             throws NoUniqueResultException;
+
+    List<String> getKnownUsernames();
 }

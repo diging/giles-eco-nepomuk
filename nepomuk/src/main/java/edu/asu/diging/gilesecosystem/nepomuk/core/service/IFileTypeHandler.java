@@ -2,8 +2,8 @@ package edu.asu.diging.gilesecosystem.nepomuk.core.service;
 
 import java.util.List;
 
-import edu.asu.diging.gilesecosystem.nepomuk.core.domain.IFile;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.NepomukFileStorageException;
+import edu.asu.diging.gilesecosystem.nepomuk.core.model.IFile;
 import edu.asu.diging.gilesecosystem.requests.FileType;
 
 public interface IFileTypeHandler {

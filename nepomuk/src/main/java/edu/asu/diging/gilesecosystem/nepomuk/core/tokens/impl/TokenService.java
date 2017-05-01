@@ -1,19 +1,17 @@
 package edu.asu.diging.gilesecosystem.nepomuk.core.tokens.impl;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.apps.IRegisteredApp;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.properties.Properties;
-import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
 import edu.asu.diging.gilesecosystem.nepomuk.core.tokens.IAppToken;
 import edu.asu.diging.gilesecosystem.nepomuk.core.tokens.ITokenService;
+import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 /**
  * Class to create new user tokens for access to the REST api.
@@ -23,8 +21,6 @@ import edu.asu.diging.gilesecosystem.nepomuk.core.tokens.ITokenService;
  */
 @Service
 public class TokenService implements ITokenService {
-    
-    private final Logger logger = LoggerFactory.getLogger(getClass());
     
     @Autowired
     private IPropertiesManager propertiesManager;
