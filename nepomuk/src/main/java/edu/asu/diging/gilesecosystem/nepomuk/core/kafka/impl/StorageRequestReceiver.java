@@ -11,10 +11,11 @@ import org.springframework.kafka.annotation.KafkaListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IRequestProcessor;
-import edu.asu.diging.gilesecosystem.nepomuk.core.service.ISystemMessageHandler;
 import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
 import edu.asu.diging.gilesecosystem.requests.IStorageRequest;
 import edu.asu.diging.gilesecosystem.requests.impl.StorageRequest;
+import edu.asu.diging.gilesecosystem.septemberutil.properties.MessageType;
+import edu.asu.diging.gilesecosystem.septemberutil.service.ISystemMessageHandler;
 
 @PropertySource("classpath:/config.properties")
 public class StorageRequestReceiver {
@@ -28,7 +29,7 @@ public class StorageRequestReceiver {
     private IPropertiesManager propertiesManager;
 
     @Autowired
-    private ISystemMessageHandler systemMessageHandler;
+    private ISystemMessageHandler messageHandler;
     
     @KafkaListener(topics = "${topic_storage_request}")
     public void receiveMessage(String message) {
@@ -37,8 +38,7 @@ public class StorageRequestReceiver {
         try {
             request = mapper.readValue(message, StorageRequest.class);
         } catch (IOException e) {
-            logger.error("Could not unmarshall request.", e);
-            systemMessageHandler.handleError("Could not unmarshall request.", e);
+            messageHandler.handleMessage("Could not unmarshall request.", e, MessageType.ERROR);
             // FIXME: handel this case
             return;
         }
