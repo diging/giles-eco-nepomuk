@@ -25,5 +25,9 @@ public interface Properties {
     public final static String GILES_TMP_FOLDER = "giles_files_tmp_dir";
     public final static String APPLICATION_ID = "application_id";
     
-
+    public final static String ZOOKEEPER_HOST = "zookeeper_host";
+    public final static String ZOOKEEPER_PORT = "zookeeper_port";
+    
+    public final static String ZOOKEEPER_NEPOMUK_SERVICE_NAME = "zookeeepr_service_nepomuk_name";
+    public final static String ZOOKEEPER_SERVICE_ROOT = "zookeeper_service_root";
 }
