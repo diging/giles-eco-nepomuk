@@ -43,7 +43,7 @@ public class ZookeeperServiceRegistry implements IZookeeperServiceRegistry {
         curatorFramework.start();
         uriToZnodePath = new ConcurrentHashMap<>();
         
-        znode = "/services/" + propertiesManager.getProperty(Properties.ZOOKEEPER_NEPOMUK_SERVICE_NAME);
+        znode = propertiesManager.getProperty(Properties.ZOOKEEPER_SERVICE_ROOT) + propertiesManager.getProperty(Properties.ZOOKEEPER_NEPOMUK_SERVICE_NAME);
         nepomukUrl = propertiesManager.getProperty(Properties.APP_BASE_URL);
         registerNepomuk();
     }

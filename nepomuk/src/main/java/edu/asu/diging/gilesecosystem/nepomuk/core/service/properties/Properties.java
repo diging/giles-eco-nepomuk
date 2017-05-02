@@ -29,5 +29,5 @@ public interface Properties {
     public final static String ZOOKEEPER_PORT = "zookeeper_port";
     
     public final static String ZOOKEEPER_NEPOMUK_SERVICE_NAME = "zookeeepr_service_nepomuk_name";
-
+    public final static String ZOOKEEPER_SERVICE_ROOT = "zookeeper_service_root";
 }
