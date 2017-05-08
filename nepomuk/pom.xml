@@ -43,6 +43,10 @@
         <db.password></db.password>
         <hibernate.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</hibernate.dialect>
         <hibernate.log.sql>false</hibernate.log.sql>
+        
+        <!-- Zookeeper -->
+        <zookeeper.host>localhost</zookeeper.host>
+        <zookeeper.port>2181</zookeeper.port>
 
     </properties>
 
