@@ -4,10 +4,10 @@ import java.util.List;
 
 import javax.persistence.TypedQuery;
 
-import edu.asu.diging.gilesecosystem.nepomuk.core.domain.IFile;
-import edu.asu.diging.gilesecosystem.nepomuk.core.domain.impl.File;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.NoUniqueResultException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.UnstorableObjectException;
+import edu.asu.diging.gilesecosystem.nepomuk.core.model.IFile;
+import edu.asu.diging.gilesecosystem.nepomuk.core.model.impl.File;
 import edu.asu.diging.gilesecosystem.nepomuk.core.store.IDatabaseClient;
 
 public interface IFilesDatabaseClient extends IDatabaseClient<IFile> {
@@ -26,5 +26,7 @@ public interface IFilesDatabaseClient extends IDatabaseClient<IFile> {
 
     public abstract IFile getFile(String uploadId, String documentId, String filename)
             throws NoUniqueResultException;
+
+    List<String> getUsernames();
 
 }

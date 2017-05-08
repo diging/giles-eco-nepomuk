@@ -18,15 +18,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import edu.asu.diging.gilesecosystem.nepomuk.core.domain.IFile;
-import edu.asu.diging.gilesecosystem.nepomuk.core.domain.impl.File;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.NepomukFileStorageException;
-import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFileStorageManager;
-import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesManager;
+import edu.asu.diging.gilesecosystem.nepomuk.core.model.IFile;
+import edu.asu.diging.gilesecosystem.nepomuk.core.model.impl.File;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileHandlerRegistry;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileTypeHandler;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IRequestProcessor;
-import edu.asu.diging.gilesecosystem.nepomuk.core.service.ISystemMessageHandler;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.properties.Properties;
 import edu.asu.diging.gilesecosystem.nepomuk.rest.FilesController;
 import edu.asu.diging.gilesecosystem.requests.ICompletedStorageRequest;
@@ -36,16 +33,12 @@ import edu.asu.diging.gilesecosystem.requests.RequestStatus;
 import edu.asu.diging.gilesecosystem.requests.exceptions.MessageCreationException;
 import edu.asu.diging.gilesecosystem.requests.impl.CompletedStorageRequest;
 import edu.asu.diging.gilesecosystem.requests.kafka.IRequestProducer;
+import edu.asu.diging.gilesecosystem.septemberutil.properties.MessageType;
+import edu.asu.diging.gilesecosystem.septemberutil.service.ISystemMessageHandler;
 import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
 
 @Service
 public class RequestProcessor implements IRequestProcessor {
-    
-    @Autowired
-    private IFilesManager filesManager;
-    
-    @Autowired
-    private IFileStorageManager fileStorageManager;
     
     @Autowired
     private IFileHandlerRegistry fileHandlerRegistry;
@@ -57,7 +50,7 @@ public class RequestProcessor implements IRequestProcessor {
     private IRequestProducer requestProducer;
     
     @Autowired
-    private ISystemMessageHandler systemMessageHandler;
+    private ISystemMessageHandler messageHandler;
     
     @Autowired
     private IRequestFactory<ICompletedStorageRequest, CompletedStorageRequest> requestFactory;
@@ -87,7 +80,7 @@ public class RequestProcessor implements IRequestProcessor {
         try {
             newFile = handler.processFile(newFile, content);
         } catch (NepomukFileStorageException e) {
-            systemMessageHandler.handleError("File could not be stored.", e);
+            messageHandler.handleMessage("File could not be stored.", e, MessageType.ERROR);
             return;
         }
         
@@ -97,7 +90,7 @@ public class RequestProcessor implements IRequestProcessor {
                 completedRequest = requestFactory.createRequest(request.getRequestId(), request.getUploadId());
             } catch (InstantiationException | IllegalAccessException e) {
                 // this should never happen, so we just fail silently...
-                systemMessageHandler.handleError("Request could not be created.", e);
+                messageHandler.handleMessage("Request could not be created.", e, MessageType.ERROR);
                 return;
             }
             
@@ -122,7 +115,7 @@ public class RequestProcessor implements IRequestProcessor {
             try {
                 requestProducer.sendRequest(completedRequest, propertiesManager.getProperty(Properties.KAFKA_TOPIC_STORAGE_COMPLETE));
             } catch (MessageCreationException e) {
-                systemMessageHandler.handleError("Request could not be send.", e);
+                messageHandler.handleMessage("Request could not be send.", e, MessageType.ERROR);
             }
         }
     }
@@ -140,7 +133,7 @@ public class RequestProcessor implements IRequestProcessor {
         try {
             response = restTemplate.exchange(url, HttpMethod.GET, entity, byte[].class);
         } catch (RestClientException ex) {
-            systemMessageHandler.handleError("File could not be downloaded from Giles.", ex);
+            messageHandler.handleMessage("File could not be downloaded from Giles.", ex, MessageType.ERROR);
             return null;
         }
         

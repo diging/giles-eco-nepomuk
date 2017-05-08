@@ -7,24 +7,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.diging.gilesecosystem.nepomuk.core.domain.IFile;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.NoUniqueResultException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.UnstorableObjectException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesDatabaseClient;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesManager;
+import edu.asu.diging.gilesecosystem.nepomuk.core.model.IFile;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileHandlerRegistry;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileTypeHandler;
-import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
 
 @PropertySource("classpath:/config.properties")
 @Service
+@Transactional
 public class FilesManager implements IFilesManager {
 
     private Logger logger = LoggerFactory.getLogger(FilesManager.class);
-
-    @Autowired
-    private IPropertiesManager propertyManager;
 
     @Autowired
     private IFilesDatabaseClient databaseClient;
@@ -82,6 +80,11 @@ public class FilesManager implements IFilesManager {
         IFileTypeHandler handler = fileHandlerRegistry.getHandler(file
                 .getFileType());
         return handler.getRelativePathOfFile(file);
+    }
+    
+    @Override
+    public List<String> getKnownUsernames() {
+        return databaseClient.getUsernames();
     }
 
 }
