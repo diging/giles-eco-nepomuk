@@ -32,6 +32,10 @@
     <definition name="admin/system/admin" extends="base.definition">
         <put-attribute name="content" value="/WEB-INF/views/config/admin_password.jsp" />
     </definition>
+    
+    <definition name="admin/kafka/listeners" extends="base.definition">
+    		<put-attribute name="content" value="/WEB-INF/views/admin/manage_listeners.jsp" />
+    	</definition>
 	
 	<!--  apps -->
 	<definition name="admin/apps" extends="base.definition">

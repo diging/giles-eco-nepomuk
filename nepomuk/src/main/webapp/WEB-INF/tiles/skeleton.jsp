@@ -63,6 +63,8 @@
                <li><a href="<c:url value="/admin/system/admin" />">Admin Password</a></li>
             </ul>
           </li>
+          <li role="presentation">
+          	<a href="<c:url value="/admin/kafka/listeners" />">Kafka</a>
           </li>
 
 <!--                
