@@ -23,13 +23,13 @@ import edu.asu.diging.gilesecosystem.septemberutil.service.ISystemMessageHandler
 
 @Controller
 public class AddRegisteredAppController {
-    
+
     @Autowired
     private IRegisteredAppManager appManager;
 
     @Autowired
     private ISystemMessageHandler messageHandler;
-    
+
     @InitBinder("app")
     public void init(WebDataBinder binder) {
         binder.addValidators(new RegisteredAppValidator());
@@ -40,16 +40,17 @@ public class AddRegisteredAppController {
         model.addAttribute("app", new RegisteredApp());
         return "admin/apps/register";
     }
-    
+
     @RequestMapping(value = "/admin/apps/register", method = RequestMethod.POST)
-    public String registerApp(@Validated @ModelAttribute("app") RegisteredApp app, BindingResult results, Model model, RedirectAttributes redirectAttrs) {
-        
+    public String registerApp(@Validated @ModelAttribute("app") RegisteredApp app, BindingResult results, Model model,
+            RedirectAttributes redirectAttrs) {
+
         if (results.hasErrors()) {
             return "admin/apps/register";
         }
-        
+
         IRegisteredApp newApp = appManager.storeApp(app);
-        
+
         IAppToken token = null;
         try {
             token = appManager.createToken(newApp);
@@ -57,10 +58,10 @@ public class AddRegisteredAppController {
             messageHandler.handleMessage("Token generation failed.", e, MessageType.ERROR);
             redirectAttrs.addFlashAttribute("show_alert", true);
             redirectAttrs.addFlashAttribute("alert_type", "danger");
-            redirectAttrs.addFlashAttribute("alert_msg", "You app has been registered, but token generation failed.");   
+            redirectAttrs.addFlashAttribute("alert_msg", "You app has been registered, but token generation failed.");
         }
         redirectAttrs.addFlashAttribute("token", token);
-        
+
         return "redirect:/admin/apps/" + app.getId();
     }
 }
