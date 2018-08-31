@@ -115,12 +115,28 @@ public class RequestProcessor implements IRequestProcessor {
             completedRequest.setStoredFileId(newFile.getId());
             completedRequest.setStatus(RequestStatus.COMPLETE);
             completedRequest.setStorageDate(OffsetDateTime.now(ZoneId.of("UTC")).toString());
-            completedRequest.setDownloadUrl(fileEndpoint);
+           
+            if(fileEndpoint == null || fileEndpoint.contains("null") )
+            {
+            	completedRequest.setDownloadUrl(null);
+            }else
+            {
+            	completedRequest.setDownloadUrl(fileEndpoint);
+
+            }
             completedRequest.setDownloadPath(handler.getRelativePathOfFile(newFile));  
         }
         
         try {
-            requestProducer.sendRequest(completedRequest, propertiesManager.getProperty(Properties.KAFKA_TOPIC_STORAGE_COMPLETE));
+        	
+        	if(completedRequest.getDownloadUrl() != null)
+        	{
+        		requestProducer.sendRequest(completedRequest, propertiesManager.getProperty(Properties.KAFKA_TOPIC_STORAGE_COMPLETE));
+        	}
+        	else
+        	{
+        		 messageHandler.handleMessage("NULL value","URL path contains a null value", MessageType.ERROR);
+        	}
         } catch (MessageCreationException e) {
             messageHandler.handleMessage("Request could not be send.", e, MessageType.ERROR);
         }
