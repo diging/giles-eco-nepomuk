@@ -153,13 +153,13 @@ public class RequestProcessor implements IRequestProcessor {
 
         ResponseEntity<byte[]> response = null;
         try {
-        	if(url == null || url.contains("null"))
-        	{
-        		throw new FileDownloadException("The URL contains null value");
-        	}
-        	
-            response = restTemplate.exchange(url, HttpMethod.GET, entity, byte[].class);
-        } catch (RestClientException ex) {
+        		if(url == null || url.contains("null"))
+        		{
+        			throw new FileDownloadException("The URL contains null value");
+        		}
+        		
+        		response = restTemplate.exchange(url, HttpMethod.GET, entity, byte[].class);
+       	} catch (RestClientException ex) {
             throw new FileDownloadException(ex);
         }
         
