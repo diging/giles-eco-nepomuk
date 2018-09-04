@@ -34,7 +34,13 @@ public class StorageRequestReceiver {
             // FIXME: handle this case
             return;
         }
-
-        requestProcessor.processRequest(request);
+        if(request != null && request.getDownloadUrl()!= null && !request.getDownloadUrl().contains("null"))
+        {
+        	requestProcessor.processRequest(request);
+        }
+        else
+        {
+        	//throw Exception
+        }
     }
 }

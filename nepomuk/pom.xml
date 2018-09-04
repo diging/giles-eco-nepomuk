@@ -62,27 +62,30 @@
     <dependencies>
 
         <!-- Giles Ecosystem -->
-        <dependency>
-            <groupId>edu.asu.diging.giles-eco</groupId>
-            <artifactId>requests</artifactId>
-            <version>${geco.requests.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>edu.asu.diging.giles-eco</groupId>
-            <artifactId>util</artifactId>
-            <version>${geco.util.version}</version>
-        </dependency>
+       <!-- https://mvnrepository.com/artifact/edu.asu.diging/giles-eco-util -->
+<dependency>
+    <groupId>edu.asu.diging</groupId>
+    <artifactId>giles-eco-util</artifactId>
+    <version>0.5</version>
+</dependency>
+<dependency>
+    <groupId>edu.asu.diging</groupId>
+    <artifactId>giles-eco-requests</artifactId>
+    <version>0.8</version>
+</dependency>
+
+       
         <dependency>
             <groupId>edu.asu.diging.giles-eco</groupId>
             <artifactId>september-util</artifactId>
             <version>${geco.september.util.version}</version>
         </dependency>
-        <dependency>
+        
+ <dependency>
         	<groupId>edu.asu.diging.giles-eco</groupId>
         	<artifactId>kafka-util</artifactId>
         	<version>${geco.kafka-util.version}</version>
         </dependency>
-
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework</groupId>
