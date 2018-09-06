@@ -40,132 +40,134 @@ import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
 
 @Service
 public class RequestProcessor implements IRequestProcessor {
-    
-    @Autowired
-    private IFileHandlerRegistry fileHandlerRegistry;
-    
-    @Autowired
-    private IPropertiesManager propertiesManager;
-    
-    @Autowired
-    private IRequestProducer requestProducer;
-    
-    @Autowired
-    private ISystemMessageHandler messageHandler;
-    
-    @Autowired
-    private IRequestFactory<ICompletedStorageRequest, CompletedStorageRequest> requestFactory;
 
-    @PostConstruct
-    public void init() {
-        requestFactory.config(CompletedStorageRequest.class);
-    }            
+	@Autowired
+	private IFileHandlerRegistry fileHandlerRegistry;
 
-    /* (non-Javadoc)
-     * @see edu.asu.diging.gilesecosystem.nepomuk.service.impl.IRequestProcessor#processRequest(edu.asu.diging.gilesecosystem.requests.IStorageRequest)
-     */
-    @Override
-    public void processRequest(IStorageRequest request) {
-        IFileTypeHandler handler = fileHandlerRegistry.getHandler(request.getFileType());
-        
-        IFile newFile = new File();
-        newFile.setDocumentId(request.getDocumentId());
-        newFile.setUploadId(request.getUploadId());
-        newFile.setUploadDate(request.getUploadDate());
-        newFile.setUsername(request.getUsername());
-        newFile.setFilename(request.getFilename());
-        newFile.setFileType(request.getFileType());
-        newFile.setGilesFileId(request.getFileId());
-        
-        byte[] content;
-        try {
-            content = downloadFile(request.getDownloadUrl());
-            newFile = handler.processFile(newFile, content);
-        } catch (FileDownloadException e1) {
-            messageHandler.handleMessage("Could not download file: " + request.getDownloadUrl(), e1, MessageType.ERROR);
-            newFile = null;
-        } catch (NepomukFileStorageException e) {
-            messageHandler.handleMessage("File could not be stored.", e, MessageType.ERROR);
-            newFile = null;
-        }
-        
-        ICompletedStorageRequest completedRequest;
-        try {
-            completedRequest = requestFactory.createRequest(request.getRequestId(), request.getUploadId());
-        } catch (InstantiationException | IllegalAccessException e) {
-            // this should never happen, so we just fail silently...
-            messageHandler.handleMessage("Request could not be created.", e, MessageType.ERROR);
-            return;
-        }
-        
-        completedRequest.setDocumentId(request.getDocumentId());
-        completedRequest.setFileId(request.getFileId());
-        completedRequest.setFilename(request.getFilename());
-        completedRequest.setFileType(request.getFileType());
-        completedRequest.setUploadDate(request.getUploadDate());
-        completedRequest.setUsername(request.getUsername());
-        
-        if (newFile != null) {
-            String restEndpoint = propertiesManager.getProperty(Properties.APP_BASE_URL) + propertiesManager.getProperty(Properties.REST_ENDPOINT_PREFIX);
-            if (restEndpoint.endsWith("/")) {
-                restEndpoint = restEndpoint.substring(0, restEndpoint.length()-1);
-            }
-            String fileEndpoint = restEndpoint + FilesController.GET_FILE_URL.replace(FilesController.FILE_ID_PLACEHOLDER, newFile.getId());
-            
-            completedRequest.setStoredFileId(newFile.getId());
-            completedRequest.setStatus(RequestStatus.COMPLETE);
-            completedRequest.setStorageDate(OffsetDateTime.now(ZoneId.of("UTC")).toString());
-           
-            if(fileEndpoint == null || fileEndpoint.contains("null") )
-            {
-            	completedRequest.setDownloadUrl(null);
-            }else
-            {
-            	completedRequest.setDownloadUrl(fileEndpoint);
+	@Autowired
+	private IPropertiesManager propertiesManager;
 
-            }
-            completedRequest.setDownloadPath(handler.getRelativePathOfFile(newFile));  
-        }
-        
-        try {
-        	
-        	if(completedRequest.getDownloadUrl() != null)
-        	{
-        		requestProducer.sendRequest(completedRequest, propertiesManager.getProperty(Properties.KAFKA_TOPIC_STORAGE_COMPLETE));
-        	}
-        	else
-        	{
-        		 messageHandler.handleMessage("NULL value","URL path contains a null value", MessageType.ERROR);
-        	}
-        } catch (MessageCreationException e) {
-            messageHandler.handleMessage("Request could not be send.", e, MessageType.ERROR);
-        }
-    }
-    
-    protected byte[] downloadFile(String url) throws FileDownloadException {
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.getMessageConverters().add(new ByteArrayHttpMessageConverter());    
-        
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
-        headers.set("Authorization", "token " + propertiesManager.getProperty(Properties.GILES_ACCESS_TOKEN));
-        HttpEntity<String> entity = new HttpEntity<String>(headers);
+	@Autowired
+	private IRequestProducer requestProducer;
 
-        ResponseEntity<byte[]> response = null;
-        try {
-        		if(url == null || url.contains("null"))
-        		{
-        			throw new FileDownloadException("The URL contains null value");
-        		}
-        		
-        		response = restTemplate.exchange(url, HttpMethod.GET, entity, byte[].class);
-       	} catch (RestClientException ex) {
-            throw new FileDownloadException(ex);
-        }
-        
-        if(response.getStatusCode().equals(HttpStatus.OK)) {    
-            return response.getBody();
-        }
-        return null;
-    }
+	@Autowired
+	private ISystemMessageHandler messageHandler;
+
+	@Autowired
+	private IRequestFactory<ICompletedStorageRequest, CompletedStorageRequest> requestFactory;
+
+	@PostConstruct
+	public void init() {
+		requestFactory.config(CompletedStorageRequest.class);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see edu.asu.diging.gilesecosystem.nepomuk.service.impl.IRequestProcessor#
+	 * processRequest(edu.asu.diging.gilesecosystem.requests.IStorageRequest)
+	 */
+	@Override
+	public void processRequest(IStorageRequest request) {
+		IFileTypeHandler handler = fileHandlerRegistry.getHandler(request.getFileType());
+
+		IFile newFile = new File();
+		newFile.setDocumentId(request.getDocumentId());
+		newFile.setUploadId(request.getUploadId());
+		newFile.setUploadDate(request.getUploadDate());
+		newFile.setUsername(request.getUsername());
+		newFile.setFilename(request.getFilename());
+		newFile.setFileType(request.getFileType());
+		newFile.setGilesFileId(request.getFileId());
+
+		byte[] content;
+		try {
+			content = downloadFile(request.getDownloadUrl());
+			newFile = handler.processFile(newFile, content);
+		} catch (FileDownloadException e1) {
+			messageHandler.handleMessage("Could not download file: " + request.getDownloadUrl(), e1, MessageType.ERROR);
+			newFile = null;
+		} catch (NepomukFileStorageException e) {
+			messageHandler.handleMessage("File could not be stored.", e, MessageType.ERROR);
+			newFile = null;
+		}
+
+		ICompletedStorageRequest completedRequest;
+		try {
+			completedRequest = requestFactory.createRequest(request.getRequestId(), request.getUploadId());
+		} catch (InstantiationException | IllegalAccessException e) {
+			// this should never happen, so we just fail silently...
+			messageHandler.handleMessage("Request could not be created.", e, MessageType.ERROR);
+			return;
+		}
+
+		completedRequest.setDocumentId(request.getDocumentId());
+		completedRequest.setFileId(request.getFileId());
+		completedRequest.setFilename(request.getFilename());
+		completedRequest.setFileType(request.getFileType());
+		completedRequest.setUploadDate(request.getUploadDate());
+		completedRequest.setUsername(request.getUsername());
+
+		if (newFile != null) {
+			String restEndpoint = propertiesManager.getProperty(Properties.APP_BASE_URL)
+					+ propertiesManager.getProperty(Properties.REST_ENDPOINT_PREFIX);
+			if (restEndpoint.endsWith("/")) {
+				restEndpoint = restEndpoint.substring(0, restEndpoint.length() - 1);
+			}
+			String fileEndpoint = restEndpoint
+					+ FilesController.GET_FILE_URL.replace(FilesController.FILE_ID_PLACEHOLDER, newFile.getId());
+
+			completedRequest.setStoredFileId(newFile.getId());
+			completedRequest.setStatus(RequestStatus.COMPLETE);
+			completedRequest.setStorageDate(OffsetDateTime.now(ZoneId.of("UTC")).toString());
+
+			if (fileEndpoint == null || fileEndpoint.contains("null")) {
+				completedRequest.setDownloadUrl(null);
+			} else {
+				completedRequest.setDownloadUrl(fileEndpoint);
+
+			}
+			completedRequest.setDownloadPath(handler.getRelativePathOfFile(newFile));
+		}
+
+		try {
+
+			if (completedRequest.getDownloadUrl() != null && !completedRequest.getDownloadUrl().contains("null")) {
+				requestProducer.sendRequest(completedRequest,
+						propertiesManager.getProperty(Properties.KAFKA_TOPIC_STORAGE_COMPLETE));
+			} else {
+				completedRequest.setStatus(RequestStatus.FAILED);
+				messageHandler.handleMessage("NULL value", "URL path contains a null value", MessageType.ERROR);
+			}
+		} catch (MessageCreationException e) {
+			messageHandler.handleMessage("Request could not be send.", e, MessageType.ERROR);
+		}
+	}
+
+	protected byte[] downloadFile(String url) throws FileDownloadException {
+		RestTemplate restTemplate = new RestTemplate();
+		restTemplate.getMessageConverters().add(new ByteArrayHttpMessageConverter());
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
+		headers.set("Authorization", "token " + propertiesManager.getProperty(Properties.GILES_ACCESS_TOKEN));
+		HttpEntity<String> entity = new HttpEntity<String>(headers);
+
+		ResponseEntity<byte[]> response = null;
+		try {
+			if (url == null || url.contains("null")) {
+
+				throw new FileDownloadException("The URL contains null value");
+			}
+
+			response = restTemplate.exchange(url, HttpMethod.GET, entity, byte[].class);
+		} catch (RestClientException ex) {
+			throw new FileDownloadException(ex);
+		}
+
+		if (response.getStatusCode().equals(HttpStatus.OK)) {
+			return response.getBody();
+		}
+		return null;
+	}
 }

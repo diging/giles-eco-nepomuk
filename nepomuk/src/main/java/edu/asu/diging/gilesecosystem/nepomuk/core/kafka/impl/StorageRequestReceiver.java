@@ -17,31 +17,29 @@ import edu.asu.diging.gilesecosystem.septemberutil.service.ISystemMessageHandler
 @PropertySource("classpath:/config.properties")
 public class StorageRequestReceiver {
 
-    @Autowired
-    private IRequestProcessor requestProcessor;
+	@Autowired
+	private IRequestProcessor requestProcessor;
 
-    @Autowired
-    private ISystemMessageHandler messageHandler;
+	@Autowired
+	private ISystemMessageHandler messageHandler;
 
-    @KafkaListener(topics = "${topic_storage_request}")
-    public void receiveMessage(String message) {
-        ObjectMapper mapper = new ObjectMapper();
-        IStorageRequest request = null;
-        try {
-            request = mapper.readValue(message, StorageRequest.class);
-        } catch (IOException e) {
-            messageHandler.handleMessage("Could not unmarshall request.", e, MessageType.ERROR);
-            // FIXME: handle this case
-            return;
-        }
-        
-        if(request!= null && request.getDownloadUrl()!= null && !request.getDownloadUrl().contains("null"))
-        {
-        	requestProcessor.processRequest(request);
-        }
-        else
-        {
-        	//throw Exception
-        }
-    }
+	@KafkaListener(topics = "${topic_storage_request}")
+	public void receiveMessage(String message) {
+		ObjectMapper mapper = new ObjectMapper();
+		IStorageRequest request = null;
+		try {
+			request = mapper.readValue(message, StorageRequest.class);
+		} catch (IOException e) {
+			messageHandler.handleMessage("Could not unmarshall request.", e, MessageType.ERROR);
+			// FIXME: handle this case
+			return;
+		}
+
+		if (request != null && request.getDownloadUrl() != null && !request.getDownloadUrl().contains("null")) {
+			requestProcessor.processRequest(request);
+		} else {
+			messageHandler.handleMessage("Null value in URL.","URL value is null or it contains a null value in its path", MessageType.ERROR);
+			// throw Exception
+		}
+	}
 }
