@@ -159,7 +159,6 @@ public class RequestProcessor implements IRequestProcessor {
 
 				throw new FileDownloadException("The URL contains null value");
 			}
-
 			response = restTemplate.exchange(url, HttpMethod.GET, entity, byte[].class);
 		} catch (RestClientException ex) {
 			throw new FileDownloadException(ex);
