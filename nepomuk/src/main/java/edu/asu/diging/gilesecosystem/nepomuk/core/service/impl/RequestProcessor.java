@@ -120,25 +120,19 @@ public class RequestProcessor implements IRequestProcessor {
 			completedRequest.setStoredFileId(newFile.getId());
 			completedRequest.setStatus(RequestStatus.COMPLETE);
 			completedRequest.setStorageDate(OffsetDateTime.now(ZoneId.of("UTC")).toString());
+			completedRequest.setDownloadUrl(fileEndpoint);
+			completedRequest.setDownloadPath(handler.getRelativePathOfFile(newFile));
 
 			if (fileEndpoint == null || fileEndpoint.contains("null")) {
-				completedRequest.setDownloadUrl(null);
-			} else {
-				completedRequest.setDownloadUrl(fileEndpoint);
-
+				completedRequest.setStatus(RequestStatus.FAILED);
+				completedRequest.setErrorMsg("URL path contains a null value");
 			}
-			completedRequest.setDownloadPath(handler.getRelativePathOfFile(newFile));
+
 		}
 
 		try {
-
-			if (completedRequest.getDownloadUrl() != null && !completedRequest.getDownloadUrl().contains("null")) {
-				requestProducer.sendRequest(completedRequest,
-						propertiesManager.getProperty(Properties.KAFKA_TOPIC_STORAGE_COMPLETE));
-			} else {
-				completedRequest.setStatus(RequestStatus.FAILED);
-				messageHandler.handleMessage("NULL value", "URL path contains a null value", MessageType.ERROR);
-			}
+			requestProducer.sendRequest(completedRequest,
+					propertiesManager.getProperty(Properties.KAFKA_TOPIC_STORAGE_COMPLETE));
 		} catch (MessageCreationException e) {
 			messageHandler.handleMessage("Request could not be send.", e, MessageType.ERROR);
 		}
@@ -155,10 +149,6 @@ public class RequestProcessor implements IRequestProcessor {
 
 		ResponseEntity<byte[]> response = null;
 		try {
-			if (url == null || url.contains("null")) {
-
-				throw new FileDownloadException("The URL contains null value");
-			}
 			response = restTemplate.exchange(url, HttpMethod.GET, entity, byte[].class);
 		} catch (RestClientException ex) {
 			throw new FileDownloadException(ex);

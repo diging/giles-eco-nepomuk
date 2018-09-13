@@ -35,11 +35,7 @@ public class StorageRequestReceiver {
 			return;
 		}
 
-		if (request != null && request.getDownloadUrl() != null && !request.getDownloadUrl().contains("null")) {
-			requestProcessor.processRequest(request);
-		} else {
-			messageHandler.handleMessage("Null value in URL.","URL value is null or it contains a null value in its path", MessageType.ERROR);
-			// throw Exception
-		}
+		requestProcessor.processRequest(request);
+
 	}
 }
