@@ -123,7 +123,7 @@ public class RequestProcessor implements IRequestProcessor {
 			completedRequest.setDownloadUrl(fileEndpoint);
 			completedRequest.setDownloadPath(handler.getRelativePathOfFile(newFile));
 
-			if (fileEndpoint == null || fileEndpoint.contains("null")) {
+			if ((fileEndpoint == null) || (fileEndpoint.contains("null"))) {
 				completedRequest.setStatus(RequestStatus.FAILED);
 				completedRequest.setErrorMsg("URL path contains a null value");
 			}
