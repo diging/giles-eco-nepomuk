@@ -16,7 +16,7 @@
         <geco.requests.version>0.13</geco.requests.version>
  		<geco.util.version>0.6</geco.util.version>
  		<geco.september.util.version>0.3</geco.september.util.version>
-		<geco.kafka-util.version>0.2</geco.kafka-util.version>
+	    <geco.kafka-util.version>0.2</geco.kafka-util.version>
         <buildNumber></buildNumber>
 
         <admin.password>$2a$04$NXKVTx9XrpEST6CLn/ps7eP8YsK3t.5A/mvAoYpg.X8QqgOKtc1za</admin.password>
@@ -68,8 +68,8 @@
             <version>${geco.requests.version}</version>
         </dependency>
         <dependency>
-            <groupId>edu.asu.diging.giles-eco</groupId>
-            <artifactId>util</artifactId>
+            <groupId>edu.asu.diging</groupId>
+            <artifactId>giles-eco-util</artifactId>
             <version>${geco.util.version}</version>
         </dependency>
         <dependency>
