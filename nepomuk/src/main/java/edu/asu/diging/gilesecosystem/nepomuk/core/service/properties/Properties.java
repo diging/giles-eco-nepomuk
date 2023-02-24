@@ -21,6 +21,7 @@ public interface Properties {
     public final static String KAFKA_TOPIC_IMAGE_EXTRACTION_REQUEST = "topic_image_extraction_request";
     public final static String KAFKA_TOPIC_IMAGE_EXTRACTION_COMPLETE_REQUEST = "topic_image_extraction_request_complete";
     public final static String KAFKA_TOPIC_SYSTEM_MESSAGES = "topic_system_messages";
+    public final static String KAFKA_TOPIC_STORAGE_DELETE_REQUEST = "topic_delete_storage_request";
     
     public final static String GILES_TMP_FOLDER = "giles_files_tmp_dir";
     public final static String APPLICATION_ID = "application_id";
