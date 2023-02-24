@@ -86,5 +86,10 @@ public class FilesManager implements IFilesManager {
     public List<String> getKnownUsernames() {
         return databaseClient.getUsernames();
     }
+    
+    @Override
+    public void deleteFile(String fileId) {
+        databaseClient.deleteFile(fileId);
+    }
 
 }

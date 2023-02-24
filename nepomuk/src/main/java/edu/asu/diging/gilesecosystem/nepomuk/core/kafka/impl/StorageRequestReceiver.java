@@ -52,6 +52,6 @@ public class StorageRequestReceiver {
             return;
         }
 
-        //requestProcessor.processRequest(request);
+        requestProcessor.processRequest(request);
     }
 }

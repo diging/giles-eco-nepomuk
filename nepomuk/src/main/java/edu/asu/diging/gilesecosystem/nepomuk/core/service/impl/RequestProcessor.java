@@ -20,6 +20,8 @@ import org.springframework.web.client.RestTemplate;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.FileDownloadException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.NepomukFileStorageException;
+import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFileStorageManager;
+import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesManager;
 import edu.asu.diging.gilesecosystem.nepomuk.core.model.IFile;
 import edu.asu.diging.gilesecosystem.nepomuk.core.model.impl.File;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileHandlerRegistry;
@@ -29,6 +31,7 @@ import edu.asu.diging.gilesecosystem.nepomuk.core.service.properties.Properties;
 import edu.asu.diging.gilesecosystem.nepomuk.rest.FilesController;
 import edu.asu.diging.gilesecosystem.requests.ICompletedStorageRequest;
 import edu.asu.diging.gilesecosystem.requests.IRequestFactory;
+import edu.asu.diging.gilesecosystem.requests.IStorageDeletionRequest;
 import edu.asu.diging.gilesecosystem.requests.IStorageRequest;
 import edu.asu.diging.gilesecosystem.requests.RequestStatus;
 import edu.asu.diging.gilesecosystem.requests.exceptions.MessageCreationException;
@@ -55,6 +58,12 @@ public class RequestProcessor implements IRequestProcessor {
     
     @Autowired
     private IRequestFactory<ICompletedStorageRequest, CompletedStorageRequest> requestFactory;
+    
+    @Autowired
+    private IFilesManager filesManager;
+    
+    @Autowired
+    private IFileStorageManager fileStorageManager;
 
     @PostConstruct
     public void init() {
@@ -146,5 +155,12 @@ public class RequestProcessor implements IRequestProcessor {
             return response.getBody();
         }
         return null;
+    }
+
+    @Override
+    public void processRequest(IStorageDeletionRequest request) {
+        IFile file = filesManager.getFile(request.getFileId());
+        IFileTypeHandler handler = fileHandlerRegistry.getHandler(file.getFileType());
+        handler.deleteFile(file);
     }
 }

@@ -32,6 +32,9 @@ public abstract class AbstractFileHandler implements IFileTypeHandler {
     @Autowired
     private ISystemMessageHandler messageHandler;
     
+    @Autowired
+    private IFileStorageManager fileStorageManager;
+    
     protected byte[] getFileContentFromUrl(URL url) throws IOException {
         URLConnection con = url.openConnection();
         
@@ -104,5 +107,13 @@ public abstract class AbstractFileHandler implements IFileTypeHandler {
     
     protected abstract IFileStorageManager getStorageManager();
     
+    public void deleteFile(IFile file) {
+        try {
+            fileStorageManager.deleteFile(file.getUsername(), file.getUploadId(), file.getDocumentId(), file.getId()); 
+        } catch (NepomukFileStorageException e) {
+            messageHandler.handleMessage("File could not be deleted.", e, MessageType.ERROR);
+        }
+        filesManager.deleteFile(file.getId());
+    }
 }
 

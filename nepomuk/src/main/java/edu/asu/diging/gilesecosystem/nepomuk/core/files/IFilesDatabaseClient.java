@@ -29,4 +29,10 @@ public interface IFilesDatabaseClient extends IDatabaseClient<IFile> {
 
     List<String> getUsernames();
 
+    /**
+     * Delete a file given the file ID.
+     * @param fileId 
+     *         ID of the file to be deleted
+     */
+    public abstract void deleteFile(String fileId);
 }

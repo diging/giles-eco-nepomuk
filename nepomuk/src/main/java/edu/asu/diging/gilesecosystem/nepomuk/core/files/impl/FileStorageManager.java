@@ -5,11 +5,18 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.NepomukFileStorageException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFileStorageManager;
+import edu.asu.diging.gilesecosystem.septemberutil.properties.MessageType;
+import edu.asu.diging.gilesecosystem.septemberutil.service.ISystemMessageHandler;
 
 @Service
 public class FileStorageManager implements IFileStorageManager {
@@ -49,8 +56,7 @@ public class FileStorageManager implements IFileStorageManager {
     @Override
     public String getAndCreateStoragePath(String username, String uploadId,
             String documentId) {
-        String path = baseDirectory + File.separator 
-                + getFileFolderPathInBaseFolder(username, uploadId, documentId);
+        String path = getStoragePath(username, uploadId, documentId);
         createDirectory(path);
         return path;
     }
@@ -118,6 +124,23 @@ public class FileStorageManager implements IFileStorageManager {
 
     public void setFileTypeFolder(String fileTypeFolder) {
         this.fileTypeFolder = fileTypeFolder;
+    }
+    
+    public String getStoragePath(String username, String uploadId,
+            String documentId) {
+        return baseDirectory + File.separator 
+                + getFileFolderPathInBaseFolder(username, uploadId, documentId);
+    }
+    
+    public void deleteFile(String username, String uploadId, String documentId, String fileId) throws NepomukFileStorageException {
+        Path path = Paths.get(getStoragePath(username, uploadId, documentId) + File.separator + fileId);
+        try {
+            Files.delete(path);
+        } catch (NoSuchFileException ex) {
+            throw new NepomukFileStorageException("No such file or directory", ex);
+        } catch (IOException ex) {
+            throw new NepomukFileStorageException("Could not store file.", ex);
+        }
     }
 
 }

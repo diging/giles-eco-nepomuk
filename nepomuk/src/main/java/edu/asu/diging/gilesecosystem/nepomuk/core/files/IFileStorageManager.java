@@ -35,5 +35,19 @@ public interface IFileStorageManager {
 
     public abstract String getFileFolderPathInBaseFolder(String username, String uploadId,
             String fileId);
-
+    
+    /**
+     * Method to delete a file from storage
+     * 
+     * @param username
+     *            username of user who uploaded an image
+     * @param uploadId
+     *            id of upload a file was part of
+     * @param documentId
+     *            id of document
+     * @param fileId
+     *            id of file
+     * @throws NepomukFileStorageException 
+     */
+    public abstract void deleteFile(String username, String uploadId, String documentId, String fileId) throws NepomukFileStorageException;
 }
