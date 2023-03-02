@@ -159,7 +159,7 @@ public class RequestProcessor implements IRequestProcessor {
 
     @Override
     public void processRequest(IStorageDeletionRequest request) {
-        IFile file = filesManager.getFile(request.getFileId());
+        IFile file = filesManager.getFile(request.getStorageFileId());
         IFileTypeHandler handler = fileHandlerRegistry.getHandler(file.getFileType());
         handler.deleteFile(file);
     }
