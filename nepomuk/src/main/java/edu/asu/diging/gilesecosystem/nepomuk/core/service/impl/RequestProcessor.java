@@ -161,6 +161,10 @@ public class RequestProcessor implements IRequestProcessor {
     public void processRequest(IStorageDeletionRequest request) {
         IFile file = filesManager.getFile(request.getStorageFileId());
         IFileTypeHandler handler = fileHandlerRegistry.getHandler(file.getFileType());
-        handler.deleteFile(file);
+        try {
+            handler.deleteFile(file);
+        } catch (NepomukFileStorageException e) {
+            messageHandler.handleMessage("Could not delete file", e, MessageType.ERROR);
+        }
     }
 }

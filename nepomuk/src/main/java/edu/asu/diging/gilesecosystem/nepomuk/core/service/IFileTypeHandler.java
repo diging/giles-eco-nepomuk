@@ -23,5 +23,5 @@ public interface IFileTypeHandler {
 
     public abstract String getRelativePathInTypeFolder(IFile file);
     
-    void deleteFile(IFile file); 
+    public abstract void deleteFile(IFile file) throws NepomukFileStorageException; 
 }
