@@ -20,7 +20,6 @@ import org.springframework.web.client.RestTemplate;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.FileDownloadException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.NepomukFileStorageException;
-import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFileStorageManager;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesManager;
 import edu.asu.diging.gilesecosystem.nepomuk.core.model.IFile;
 import edu.asu.diging.gilesecosystem.nepomuk.core.model.impl.File;
@@ -29,12 +28,14 @@ import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileTypeHandler;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IRequestProcessor;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.properties.Properties;
 import edu.asu.diging.gilesecosystem.nepomuk.rest.FilesController;
+import edu.asu.diging.gilesecosystem.requests.ICompletedStorageDeletionRequest;
 import edu.asu.diging.gilesecosystem.requests.ICompletedStorageRequest;
 import edu.asu.diging.gilesecosystem.requests.IRequestFactory;
 import edu.asu.diging.gilesecosystem.requests.IStorageDeletionRequest;
 import edu.asu.diging.gilesecosystem.requests.IStorageRequest;
 import edu.asu.diging.gilesecosystem.requests.RequestStatus;
 import edu.asu.diging.gilesecosystem.requests.exceptions.MessageCreationException;
+import edu.asu.diging.gilesecosystem.requests.impl.CompletedStorageDeletionRequest;
 import edu.asu.diging.gilesecosystem.requests.impl.CompletedStorageRequest;
 import edu.asu.diging.gilesecosystem.requests.kafka.IRequestProducer;
 import edu.asu.diging.gilesecosystem.septemberutil.properties.MessageType;
@@ -63,7 +64,7 @@ public class RequestProcessor implements IRequestProcessor {
     private IFilesManager filesManager;
     
     @Autowired
-    private IFileStorageManager fileStorageManager;
+    private IRequestFactory<ICompletedStorageDeletionRequest, CompletedStorageDeletionRequest> requestFactoryDeletion;
 
     @PostConstruct
     public void init() {
@@ -162,5 +163,22 @@ public class RequestProcessor implements IRequestProcessor {
         IFile file = filesManager.getFile(request.getStorageFileId());
         IFileTypeHandler handler = fileHandlerRegistry.getHandler(file.getFileType());
         handler.deleteFile(file);
+        ICompletedStorageDeletionRequest completedRequest;
+        try {
+            completedRequest = requestFactoryDeletion.createRequest(request.getRequestId(), request.getUploadId());
+        } catch (InstantiationException | IllegalAccessException e) {
+            // this should never happen, so we just fail silently...
+            messageHandler.handleMessage("Request could not be created.", e, MessageType.ERROR);
+            return;
+        }
+        completedRequest.setStatus(RequestStatus.COMPLETE);
+        completedRequest.setFileId(file.getGilesFileId());
+        completedRequest.setStorageFileId(file.getId());
+        
+        try {
+            requestProducer.sendRequest(completedRequest, propertiesManager.getProperty(Properties.KAFKA_TOPIC_STORAGE_DELETE_COMPLETE_REQUEST));
+        } catch (MessageCreationException e) {
+            messageHandler.handleMessage("Request could not be send.", e, MessageType.ERROR);
+        }
     }
 }

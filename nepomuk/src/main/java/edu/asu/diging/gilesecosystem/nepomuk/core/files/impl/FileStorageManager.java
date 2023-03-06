@@ -132,14 +132,14 @@ public class FileStorageManager implements IFileStorageManager {
                 + getFileFolderPathInBaseFolder(username, uploadId, documentId);
     }
     
-    public void deleteFile(String username, String uploadId, String documentId, String fileId) throws NepomukFileStorageException {
-        Path path = Paths.get(getStoragePath(username, uploadId, documentId) + File.separator + fileId);
+    public void deleteFile(String username, String uploadId, String documentId, String fileName) throws NepomukFileStorageException {
+        Path path = Paths.get(getStoragePath(username, uploadId, documentId) + File.separator + fileName);
         try {
             Files.delete(path);
         } catch (NoSuchFileException ex) {
-            throw new NepomukFileStorageException("No such file or directory", ex);
+            throw new NepomukFileStorageException("No such file or directory.", ex);
         } catch (IOException ex) {
-            throw new NepomukFileStorageException("Could not store file.", ex);
+            throw new NepomukFileStorageException("Could not delete file.", ex);
         }
     }
 
