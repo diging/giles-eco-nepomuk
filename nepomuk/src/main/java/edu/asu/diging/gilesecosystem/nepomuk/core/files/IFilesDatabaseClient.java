@@ -35,4 +35,6 @@ public interface IFilesDatabaseClient extends IDatabaseClient<IFile> {
      *         ID of the file to be deleted
      */
     public abstract void deleteFile(String fileId);
+
+    public abstract List<IFile> getFilesByDocumentId(String documentId);
 }

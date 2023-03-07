@@ -126,4 +126,11 @@ public class FilesDatabaseClient extends DatabaseClient<IFile> implements
     public void deleteFile(String fileId) {
         em.remove(getById(fileId));
     }
+    
+    @Override
+    public List<IFile> getFilesByDocumentId(String documentId) {
+        List<IFile> results = new ArrayList<IFile>();
+        searchByProperty("documentId", documentId, File.class).forEach(f -> results.add((IFile)f));
+        return results;
+    }
 }

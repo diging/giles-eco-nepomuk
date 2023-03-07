@@ -43,4 +43,6 @@ public interface IFilesManager {
      */
 
     public abstract void deleteFile(String fileId);
+
+    public abstract List<IFile> getFilesByDocumentId(String documentId);
 }

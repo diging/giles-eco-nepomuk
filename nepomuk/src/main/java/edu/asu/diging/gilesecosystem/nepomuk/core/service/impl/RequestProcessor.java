@@ -3,6 +3,7 @@ package edu.asu.diging.gilesecosystem.nepomuk.core.service.impl;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -69,7 +70,7 @@ public class RequestProcessor implements IRequestProcessor {
     @PostConstruct
     public void init() {
         requestFactory.config(CompletedStorageRequest.class);
-    }            
+        requestFactoryDeletion.config(CompletedStorageDeletionRequest.class);    }            
 
     /* (non-Javadoc)
      * @see edu.asu.diging.gilesecosystem.nepomuk.service.impl.IRequestProcessor#processRequest(edu.asu.diging.gilesecosystem.requests.IStorageRequest)
@@ -163,22 +164,26 @@ public class RequestProcessor implements IRequestProcessor {
         IFile file = filesManager.getFile(request.getStorageFileId());
         IFileTypeHandler handler = fileHandlerRegistry.getHandler(file.getFileType());
         handler.deleteFile(file);
-        ICompletedStorageDeletionRequest completedRequest;
-        try {
-            completedRequest = requestFactoryDeletion.createRequest(request.getRequestId(), request.getUploadId());
-        } catch (InstantiationException | IllegalAccessException e) {
-            // this should never happen, so we just fail silently...
-            messageHandler.handleMessage("Request could not be created.", e, MessageType.ERROR);
-            return;
-        }
-        completedRequest.setStatus(RequestStatus.COMPLETE);
-        completedRequest.setFileId(file.getGilesFileId());
-        completedRequest.setStorageFileId(file.getId());
-        
-        try {
-            requestProducer.sendRequest(completedRequest, propertiesManager.getProperty(Properties.KAFKA_TOPIC_STORAGE_DELETE_COMPLETE_REQUEST));
-        } catch (MessageCreationException e) {
-            messageHandler.handleMessage("Request could not be send.", e, MessageType.ERROR);
+        List<IFile> files = filesManager.getFilesByDocumentId(file.getDocumentId());
+        // If no files are remaining for the document the request to delete the document and upload in Giles is pushed. 
+        if (files.isEmpty()) {
+            ICompletedStorageDeletionRequest completedRequest;
+            try {
+                completedRequest = requestFactoryDeletion.createRequest(request.getRequestId(), request.getUploadId());
+            } catch (InstantiationException | IllegalAccessException e) {
+                // this should never happen, so we just fail silently...
+                messageHandler.handleMessage("Request could not be created.", e, MessageType.ERROR);
+                return;
+            }
+            completedRequest.setStatus(RequestStatus.COMPLETE);
+            completedRequest.setFileId(file.getGilesFileId());
+            completedRequest.setStorageFileId(file.getId());
+            completedRequest.setDocumentId(file.getDocumentId());
+            try {
+                requestProducer.sendRequest(completedRequest, propertiesManager.getProperty(Properties.KAFKA_TOPIC_STORAGE_DELETE_COMPLETE_REQUEST));
+            } catch (MessageCreationException e) {
+                messageHandler.handleMessage("Request could not be send.", e, MessageType.ERROR);
+            }
         }
     }
 }

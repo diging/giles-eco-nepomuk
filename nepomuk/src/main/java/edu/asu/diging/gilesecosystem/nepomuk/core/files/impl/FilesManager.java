@@ -91,5 +91,9 @@ public class FilesManager implements IFilesManager {
     public void deleteFile(String fileId) {
         databaseClient.deleteFile(fileId);
     }
-
+    
+    @Override
+    public List<IFile> getFilesByDocumentId(String uploadId) {
+        return databaseClient.getFilesByDocumentId(uploadId);
+    }
 }
