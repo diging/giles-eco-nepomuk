@@ -23,5 +23,5 @@ public interface IFileTypeHandler {
 
     public abstract String getRelativePathInTypeFolder(IFile file);
     
-    void deleteFile(IFile file); 
+    void deleteFile(IFile file, boolean isOldFileVersion); 
 }

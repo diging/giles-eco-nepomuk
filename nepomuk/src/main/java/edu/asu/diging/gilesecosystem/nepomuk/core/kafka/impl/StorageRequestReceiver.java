@@ -51,7 +51,6 @@ public class StorageRequestReceiver {
             // FIXME: handle this case
             return;
         }
-
         requestProcessor.processRequest(request);
     }
 }

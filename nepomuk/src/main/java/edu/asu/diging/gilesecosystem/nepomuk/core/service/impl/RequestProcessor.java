@@ -163,7 +163,7 @@ public class RequestProcessor implements IRequestProcessor {
     public void processRequest(IStorageDeletionRequest request) {
         IFile file = filesManager.getFile(request.getStorageFileId());
         IFileTypeHandler handler = fileHandlerRegistry.getHandler(file.getFileType());
-        handler.deleteFile(file);
+        handler.deleteFile(file, request.getIsOldFileVersion());
         List<IFile> files = filesManager.getFilesByDocumentId(file.getDocumentId());
         // If no files are remaining for the document the request to delete the document and upload in Giles is pushed. 
         if (files.isEmpty()) {
