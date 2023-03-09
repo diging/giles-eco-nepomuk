@@ -70,7 +70,8 @@ public class RequestProcessor implements IRequestProcessor {
     @PostConstruct
     public void init() {
         requestFactory.config(CompletedStorageRequest.class);
-        requestFactoryDeletion.config(CompletedStorageDeletionRequest.class);    }            
+        requestFactoryDeletion.config(CompletedStorageDeletionRequest.class);
+    }            
 
     /* (non-Javadoc)
      * @see edu.asu.diging.gilesecosystem.nepomuk.service.impl.IRequestProcessor#processRequest(edu.asu.diging.gilesecosystem.requests.IStorageRequest)
