@@ -65,7 +65,7 @@
         <dependency>
             <groupId>edu.asu.diging</groupId>
             <artifactId>giles-eco-requests</artifactId>
-            <version>${geco.requests.version}</version>
+            <version>0.14-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>edu.asu.diging</groupId>
@@ -467,8 +467,8 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>11</source>
+                    <target>11</target>
                 </configuration>
             </plugin>
             <plugin>
