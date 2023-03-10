@@ -138,28 +138,6 @@ public class RequestProcessor implements IRequestProcessor {
         }
     }
     
-    protected byte[] downloadFile(String url) throws FileDownloadException {
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.getMessageConverters().add(new ByteArrayHttpMessageConverter());    
-        
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
-        headers.set("Authorization", "token " + propertiesManager.getProperty(Properties.GILES_ACCESS_TOKEN));
-        HttpEntity<String> entity = new HttpEntity<String>(headers);
-
-        ResponseEntity<byte[]> response = null;
-        try {
-            response = restTemplate.exchange(url, HttpMethod.GET, entity, byte[].class);
-        } catch (RestClientException ex) {
-            throw new FileDownloadException(ex);
-        }
-        
-        if(response.getStatusCode().equals(HttpStatus.OK)) {    
-            return response.getBody();
-        }
-        return null;
-    }
-
     @Override
     public void processRequest(IStorageDeletionRequest request) {
         IFile file = filesManager.getFile(request.getStorageFileId());
@@ -186,5 +164,27 @@ public class RequestProcessor implements IRequestProcessor {
                 messageHandler.handleMessage("Request could not be send.", e, MessageType.ERROR);
             }
         }
+    }
+    
+    protected byte[] downloadFile(String url) throws FileDownloadException {
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new ByteArrayHttpMessageConverter());    
+        
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
+        headers.set("Authorization", "token " + propertiesManager.getProperty(Properties.GILES_ACCESS_TOKEN));
+        HttpEntity<String> entity = new HttpEntity<String>(headers);
+
+        ResponseEntity<byte[]> response = null;
+        try {
+            response = restTemplate.exchange(url, HttpMethod.GET, entity, byte[].class);
+        } catch (RestClientException ex) {
+            throw new FileDownloadException(ex);
+        }
+        
+        if(response.getStatusCode().equals(HttpStatus.OK)) {    
+            return response.getBody();
+        }
+        return null;
     }
 }

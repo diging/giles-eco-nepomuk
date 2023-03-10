@@ -48,7 +48,6 @@ public class StorageRequestReceiver {
             request = mapper.readValue(message, StorageDeletionRequest.class);
         } catch (IOException e) {
             messageHandler.handleMessage("Could not unmarshall request.", e, MessageType.ERROR);
-            // FIXME: handle this case
             return;
         }
         requestProcessor.processRequest(request);
