@@ -13,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import antlr.collections.List;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesManager;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileHandlerRegistry;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileTypeHandler;
@@ -48,7 +47,7 @@ public class RequestProcessorTest {
     private IRequestProducer requestProducer;
     
     @Mock
-    private IRequestFactory<ICompletedStorageDeletionRequest, CompletedStorageDeletionRequest> requestFactoryDeletion;
+    private IRequestFactory<ICompletedStorageDeletionRequest, CompletedStorageDeletionRequest> deletionRequestFactory;
     
     @Mock
     private IFilesManager filesManager;
@@ -93,7 +92,7 @@ public class RequestProcessorTest {
         Mockito.when(fileHandlerRegistry.getHandler(file1.getFileType())).thenReturn(handler);
         doNothing().when(handler).deleteFile(file1, false);
         try {
-            Mockito.when(requestFactoryDeletion.createRequest("REQ123", UPLOAD_ID)).thenReturn(completedStorageDeletionRequest);
+            Mockito.when(deletionRequestFactory.createRequest("REQ123", UPLOAD_ID)).thenReturn(completedStorageDeletionRequest);
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }

@@ -121,7 +121,6 @@ public class FilesDatabaseClient extends DatabaseClient<IFile> implements
         return docs.getResultList();       
     }
     
-    @Transactional
     @Override
     public void deleteFile(String fileId) {
         em.remove(getById(fileId));

@@ -50,26 +50,18 @@ public class AbstractFileHandlerTest {
     }
     
     @Test
-    public void test_deleteFile_whenIsOldFileVersionFalse_success() {
+    public void test_deleteFile_whenIsOldFileVersionFalse_success() throws NepomukFileStorageException {
         Mockito.doCallRealMethod().when(abstractFileHandler).deleteFile(file, false);
         abstractFileHandler.deleteFile(file, false);
-        try {
-            Mockito.verify(fileStorageManager, times(1)).deleteFile("github_3123", UPLOAD_ID, DOCUMENT_ID, FILENAME);
-        } catch (NepomukFileStorageException e) {
-            e.printStackTrace();
-        }
+        Mockito.verify(fileStorageManager, times(1)).deleteFile("github_3123", UPLOAD_ID, DOCUMENT_ID, FILENAME);
         Mockito.verify(filesManager, times(1)).deleteFile(file.getId());
     }
     
     @Test
-    public void test_deleteFile_whenIsOldFileVersionTrue_success() {
+    public void test_deleteFile_whenIsOldFileVersionTrue_success() throws NepomukFileStorageException {
         Mockito.doCallRealMethod().when(abstractFileHandler).deleteFile(file, true);
         abstractFileHandler.deleteFile(file, true);
-        try {
-            Mockito.verify(fileStorageManager, times(0)).deleteFile("github_3123", UPLOAD_ID, DOCUMENT_ID, FILENAME);
-        } catch (NepomukFileStorageException e) {
-            e.printStackTrace();
-        }
+        Mockito.verify(fileStorageManager, times(0)).deleteFile("github_3123", UPLOAD_ID, DOCUMENT_ID, FILENAME);
         Mockito.verify(filesManager, times(1)).deleteFile(file.getId());
     }
     

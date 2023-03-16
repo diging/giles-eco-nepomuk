@@ -35,6 +35,11 @@ public class FilesManager implements IFilesManager {
     public List<IFile> getFilesByUploadId(String uploadId) {
         return databaseClient.getFilesByUploadId(uploadId);
     }
+    
+    @Override
+    public List<IFile> getFilesByDocumentId(String documentId) {
+        return databaseClient.getFilesByDocumentId(documentId);
+    }
 
     @Override
     public IFile getFile(String id) {
@@ -90,10 +95,5 @@ public class FilesManager implements IFilesManager {
     @Override
     public void deleteFile(String fileId) {
         databaseClient.deleteFile(fileId);
-    }
-    
-    @Override
-    public List<IFile> getFilesByDocumentId(String uploadId) {
-        return databaseClient.getFilesByDocumentId(uploadId);
     }
 }

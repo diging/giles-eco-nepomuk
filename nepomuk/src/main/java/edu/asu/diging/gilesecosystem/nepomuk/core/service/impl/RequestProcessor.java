@@ -65,12 +65,12 @@ public class RequestProcessor implements IRequestProcessor {
     private IFilesManager filesManager;
     
     @Autowired
-    private IRequestFactory<ICompletedStorageDeletionRequest, CompletedStorageDeletionRequest> requestFactoryDeletion;
+    private IRequestFactory<ICompletedStorageDeletionRequest, CompletedStorageDeletionRequest> deletionRequestFactory;
 
     @PostConstruct
     public void init() {
         requestFactory.config(CompletedStorageRequest.class);
-        requestFactoryDeletion.config(CompletedStorageDeletionRequest.class);
+        deletionRequestFactory.config(CompletedStorageDeletionRequest.class);
     }            
 
     /* (non-Javadoc)
@@ -148,7 +148,7 @@ public class RequestProcessor implements IRequestProcessor {
         if (files.isEmpty()) {
             ICompletedStorageDeletionRequest completedRequest;
             try {
-                completedRequest = requestFactoryDeletion.createRequest(request.getRequestId(), request.getUploadId());
+                completedRequest = deletionRequestFactory.createRequest(request.getRequestId(), request.getUploadId());
             } catch (InstantiationException | IllegalAccessException e) {
                 // this should never happen, so we just fail silently...
                 messageHandler.handleMessage("Request could not be created.", e, MessageType.ERROR);
