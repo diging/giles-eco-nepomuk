@@ -57,6 +57,13 @@ public class FilesDatabaseClient extends DatabaseClient<IFile> implements
     }
     
     @Override
+    public List<IFile> getFilesByDocumentId(String documentId) {
+        List<IFile> results = new ArrayList<IFile>();
+        searchByProperty("documentId", documentId, File.class).forEach(f -> results.add((IFile)f));
+        return results;
+    }
+    
+    @Override
     public List<IFile> getFilesByUsername(String username) {
         List<IFile> results = new ArrayList<IFile>();
         searchByProperty("username", username, File.class).forEach(f -> results.add((IFile)f));
@@ -124,12 +131,5 @@ public class FilesDatabaseClient extends DatabaseClient<IFile> implements
     @Override
     public void deleteFile(String fileId) {
         em.remove(getById(fileId));
-    }
-    
-    @Override
-    public List<IFile> getFilesByDocumentId(String documentId) {
-        List<IFile> results = new ArrayList<IFile>();
-        searchByProperty("documentId", documentId, File.class).forEach(f -> results.add((IFile)f));
-        return results;
     }
 }
