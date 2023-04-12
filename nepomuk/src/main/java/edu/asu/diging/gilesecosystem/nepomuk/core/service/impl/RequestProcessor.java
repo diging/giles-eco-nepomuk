@@ -27,6 +27,7 @@ import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileTypeHandler;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IRequestProcessor;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.properties.Properties;
 import edu.asu.diging.gilesecosystem.nepomuk.rest.FilesController;
+import edu.asu.diging.gilesecosystem.requests.FileType;
 import edu.asu.diging.gilesecosystem.requests.ICompletedStorageRequest;
 import edu.asu.diging.gilesecosystem.requests.IRequestFactory;
 import edu.asu.diging.gilesecosystem.requests.IStorageRequest;
@@ -97,13 +98,15 @@ public class RequestProcessor implements IRequestProcessor {
             messageHandler.handleMessage("Request could not be created.", e, MessageType.ERROR);
             return;
         }
-        
         completedRequest.setDocumentId(request.getDocumentId());
         completedRequest.setFileId(request.getFileId());
         completedRequest.setFilename(request.getFilename());
         completedRequest.setFileType(request.getFileType());
         completedRequest.setUploadDate(request.getUploadDate());
         completedRequest.setUsername(request.getUsername());
+        if (request.getFileType() == FileType.IMAGE) {
+            completedRequest.setPageNr(request.getPageNr());
+        }
         
         if (newFile != null) {
             String restEndpoint = propertiesManager.getProperty(Properties.APP_BASE_URL) + propertiesManager.getProperty(Properties.REST_ENDPOINT_PREFIX);
