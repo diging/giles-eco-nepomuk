@@ -104,10 +104,12 @@ public class RequestProcessor implements IRequestProcessor {
         completedRequest.setFileType(request.getFileType());
         completedRequest.setUploadDate(request.getUploadDate());
         completedRequest.setUsername(request.getUsername());
-        if (request.getFileType() == FileType.IMAGE) {
+        if (request.getFileType().equals(FileType.IMAGE)) {
             completedRequest.setPageNr(request.getPageNr());
         }
-        
+        if (request.getFileType().equals(FileType.IMAGE) && request.getImageExtracted()) {
+            completedRequest.setImageExtracted(true);
+        }
         if (newFile != null) {
             String restEndpoint = propertiesManager.getProperty(Properties.APP_BASE_URL) + propertiesManager.getProperty(Properties.REST_ENDPOINT_PREFIX);
             if (restEndpoint.endsWith("/")) {
