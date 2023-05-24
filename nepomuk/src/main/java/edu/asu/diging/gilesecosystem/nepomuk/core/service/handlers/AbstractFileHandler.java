@@ -104,13 +104,11 @@ public abstract class AbstractFileHandler implements IFileTypeHandler {
     
     protected abstract IFileStorageManager getStorageManager();
     
-    public void deleteFile(IFile file, boolean isOldFileVersion) {
-        if(!isOldFileVersion) {
-            try {
-                getStorageManager().deleteFile(file.getUsername(), file.getUploadId(), file.getDocumentId(), file.getFilename()); 
-            } catch (NepomukFileStorageException e) {
-                messageHandler.handleMessage("File could not be deleted.", e, MessageType.WARNING);
-            }
+    public void deleteFile(IFile file) {
+        try {
+          getStorageManager().deleteFile(file.getUsername(), file.getUploadId(), file.getDocumentId(), file.getFilename()); 
+        } catch (NepomukFileStorageException e) {
+          messageHandler.handleMessage("File could not be deleted.", e, MessageType.WARNING);
         }
         filesManager.deleteFile(file.getId());
     }

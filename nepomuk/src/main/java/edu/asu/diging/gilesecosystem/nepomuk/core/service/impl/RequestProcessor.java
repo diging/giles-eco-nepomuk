@@ -62,10 +62,10 @@ public class RequestProcessor implements IRequestProcessor {
     private IRequestFactory<ICompletedStorageRequest, CompletedStorageRequest> requestFactory;
     
     @Autowired
-    private IFilesManager filesManager;
-    
-    @Autowired
     private IRequestFactory<ICompletedStorageDeletionRequest, CompletedStorageDeletionRequest> deletionRequestFactory;
+
+    @Autowired
+    private IFilesManager filesManager;
 
     @PostConstruct
     public void init() {
@@ -140,24 +140,21 @@ public class RequestProcessor implements IRequestProcessor {
     
     @Override
     public void processRequest(IStorageDeletionRequest request) {
-        IFile file = filesManager.getFile(request.getStorageFileId());
-        IFileTypeHandler handler = fileHandlerRegistry.getHandler(file.getFileType());
-        handler.deleteFile(file, request.getIsOldFileVersion());
-        List<IFile> files = filesManager.getFilesByDocumentId(file.getDocumentId());
-        // If no files are remaining for the document the request to delete the document and upload in Giles is pushed. 
-        if (files.isEmpty()) {
+        List<IFile> files = filesManager.getFilesByDocumentId(request.getDocumentId());
+        for (IFile file : files) {
+            IFileTypeHandler handler = fileHandlerRegistry.getHandler(file.getFileType());
+            handler.deleteFile(file);
+        }
+        if (filesManager.getFilesByDocumentId(request.getDocumentId()).isEmpty()) {
             ICompletedStorageDeletionRequest completedRequest;
             try {
                 completedRequest = deletionRequestFactory.createRequest(request.getRequestId(), request.getUploadId());
             } catch (InstantiationException | IllegalAccessException e) {
-                // this should never happen, so we just fail silently...
                 messageHandler.handleMessage("Request could not be created.", e, MessageType.ERROR);
                 return;
             }
             completedRequest.setStatus(RequestStatus.COMPLETE);
-            completedRequest.setFileId(file.getGilesFileId());
-            completedRequest.setStorageFileId(file.getId());
-            completedRequest.setDocumentId(file.getDocumentId());
+            completedRequest.setDocumentId(request.getDocumentId());
             try {
                 requestProducer.sendRequest(completedRequest, propertiesManager.getProperty(Properties.KAFKA_TOPIC_STORAGE_DELETE_COMPLETE_REQUEST));
             } catch (MessageCreationException e) {

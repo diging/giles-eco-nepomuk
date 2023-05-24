@@ -27,8 +27,6 @@ public interface IFileTypeHandler {
      * This method deletes a file.
      * @param file 
      *        File to be deleted.
-     * @param isOldFileVersion
-     *        specifies if the file is the current version of the file or an old version.
      */
-    void deleteFile(IFile file, boolean isOldFileVersion); 
+    public abstract void deleteFile(IFile file); 
 }
