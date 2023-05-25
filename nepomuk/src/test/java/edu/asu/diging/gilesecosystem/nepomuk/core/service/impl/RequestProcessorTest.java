@@ -86,11 +86,10 @@ public class RequestProcessorTest {
         storageDeletionRequest = createStorageDeletionRequest();
         completedStorageDeletionRequest = createCompletedStorageDeletionRequest();
         handler = mock(IFileTypeHandler.class);
-        Mockito.when(filesManager.getFile(storageDeletionRequest.getStorageFileId())).thenReturn(file1);
         Mockito.when(filesManager.getFilesByDocumentId(file1.getDocumentId())).thenReturn(new ArrayList<IFile>());
         Mockito.when(propertiesManager.getProperty(Properties.KAFKA_TOPIC_STORAGE_DELETE_COMPLETE_REQUEST)).thenReturn("topic_delete_storage_request_complete");
         Mockito.when(fileHandlerRegistry.getHandler(file1.getFileType())).thenReturn(handler);
-        doNothing().when(handler).deleteFile(file1, false);
+        doNothing().when(handler).deleteFile(file1);
         try {
             Mockito.when(deletionRequestFactory.createRequest("REQ123", UPLOAD_ID)).thenReturn(completedStorageDeletionRequest);
         } catch (InstantiationException | IllegalAccessException e) {
@@ -112,7 +111,7 @@ public class RequestProcessorTest {
     public void test_processRequest_allFilesNotDeleted_success() {
         ArrayList<IFile> files = new ArrayList<IFile>();
         files.add(file2);
-        Mockito.when(filesManager.getFilesByDocumentId(file1.getDocumentId())).thenReturn(files);
+        Mockito.when(filesManager.getFilesByDocumentId(storageDeletionRequest.getDocumentId())).thenReturn(files);
         requestProcessor.processRequest(storageDeletionRequest);
         try {
             Mockito.verify(requestProducer, times(0)).sendRequest(completedStorageDeletionRequest, "topic_delete_storage_request_complete");
@@ -138,9 +137,8 @@ public class RequestProcessorTest {
     private StorageDeletionRequest createStorageDeletionRequest() {
         StorageDeletionRequest storageDeletionRequest = new StorageDeletionRequest();
         storageDeletionRequest.setRequestId("REQ123");
-        storageDeletionRequest.setStorageFileId(FILE_ID_1);
         storageDeletionRequest.setUploadId(UPLOAD_ID);
-        storageDeletionRequest.setIsOldFileVersion(false);
+        storageDeletionRequest.setDocumentId(DOCUMENT_ID);
         
         return storageDeletionRequest;
     }
@@ -149,6 +147,7 @@ public class RequestProcessorTest {
         CompletedStorageDeletionRequest completedStorageDeletionRequest = new CompletedStorageDeletionRequest();
         completedStorageDeletionRequest.setRequestId("REQ123");
         completedStorageDeletionRequest.setUploadId(UPLOAD_ID);
+
         return completedStorageDeletionRequest;
     }
 }

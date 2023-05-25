@@ -15,6 +15,7 @@ import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFileStorageManager;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesManager;
 import edu.asu.diging.gilesecosystem.nepomuk.core.model.IFile;
 import edu.asu.diging.gilesecosystem.nepomuk.core.model.impl.File;
+import edu.asu.diging.gilesecosystem.septemberutil.properties.MessageType;
 import edu.asu.diging.gilesecosystem.septemberutil.service.ISystemMessageHandler;
 
 public class AbstractFileHandlerTest {
@@ -50,18 +51,19 @@ public class AbstractFileHandlerTest {
     }
     
     @Test
-    public void test_deleteFile_whenIsOldFileVersionFalse_success() throws NepomukFileStorageException {
-        Mockito.doCallRealMethod().when(abstractFileHandler).deleteFile(file, false);
-        abstractFileHandler.deleteFile(file, false);
+    public void test_deleteFile_success() throws NepomukFileStorageException {
+        Mockito.doCallRealMethod().when(abstractFileHandler).deleteFile(file);
+        abstractFileHandler.deleteFile(file);
         Mockito.verify(fileStorageManager, times(1)).deleteFile("github_3123", UPLOAD_ID, DOCUMENT_ID, FILENAME);
         Mockito.verify(filesManager, times(1)).deleteFile(file.getId());
     }
     
     @Test
-    public void test_deleteFile_whenIsOldFileVersionTrue_success() throws NepomukFileStorageException {
-        Mockito.doCallRealMethod().when(abstractFileHandler).deleteFile(file, true);
-        abstractFileHandler.deleteFile(file, true);
-        Mockito.verify(fileStorageManager, times(0)).deleteFile("github_3123", UPLOAD_ID, DOCUMENT_ID, FILENAME);
+    public void test_deleteFile_throwsNepomukFileStorageException() throws NepomukFileStorageException {
+        Mockito.doCallRealMethod().when(abstractFileHandler).deleteFile(file);
+        Mockito.doThrow(new NepomukFileStorageException()).when(fileStorageManager).deleteFile("github_3123", UPLOAD_ID, DOCUMENT_ID, FILENAME);
+        abstractFileHandler.deleteFile(file);
+        Mockito.verify(messageHandler, times(1)).handleMessage(Mockito.anyString(), Mockito.any(NepomukFileStorageException.class), Mockito.eq(MessageType.WARNING));
         Mockito.verify(filesManager, times(1)).deleteFile(file.getId());
     }
     
