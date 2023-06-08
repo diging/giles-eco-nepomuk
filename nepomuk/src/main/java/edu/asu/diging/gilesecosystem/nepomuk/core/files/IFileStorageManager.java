@@ -47,7 +47,9 @@ public interface IFileStorageManager {
      *            id of document
      * @param fileId
      *            id of file
+     * @param deleteEmptyFolders
+     *            if empty folders need to be deleted 
      * @throws NepomukFileStorageException 
      */
-    public abstract void deleteFile(String username, String uploadId, String documentId, String fileId) throws NepomukFileStorageException;
+    public abstract void deleteFile(String username, String uploadId, String documentId, String fileId, boolean deleteEmptyFolders) throws NepomukFileStorageException;
 }

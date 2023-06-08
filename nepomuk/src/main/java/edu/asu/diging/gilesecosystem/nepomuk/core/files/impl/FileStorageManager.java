@@ -132,7 +132,7 @@ public class FileStorageManager implements IFileStorageManager {
                 + getFileFolderPathInBaseFolder(username, uploadId, documentId);
     }
     
-    public void deleteFile(String username, String uploadId, String documentId, String fileName) throws NepomukFileStorageException {
+    public void deleteFile(String username, String uploadId, String documentId, String fileName, boolean deleteEmptyFolders) throws NepomukFileStorageException {
         Path path = Paths.get(getStoragePath(username, uploadId, documentId) + File.separator + fileName);
         try {
             Files.delete(path);
@@ -141,6 +141,19 @@ public class FileStorageManager implements IFileStorageManager {
         } catch (IOException ex) {
             throw new NepomukFileStorageException("Could not delete file.", ex);
         }
+        if (deleteEmptyFolders) {
+            File docFolder = new File(getStoragePath(username, uploadId, documentId));
+            if (docFolder.isDirectory() && docFolder.list().length == 0) {
+                boolean deletedDocFolder = docFolder.delete();
+                if (deletedDocFolder) {
+                    Path documentFolderPath = Paths.get(getStoragePath(username, uploadId, documentId));
+                    Path uploadFolderDirectory = documentFolderPath.getParent();
+                    File uploadFolder = new File(uploadFolderDirectory.toString());
+                    if (uploadFolder.isDirectory() && uploadFolder.list().length == 0) {
+                        uploadFolder.delete();
+                    }
+                }
+            }
+        }    
     }
-
 }
