@@ -27,7 +27,6 @@ import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileTypeHandler;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IRequestProcessor;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.properties.Properties;
 import edu.asu.diging.gilesecosystem.nepomuk.rest.FilesController;
-import edu.asu.diging.gilesecosystem.requests.FileType;
 import edu.asu.diging.gilesecosystem.requests.ICompletedStorageRequest;
 import edu.asu.diging.gilesecosystem.requests.IRequestFactory;
 import edu.asu.diging.gilesecosystem.requests.IStorageRequest;
