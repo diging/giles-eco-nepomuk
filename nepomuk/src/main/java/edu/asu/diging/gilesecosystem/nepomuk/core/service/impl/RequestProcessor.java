@@ -145,21 +145,19 @@ public class RequestProcessor implements IRequestProcessor {
             IFileTypeHandler handler = fileHandlerRegistry.getHandler(file.getFileType());
             handler.deleteFile(file);
         }
-        if (filesManager.getFilesByDocumentId(request.getDocumentId()).isEmpty()) {
-            ICompletedStorageDeletionRequest completedRequest;
-            try {
-                completedRequest = deletionRequestFactory.createRequest(request.getRequestId(), request.getUploadId());
-            } catch (InstantiationException | IllegalAccessException e) {
-                messageHandler.handleMessage("Request could not be created.", e, MessageType.ERROR);
-                return;
-            }
-            completedRequest.setStatus(RequestStatus.COMPLETE);
-            completedRequest.setDocumentId(request.getDocumentId());
-            try {
-                requestProducer.sendRequest(completedRequest, propertiesManager.getProperty(Properties.KAFKA_TOPIC_STORAGE_DELETE_COMPLETE_REQUEST));
-            } catch (MessageCreationException e) {
-                messageHandler.handleMessage("Request could not be send.", e, MessageType.ERROR);
-            }
+        ICompletedStorageDeletionRequest completedRequest;
+        try {
+            completedRequest = deletionRequestFactory.createRequest(request.getRequestId(), request.getUploadId());
+        } catch (InstantiationException | IllegalAccessException e) {
+            messageHandler.handleMessage("Request could not be created.", e, MessageType.ERROR);
+            return;
+        }
+        completedRequest.setStatus(RequestStatus.COMPLETE);
+        completedRequest.setDocumentId(request.getDocumentId());
+        try {
+            requestProducer.sendRequest(completedRequest, propertiesManager.getProperty(Properties.KAFKA_TOPIC_STORAGE_DELETE_COMPLETE_REQUEST));
+        } catch (MessageCreationException e) {
+            messageHandler.handleMessage("Request could not be send.", e, MessageType.ERROR);
         }
     }
     

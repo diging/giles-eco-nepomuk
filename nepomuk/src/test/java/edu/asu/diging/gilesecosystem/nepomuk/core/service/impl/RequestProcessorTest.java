@@ -111,13 +111,15 @@ public class RequestProcessorTest {
     }
     
     @Test
-    public void test_processRequest_allFilesNotDeleted() throws MessageCreationException, NepomukFileStorageException {
+    public void test_processRequest_multipleFilesToDelete_success() throws MessageCreationException, NepomukFileStorageException {
         doNothing().when(handler).deleteFile(file1);
+        doNothing().when(handler).deleteFile(file2);
         ArrayList<IFile> files = new ArrayList<IFile>();
         files.add(file2);
+        files.add(file1);
         Mockito.when(filesManager.getFilesByDocumentId(storageDeletionRequest.getDocumentId())).thenReturn(files);
         requestProcessor.processRequest(storageDeletionRequest);
-        Mockito.verify(requestProducer, times(0)).sendRequest(completedStorageDeletionRequest, "topic_delete_storage_request_complete");
+        Mockito.verify(requestProducer, times(1)).sendRequest(completedStorageDeletionRequest, "topic_delete_storage_request_complete");
     }
     
     private File createFile(String fileId, String gilesId) {

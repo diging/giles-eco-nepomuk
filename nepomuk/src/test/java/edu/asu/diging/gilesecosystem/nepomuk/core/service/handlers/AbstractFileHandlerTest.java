@@ -57,7 +57,7 @@ public class AbstractFileHandlerTest {
         Mockito.when(abstractFileHandler.getStorageManager().checkIfFileExists("github_3123", UPLOAD_ID, DOCUMENT_ID, FILENAME)).thenReturn(true);
         Mockito.doCallRealMethod().when(abstractFileHandler).deleteFile(file);
         abstractFileHandler.deleteFile(file);
-        Mockito.verify(fileStorageManager, times(1)).deleteFile("github_3123", UPLOAD_ID, DOCUMENT_ID, FILENAME, true);
+        Mockito.verify(fileStorageManager, times(1)).deleteFile("github_3123", UPLOAD_ID, DOCUMENT_ID, FILENAME);
         Mockito.verify(filesManager, times(1)).deleteFile(file.getId());
     }
     
@@ -66,7 +66,7 @@ public class AbstractFileHandlerTest {
         Mockito.when(abstractFileHandler.getStorageManager().checkIfFileExists("github_3123", UPLOAD_ID, DOCUMENT_ID, FILENAME)).thenReturn(false);
         Mockito.doCallRealMethod().when(abstractFileHandler).deleteFile(file);
         abstractFileHandler.deleteFile(file);
-        Mockito.verify(fileStorageManager, times(0)).deleteFile("github_3123", UPLOAD_ID, DOCUMENT_ID, FILENAME, true);
+        Mockito.verify(fileStorageManager, times(0)).deleteFile("github_3123", UPLOAD_ID, DOCUMENT_ID, FILENAME);
         Mockito.verify(filesManager, times(1)).deleteFile(file.getId());
     }
     
@@ -74,7 +74,7 @@ public class AbstractFileHandlerTest {
     public void test_deleteFile_throwsNepomukFileStorageException() throws NepomukFileStorageException {
         Mockito.when(abstractFileHandler.getStorageManager().checkIfFileExists("github_3123", UPLOAD_ID, DOCUMENT_ID, FILENAME)).thenReturn(true);
         Mockito.doCallRealMethod().when(abstractFileHandler).deleteFile(file);
-        Mockito.doThrow(new NepomukFileStorageException()).when(fileStorageManager).deleteFile("github_3123", UPLOAD_ID, DOCUMENT_ID, FILENAME, true);
+        Mockito.doThrow(new NepomukFileStorageException()).when(fileStorageManager).deleteFile("github_3123", UPLOAD_ID, DOCUMENT_ID, FILENAME);
         abstractFileHandler.deleteFile(file);
         Mockito.verify(filesManager, times(0)).deleteFile(file.getId());
     }

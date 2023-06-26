@@ -132,27 +132,28 @@ public class FileStorageManager implements IFileStorageManager {
                 + getFileFolderPathInBaseFolder(username, uploadId, documentId);
     }
     
-    public void deleteFile(String username, String uploadId, String documentId, String fileName, boolean deleteEmptyFolders) throws NepomukFileStorageException {
+    public void deleteFile(String username, String uploadId, String documentId, String fileName) throws NepomukFileStorageException {
         Path path = Paths.get(getStoragePath(username, uploadId, documentId) + File.separator + fileName);
         try {
             Files.delete(path);
         } catch (IOException ex) {
             throw new NepomukFileStorageException("Could not delete file.", ex);
         }
-        if (deleteEmptyFolders) {
-            File docFolder = new File(getStoragePath(username, uploadId, documentId));
-            if (docFolder.isDirectory() && docFolder.list().length == 0) {
-                boolean deletedDocFolder = docFolder.delete();
-                if (deletedDocFolder) {
-                    Path documentFolderPath = Paths.get(getStoragePath(username, uploadId, documentId));
-                    Path uploadFolderDirectory = documentFolderPath.getParent();
-                    File uploadFolder = new File(uploadFolderDirectory.toString());
-                    if (uploadFolder.isDirectory() && uploadFolder.list().length == 0) {
-                        uploadFolder.delete();
-                    }
+        File docFolder = new File(getStoragePath(username, uploadId, documentId));
+        if (docFolder.isDirectory() && docFolder.list().length == 0) {
+            // If another process adds a file to the folder just before deletion, we do not want to delete the folder.
+            // The goal is to ensure that the folder remains intact even if new files are added during the deletion process.
+            // Using the File.delete() as an exception is not required to be thrown in this scenario.
+            boolean deleted = docFolder.delete();
+            if (deleted) {
+                Path documentFolderPath = Paths.get(getStoragePath(username, uploadId, documentId));
+                Path uploadFolderDirectory = documentFolderPath.getParent();
+                File uploadFolder = new File(uploadFolderDirectory.toString());
+                if (uploadFolder.isDirectory() && uploadFolder.list().length == 0) {
+                    uploadFolder.delete();
                 }
             }
-        }    
+        }
     }
 
     @Override

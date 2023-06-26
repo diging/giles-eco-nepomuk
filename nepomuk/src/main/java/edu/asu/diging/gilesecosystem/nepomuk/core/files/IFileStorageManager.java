@@ -51,7 +51,7 @@ public interface IFileStorageManager {
      *            if empty folders need to be deleted 
      * @throws NepomukFileStorageException 
      */
-    public abstract void deleteFile(String username, String uploadId, String documentId, String fileId, boolean deleteEmptyFolders) throws NepomukFileStorageException;
+    public abstract void deleteFile(String username, String uploadId, String documentId, String fileId) throws NepomukFileStorageException;
 
     /**
      * Checks if a file exists at the specified location.
