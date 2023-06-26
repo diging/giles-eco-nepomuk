@@ -139,7 +139,7 @@ public class RequestProcessor implements IRequestProcessor {
     }
     
     @Override
-    public void processRequest(IStorageDeletionRequest request) {
+    public void processRequest(IStorageDeletionRequest request) throws NepomukFileStorageException {
         List<IFile> files = filesManager.getFilesByDocumentId(request.getDocumentId());
         for (IFile file : files) {
             IFileTypeHandler handler = fileHandlerRegistry.getHandler(file.getFileType());

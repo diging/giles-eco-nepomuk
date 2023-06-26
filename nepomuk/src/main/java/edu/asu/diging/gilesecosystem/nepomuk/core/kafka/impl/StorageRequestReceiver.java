@@ -8,6 +8,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import edu.asu.diging.gilesecosystem.nepomuk.core.exception.NepomukFileStorageException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IRequestProcessor;
 import edu.asu.diging.gilesecosystem.requests.IStorageDeletionRequest;
 import edu.asu.diging.gilesecosystem.requests.IStorageRequest;
@@ -39,7 +40,11 @@ public class StorageRequestReceiver {
 
         requestProcessor.processRequest(request);
     }
-    
+ 
+    /**
+     * Kafka listener method for receiving and processing a delete storage request message.
+     * @param message The message containing the delete storage request.
+     */
     @KafkaListener(topics = "${topic_delete_storage_request}")
     public void receiveDeleteMessage(String message) {
         ObjectMapper mapper = new ObjectMapper();
@@ -50,6 +55,10 @@ public class StorageRequestReceiver {
             messageHandler.handleMessage("Could not unmarshall request.", e, MessageType.ERROR);
             return;
         }
-        requestProcessor.processRequest(request);
+        try {
+            requestProcessor.processRequest(request);
+        } catch (NepomukFileStorageException e) {
+            messageHandler.handleMessage("Could not process deletion request", e, MessageType.ERROR);
+        }
     }
 }

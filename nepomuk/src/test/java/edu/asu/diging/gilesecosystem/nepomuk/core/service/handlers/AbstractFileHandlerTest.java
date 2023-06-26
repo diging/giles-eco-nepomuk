@@ -3,6 +3,8 @@ package edu.asu.diging.gilesecosystem.nepomuk.core.service.handlers;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 
+import java.io.IOException;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -52,19 +54,29 @@ public class AbstractFileHandlerTest {
     
     @Test
     public void test_deleteFile_success() throws NepomukFileStorageException {
+        Mockito.when(abstractFileHandler.getStorageManager().checkIfFileExists("github_3123", UPLOAD_ID, DOCUMENT_ID, FILENAME)).thenReturn(true);
         Mockito.doCallRealMethod().when(abstractFileHandler).deleteFile(file);
         abstractFileHandler.deleteFile(file);
-        Mockito.verify(fileStorageManager, times(1)).deleteFile("github_3123", UPLOAD_ID, DOCUMENT_ID, FILENAME);
+        Mockito.verify(fileStorageManager, times(1)).deleteFile("github_3123", UPLOAD_ID, DOCUMENT_ID, FILENAME, true);
         Mockito.verify(filesManager, times(1)).deleteFile(file.getId());
     }
     
     @Test
-    public void test_deleteFile_throwsNepomukFileStorageException() throws NepomukFileStorageException {
+    public void test_deleteFile_whenFileNotInStorage_success() throws NepomukFileStorageException {
+        Mockito.when(abstractFileHandler.getStorageManager().checkIfFileExists("github_3123", UPLOAD_ID, DOCUMENT_ID, FILENAME)).thenReturn(false);
         Mockito.doCallRealMethod().when(abstractFileHandler).deleteFile(file);
-        Mockito.doThrow(new NepomukFileStorageException()).when(fileStorageManager).deleteFile("github_3123", UPLOAD_ID, DOCUMENT_ID, FILENAME);
         abstractFileHandler.deleteFile(file);
-        Mockito.verify(messageHandler, times(1)).handleMessage(Mockito.anyString(), Mockito.any(NepomukFileStorageException.class), Mockito.eq(MessageType.WARNING));
+        Mockito.verify(fileStorageManager, times(0)).deleteFile("github_3123", UPLOAD_ID, DOCUMENT_ID, FILENAME, true);
         Mockito.verify(filesManager, times(1)).deleteFile(file.getId());
+    }
+    
+    @Test(expected=NepomukFileStorageException.class)
+    public void test_deleteFile_throwsNepomukFileStorageException() throws NepomukFileStorageException {
+        Mockito.when(abstractFileHandler.getStorageManager().checkIfFileExists("github_3123", UPLOAD_ID, DOCUMENT_ID, FILENAME)).thenReturn(true);
+        Mockito.doCallRealMethod().when(abstractFileHandler).deleteFile(file);
+        Mockito.doThrow(new NepomukFileStorageException()).when(fileStorageManager).deleteFile("github_3123", UPLOAD_ID, DOCUMENT_ID, FILENAME, true);
+        abstractFileHandler.deleteFile(file);
+        Mockito.verify(filesManager, times(0)).deleteFile(file.getId());
     }
     
     private File createFile(String fileId, String gilesId) {

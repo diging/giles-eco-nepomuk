@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import edu.asu.diging.gilesecosystem.nepomuk.core.exception.NepomukFileStorageException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesManager;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileHandlerRegistry;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileTypeHandler;
@@ -78,46 +79,45 @@ public class RequestProcessorTest {
     private String UPLOAD_ID = "uploadId";
     
     @Before
-    public void setUp() {
+    public void setUp() throws NepomukFileStorageException, InstantiationException, IllegalAccessException {
         requestProcessor = new RequestProcessor();
         MockitoAnnotations.initMocks(this);
         file1 = createFile(FILE_ID_1, GILES_ID_1);
         file2 = createFile(FILE_ID_2, GILES_ID_2);
+        ArrayList<IFile> files = new ArrayList<IFile>();
+        files.add(file1);
         storageDeletionRequest = createStorageDeletionRequest();
         completedStorageDeletionRequest = createCompletedStorageDeletionRequest();
         handler = mock(IFileTypeHandler.class);
-        Mockito.when(filesManager.getFilesByDocumentId(file1.getDocumentId())).thenReturn(new ArrayList<IFile>());
+        Mockito.when(filesManager.getFilesByDocumentId(file1.getDocumentId())).thenReturn(files);
         Mockito.when(propertiesManager.getProperty(Properties.KAFKA_TOPIC_STORAGE_DELETE_COMPLETE_REQUEST)).thenReturn("topic_delete_storage_request_complete");
         Mockito.when(fileHandlerRegistry.getHandler(file1.getFileType())).thenReturn(handler);
+        Mockito.when(deletionRequestFactory.createRequest("REQ123", UPLOAD_ID)).thenReturn(completedStorageDeletionRequest);
+    }
+    
+    @Test
+    public void test_processRequest_allFilesDeleted_success() throws NepomukFileStorageException, MessageCreationException {
+        Mockito.when(filesManager.getFilesByDocumentId(file1.getDocumentId())).thenReturn(new ArrayList<IFile>());
         doNothing().when(handler).deleteFile(file1);
-        try {
-            Mockito.when(deletionRequestFactory.createRequest("REQ123", UPLOAD_ID)).thenReturn(completedStorageDeletionRequest);
-        } catch (InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    @Test
-    public void test_processRequest_allFilesDeleted_success() {
         requestProcessor.processRequest(storageDeletionRequest);
-        try {
-            Mockito.verify(requestProducer, times(1)).sendRequest(completedStorageDeletionRequest, "topic_delete_storage_request_complete");
-        } catch (MessageCreationException e) {
-            e.printStackTrace();
-        }
+        Mockito.verify(requestProducer, times(1)).sendRequest(completedStorageDeletionRequest, "topic_delete_storage_request_complete");
+    }
+    
+    @Test(expected=NepomukFileStorageException.class)
+    public void test_processRequest_deletionFailure_throwsNepomukFileStorageException() throws MessageCreationException, NepomukFileStorageException {
+        Mockito.doThrow(new NepomukFileStorageException()).when(handler).deleteFile(Mockito.any());
+        requestProcessor.processRequest(storageDeletionRequest);
+        Mockito.verify(requestProducer, times(0)).sendRequest(completedStorageDeletionRequest, "topic_delete_storage_request_complete");
     }
     
     @Test
-    public void test_processRequest_allFilesNotDeleted_success() {
+    public void test_processRequest_allFilesNotDeleted() throws MessageCreationException, NepomukFileStorageException {
+        doNothing().when(handler).deleteFile(file1);
         ArrayList<IFile> files = new ArrayList<IFile>();
         files.add(file2);
         Mockito.when(filesManager.getFilesByDocumentId(storageDeletionRequest.getDocumentId())).thenReturn(files);
         requestProcessor.processRequest(storageDeletionRequest);
-        try {
-            Mockito.verify(requestProducer, times(0)).sendRequest(completedStorageDeletionRequest, "topic_delete_storage_request_complete");
-        } catch (MessageCreationException e) {
-            e.printStackTrace();
-        }
+        Mockito.verify(requestProducer, times(0)).sendRequest(completedStorageDeletionRequest, "topic_delete_storage_request_complete");
     }
     
     private File createFile(String fileId, String gilesId) {

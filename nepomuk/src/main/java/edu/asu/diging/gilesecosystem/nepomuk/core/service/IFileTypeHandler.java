@@ -27,6 +27,7 @@ public interface IFileTypeHandler {
      * This method deletes a file.
      * @param file 
      *        File to be deleted.
+     * @throws NepomukFileStorageException 
      */
-    public abstract void deleteFile(IFile file); 
+    public abstract void deleteFile(IFile file) throws NepomukFileStorageException; 
 }

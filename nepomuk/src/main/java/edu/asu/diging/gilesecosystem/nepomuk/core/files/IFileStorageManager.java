@@ -52,4 +52,14 @@ public interface IFileStorageManager {
      * @throws NepomukFileStorageException 
      */
     public abstract void deleteFile(String username, String uploadId, String documentId, String fileId, boolean deleteEmptyFolders) throws NepomukFileStorageException;
+
+    /**
+     * Checks if a file exists at the specified location.
+     * @param username   The username associated with the file.
+     * @param uploadId   The unique identifier for the upload.
+     * @param documentId The identifier for the document.
+     * @param fileName   The name of the file to check.
+     * @return {@code true} if the file exists at the specified location, {@code false} otherwise.
+     */
+    public abstract boolean checkIfFileExists(String username, String uploadId, String documentId, String fileName);
 }
