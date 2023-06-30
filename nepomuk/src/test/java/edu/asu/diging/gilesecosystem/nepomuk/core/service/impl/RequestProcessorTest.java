@@ -103,11 +103,11 @@ public class RequestProcessorTest {
         Mockito.verify(requestProducer, times(1)).sendRequest(completedStorageDeletionRequest, "topic_delete_storage_request_complete");
     }
     
-    @Test(expected=NepomukFileStorageException.class)
+    @Test()
     public void test_processRequest_deletionFailure_throwsNepomukFileStorageException() throws MessageCreationException, NepomukFileStorageException {
         Mockito.doThrow(new NepomukFileStorageException()).when(handler).deleteFile(Mockito.any());
         requestProcessor.processRequest(storageDeletionRequest);
-        Mockito.verify(requestProducer, times(0)).sendRequest(completedStorageDeletionRequest, "topic_delete_storage_request_complete");
+        Mockito.verify(requestProducer, times(1)).sendRequest(completedStorageDeletionRequest, "topic_delete_storage_request_complete");
     }
     
     @Test

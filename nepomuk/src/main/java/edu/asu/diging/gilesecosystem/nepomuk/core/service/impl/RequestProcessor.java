@@ -139,11 +139,17 @@ public class RequestProcessor implements IRequestProcessor {
     }
     
     @Override
-    public void processRequest(IStorageDeletionRequest request) throws NepomukFileStorageException {
+    public void processRequest(IStorageDeletionRequest request) {
         List<IFile> files = filesManager.getFilesByDocumentId(request.getDocumentId());
+        RequestStatus status = RequestStatus.COMPLETE;
         for (IFile file : files) {
             IFileTypeHandler handler = fileHandlerRegistry.getHandler(file.getFileType());
-            handler.deleteFile(file);
+            try {
+                handler.deleteFile(file);
+            } catch(NepomukFileStorageException ex) {
+                messageHandler.handleMessage("Error deleting file with id " + file.getId(), ex, MessageType.ERROR);
+                status = RequestStatus.FAILED;
+            }          
         }
         ICompletedStorageDeletionRequest completedRequest;
         try {
@@ -152,7 +158,7 @@ public class RequestProcessor implements IRequestProcessor {
             messageHandler.handleMessage("Request could not be created.", e, MessageType.ERROR);
             return;
         }
-        completedRequest.setStatus(RequestStatus.COMPLETE);
+        completedRequest.setStatus(status);
         completedRequest.setDocumentId(request.getDocumentId());
         try {
             requestProducer.sendRequest(completedRequest, propertiesManager.getProperty(Properties.KAFKA_TOPIC_STORAGE_DELETE_COMPLETE_REQUEST));

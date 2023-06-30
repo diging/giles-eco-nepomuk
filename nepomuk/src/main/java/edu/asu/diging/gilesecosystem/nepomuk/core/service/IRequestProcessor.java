@@ -11,8 +11,7 @@ public interface IRequestProcessor {
     /**
      * Processes a storage deletion request.
      * @param request The storage deletion request to process.
-     * @throws NepomukFileStorageException If an error occurs during the storage deletion process.
      */
-    public abstract void processRequest(IStorageDeletionRequest request) throws NepomukFileStorageException;
+    public abstract void processRequest(IStorageDeletionRequest request);
 
 }

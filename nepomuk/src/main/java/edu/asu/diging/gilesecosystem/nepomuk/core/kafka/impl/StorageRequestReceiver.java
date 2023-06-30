@@ -55,10 +55,6 @@ public class StorageRequestReceiver {
             messageHandler.handleMessage("Could not unmarshall request.", e, MessageType.ERROR);
             return;
         }
-        try {
-            requestProcessor.processRequest(request);
-        } catch (NepomukFileStorageException e) {
-            messageHandler.handleMessage("Could not process deletion request", e, MessageType.ERROR);
-        }
+        requestProcessor.processRequest(request);
     }
 }
