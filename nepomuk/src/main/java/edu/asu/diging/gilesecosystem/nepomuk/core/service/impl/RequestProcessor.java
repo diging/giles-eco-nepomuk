@@ -3,7 +3,6 @@ package edu.asu.diging.gilesecosystem.nepomuk.core.service.impl;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -21,7 +20,6 @@ import org.springframework.web.client.RestTemplate;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.FileDownloadException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.NepomukFileStorageException;
-import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesManager;
 import edu.asu.diging.gilesecosystem.nepomuk.core.model.IFile;
 import edu.asu.diging.gilesecosystem.nepomuk.core.model.impl.File;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileHandlerRegistry;
@@ -29,14 +27,11 @@ import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileTypeHandler;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IRequestProcessor;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.properties.Properties;
 import edu.asu.diging.gilesecosystem.nepomuk.rest.FilesController;
-import edu.asu.diging.gilesecosystem.requests.ICompletedStorageDeletionRequest;
 import edu.asu.diging.gilesecosystem.requests.ICompletedStorageRequest;
 import edu.asu.diging.gilesecosystem.requests.IRequestFactory;
-import edu.asu.diging.gilesecosystem.requests.IStorageDeletionRequest;
 import edu.asu.diging.gilesecosystem.requests.IStorageRequest;
 import edu.asu.diging.gilesecosystem.requests.RequestStatus;
 import edu.asu.diging.gilesecosystem.requests.exceptions.MessageCreationException;
-import edu.asu.diging.gilesecosystem.requests.impl.CompletedStorageDeletionRequest;
 import edu.asu.diging.gilesecosystem.requests.impl.CompletedStorageRequest;
 import edu.asu.diging.gilesecosystem.requests.kafka.IRequestProducer;
 import edu.asu.diging.gilesecosystem.septemberutil.properties.MessageType;
@@ -60,17 +55,10 @@ public class RequestProcessor implements IRequestProcessor {
     
     @Autowired
     private IRequestFactory<ICompletedStorageRequest, CompletedStorageRequest> requestFactory;
-    
-    @Autowired
-    private IRequestFactory<ICompletedStorageDeletionRequest, CompletedStorageDeletionRequest> deletionRequestFactory;
-
-    @Autowired
-    private IFilesManager filesManager;
 
     @PostConstruct
     public void init() {
         requestFactory.config(CompletedStorageRequest.class);
-        deletionRequestFactory.config(CompletedStorageDeletionRequest.class);
     }            
 
     /* (non-Javadoc)
@@ -133,35 +121,6 @@ public class RequestProcessor implements IRequestProcessor {
         
         try {
             requestProducer.sendRequest(completedRequest, propertiesManager.getProperty(Properties.KAFKA_TOPIC_STORAGE_COMPLETE));
-        } catch (MessageCreationException e) {
-            messageHandler.handleMessage("Request could not be send.", e, MessageType.ERROR);
-        }
-    }
-    
-    @Override
-    public void processRequest(IStorageDeletionRequest request) {
-        List<IFile> files = filesManager.getFilesByDocumentId(request.getDocumentId());
-        RequestStatus status = RequestStatus.COMPLETE;
-        for (IFile file : files) {
-            IFileTypeHandler handler = fileHandlerRegistry.getHandler(file.getFileType());
-            try {
-                handler.deleteFile(file);
-            } catch(NepomukFileStorageException ex) {
-                messageHandler.handleMessage("Error deleting file with id " + file.getId(), ex, MessageType.ERROR);
-                status = RequestStatus.FAILED;
-            }          
-        }
-        ICompletedStorageDeletionRequest completedRequest;
-        try {
-            completedRequest = deletionRequestFactory.createRequest(request.getRequestId(), request.getUploadId());
-        } catch (InstantiationException | IllegalAccessException e) {
-            messageHandler.handleMessage("Request could not be created.", e, MessageType.ERROR);
-            return;
-        }
-        completedRequest.setStatus(status);
-        completedRequest.setDocumentId(request.getDocumentId());
-        try {
-            requestProducer.sendRequest(completedRequest, propertiesManager.getProperty(Properties.KAFKA_TOPIC_STORAGE_DELETE_COMPLETE_REQUEST));
         } catch (MessageCreationException e) {
             messageHandler.handleMessage("Request could not be send.", e, MessageType.ERROR);
         }

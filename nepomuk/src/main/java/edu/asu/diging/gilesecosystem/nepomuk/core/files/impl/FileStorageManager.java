@@ -157,7 +157,6 @@ public class FileStorageManager implements IFileStorageManager {
     @Override
     public boolean checkIfFileExists(String username, String uploadId, String documentId, String fileName) {
         Path path = Paths.get(getStoragePath(username, uploadId, documentId) + File.separator + fileName);
-
         return Files.exists(path);
     }
 }
