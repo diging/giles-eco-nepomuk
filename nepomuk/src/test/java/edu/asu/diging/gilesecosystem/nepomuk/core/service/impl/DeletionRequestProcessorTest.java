@@ -15,26 +15,23 @@ import org.mockito.MockitoAnnotations;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.NepomukFileStorageException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesManager;
+import edu.asu.diging.gilesecosystem.nepomuk.core.model.IFile;
+import edu.asu.diging.gilesecosystem.nepomuk.core.model.impl.File;
+import edu.asu.diging.gilesecosystem.nepomuk.core.service.IDeletionRequestProcessor;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileHandlerRegistry;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.IFileTypeHandler;
-import edu.asu.diging.gilesecosystem.nepomuk.core.service.IRequestProcessor;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.properties.Properties;
 import edu.asu.diging.gilesecosystem.requests.ICompletedStorageDeletionRequest;
-import edu.asu.diging.gilesecosystem.requests.ICompletedStorageRequest;
 import edu.asu.diging.gilesecosystem.requests.IRequestFactory;
 import edu.asu.diging.gilesecosystem.requests.IStorageDeletionRequest;
 import edu.asu.diging.gilesecosystem.requests.exceptions.MessageCreationException;
 import edu.asu.diging.gilesecosystem.requests.impl.CompletedStorageDeletionRequest;
-import edu.asu.diging.gilesecosystem.requests.impl.CompletedStorageRequest;
 import edu.asu.diging.gilesecosystem.requests.impl.StorageDeletionRequest;
 import edu.asu.diging.gilesecosystem.requests.kafka.IRequestProducer;
 import edu.asu.diging.gilesecosystem.septemberutil.service.ISystemMessageHandler;
 import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
-import edu.asu.diging.gilesecosystem.nepomuk.core.model.IFile;
-import edu.asu.diging.gilesecosystem.nepomuk.core.model.impl.File;
 
-public class RequestProcessorTest {
-    
+public class DeletionRequestProcessorTest {
     @Mock
     private IFileHandlerRegistry fileHandlerRegistry;
     
@@ -54,13 +51,10 @@ public class RequestProcessorTest {
     private IFilesManager filesManager;
     
     @Mock
-    private IRequestFactory<ICompletedStorageRequest, CompletedStorageRequest> requestFactory;
-    
-    @Mock
     private IFileTypeHandler fileTypeHandler;
     
     @InjectMocks
-    private IRequestProcessor requestProcessor;
+    private IDeletionRequestProcessor deletionRequestProcessor;
     
     IFile file1, file2;
     IStorageDeletionRequest storageDeletionRequest;
@@ -80,7 +74,7 @@ public class RequestProcessorTest {
     
     @Before
     public void setUp() throws NepomukFileStorageException, InstantiationException, IllegalAccessException {
-        requestProcessor = new RequestProcessor();
+        deletionRequestProcessor = new DeletionRequestProcessor();
         MockitoAnnotations.initMocks(this);
         file1 = createFile(FILE_ID_1, GILES_ID_1);
         file2 = createFile(FILE_ID_2, GILES_ID_2);
@@ -99,14 +93,14 @@ public class RequestProcessorTest {
     public void test_processRequest_allFilesDeleted_success() throws NepomukFileStorageException, MessageCreationException {
         Mockito.when(filesManager.getFilesByDocumentId(file1.getDocumentId())).thenReturn(new ArrayList<IFile>());
         doNothing().when(handler).deleteFile(file1);
-        requestProcessor.processRequest(storageDeletionRequest);
+        deletionRequestProcessor.processRequest(storageDeletionRequest);
         Mockito.verify(requestProducer, times(1)).sendRequest(completedStorageDeletionRequest, "topic_delete_storage_request_complete");
     }
     
     @Test()
     public void test_processRequest_deletionFailure_throwsNepomukFileStorageException() throws MessageCreationException, NepomukFileStorageException {
         Mockito.doThrow(new NepomukFileStorageException()).when(handler).deleteFile(Mockito.any());
-        requestProcessor.processRequest(storageDeletionRequest);
+        deletionRequestProcessor.processRequest(storageDeletionRequest);
         Mockito.verify(requestProducer, times(1)).sendRequest(completedStorageDeletionRequest, "topic_delete_storage_request_complete");
     }
     
@@ -118,7 +112,7 @@ public class RequestProcessorTest {
         files.add(file2);
         files.add(file1);
         Mockito.when(filesManager.getFilesByDocumentId(storageDeletionRequest.getDocumentId())).thenReturn(files);
-        requestProcessor.processRequest(storageDeletionRequest);
+        deletionRequestProcessor.processRequest(storageDeletionRequest);
         Mockito.verify(requestProducer, times(1)).sendRequest(completedStorageDeletionRequest, "topic_delete_storage_request_complete");
     }
     
