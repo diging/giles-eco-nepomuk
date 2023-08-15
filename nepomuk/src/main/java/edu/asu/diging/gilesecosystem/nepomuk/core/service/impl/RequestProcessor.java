@@ -103,9 +103,7 @@ public class RequestProcessor implements IRequestProcessor {
         completedRequest.setFileType(request.getFileType());
         completedRequest.setUploadDate(request.getUploadDate());
         completedRequest.setUsername(request.getUsername());
-        if (request.isDerivedFile()) {
-            completedRequest.setDerivedFile(true);
-        }
+        completedRequest.setGeneratedByService(request.getGeneratedByService());
         if (newFile != null) {
             String restEndpoint = propertiesManager.getProperty(Properties.APP_BASE_URL) + propertiesManager.getProperty(Properties.REST_ENDPOINT_PREFIX);
             if (restEndpoint.endsWith("/")) {
