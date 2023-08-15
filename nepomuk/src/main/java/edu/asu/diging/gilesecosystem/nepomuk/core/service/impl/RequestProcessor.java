@@ -97,14 +97,13 @@ public class RequestProcessor implements IRequestProcessor {
             messageHandler.handleMessage("Request could not be created.", e, MessageType.ERROR);
             return;
         }
-        
         completedRequest.setDocumentId(request.getDocumentId());
         completedRequest.setFileId(request.getFileId());
         completedRequest.setFilename(request.getFilename());
         completedRequest.setFileType(request.getFileType());
         completedRequest.setUploadDate(request.getUploadDate());
         completedRequest.setUsername(request.getUsername());
-        
+        completedRequest.setGeneratedByService(request.getGeneratedByService());
         if (newFile != null) {
             String restEndpoint = propertiesManager.getProperty(Properties.APP_BASE_URL) + propertiesManager.getProperty(Properties.REST_ENDPOINT_PREFIX);
             if (restEndpoint.endsWith("/")) {
