@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import edu.asu.diging.gilesecosystem.nepomuk.core.exception.NepomukFileStorageException;
 import edu.asu.diging.gilesecosystem.nepomuk.core.files.IFilesManager;
@@ -24,6 +25,7 @@ import edu.asu.diging.gilesecosystem.septemberutil.properties.MessageType;
 import edu.asu.diging.gilesecosystem.septemberutil.service.ISystemMessageHandler;
 import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
 
+@Service
 public class DeletionRequestProcessor implements IDeletionRequestProcessor {
     @Autowired
     private IFileHandlerRegistry fileHandlerRegistry;
