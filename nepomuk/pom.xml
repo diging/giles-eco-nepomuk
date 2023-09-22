@@ -13,7 +13,7 @@
         <org.slf4j-version>1.7.5</org.slf4j-version>
         <org.springframework-version>4.3.2.RELEASE</org.springframework-version>
         <spring-security-version>4.1.3.RELEASE</spring-security-version>
-        <geco.requests.version>0.15</geco.requests.version>
+        <geco.requests.version>0.16</geco.requests.version>
         <geco.util.version>0.6</geco.util.version>
         <geco.september.util.version>0.3</geco.september.util.version>
         <geco.kafka-util.version>0.2</geco.kafka-util.version>
