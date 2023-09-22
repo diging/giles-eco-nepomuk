@@ -57,6 +57,13 @@ public class FilesDatabaseClient extends DatabaseClient<IFile> implements
     }
     
     @Override
+    public List<IFile> getFilesByDocumentId(String documentId) {
+        List<IFile> results = new ArrayList<IFile>();
+        searchByProperty("documentId", documentId, File.class).forEach(f -> results.add((IFile)f));
+        return results;
+    }
+    
+    @Override
     public List<IFile> getFilesByUsername(String username) {
         List<IFile> results = new ArrayList<IFile>();
         searchByProperty("username", username, File.class).forEach(f -> results.add((IFile)f));
@@ -119,5 +126,10 @@ public class FilesDatabaseClient extends DatabaseClient<IFile> implements
         String query = "SELECT DISTINCT(t.username) FROM " + File.class.getName()  + " t";
         TypedQuery<String> docs = em.createQuery(query, String.class);
         return docs.getResultList();       
+    }
+    
+    @Override
+    public void deleteFile(String fileId) {
+        em.remove(getById(fileId));
     }
 }

@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.springframework.stereotype.Service;
 
@@ -49,8 +52,7 @@ public class FileStorageManager implements IFileStorageManager {
     @Override
     public String getAndCreateStoragePath(String username, String uploadId,
             String documentId) {
-        String path = baseDirectory + File.separator 
-                + getFileFolderPathInBaseFolder(username, uploadId, documentId);
+        String path = getStoragePath(username, uploadId, documentId);
         createDirectory(path);
         return path;
     }
@@ -119,5 +121,42 @@ public class FileStorageManager implements IFileStorageManager {
     public void setFileTypeFolder(String fileTypeFolder) {
         this.fileTypeFolder = fileTypeFolder;
     }
+    
+    private String getStoragePath(String username, String uploadId,
+            String documentId) {
+        return baseDirectory + File.separator 
+                + getFileFolderPathInBaseFolder(username, uploadId, documentId);
+    }
+    
+    public void deleteFile(String username, String uploadId, String documentId, String fileName) throws NepomukFileStorageException {
+        String originalFilePath = getStoragePath(username, uploadId, documentId);
+        Path path = Paths.get(originalFilePath + File.separator + fileName);
+        try {
+            Files.delete(path);
+        } catch (IOException ex) {
+            throw new NepomukFileStorageException("Could not delete file.", ex);
+        }
+        String documentFolder = getStoragePath(username, uploadId, documentId);
+        File docFolder = new File(documentFolder);
+        if (docFolder.isDirectory() && docFolder.list().length == 0) {
+            // If another process adds a file to the folder just before deletion, we do not want to delete the folder.
+            // The goal is to ensure that the folder remains intact even if new files are added during the deletion process.
+            // Using the File.delete() instead of Files.delete(path) as an exception is not required to be thrown in this scenario.
+            boolean deleted = docFolder.delete();
+            if (deleted) {
+                Path documentFolderPath = Paths.get(documentFolder);
+                Path uploadFolderDirectory = documentFolderPath.getParent();
+                File uploadFolder = new File(uploadFolderDirectory.toString());
+                if (uploadFolder.isDirectory() && uploadFolder.list().length == 0) {
+                    uploadFolder.delete();
+                }
+            }
+        }
+    }
 
+    @Override
+    public boolean checkIfFileExists(String username, String uploadId, String documentId, String fileName) {
+        Path path = Paths.get(getStoragePath(username, uploadId, documentId) + File.separator + fileName);
+        return Files.exists(path);
+    }
 }
