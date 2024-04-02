@@ -104,5 +104,13 @@ public abstract class AbstractFileHandler implements IFileTypeHandler {
     
     protected abstract IFileStorageManager getStorageManager();
     
+    public void deleteFile(IFile file) throws NepomukFileStorageException {
+        if (getStorageManager().checkIfFileExists(file.getUsername(), file.getUploadId(), file.getDocumentId(), file.getFilename())) {
+            getStorageManager().deleteFile(file.getUsername(), file.getUploadId(), file.getDocumentId(), file.getFilename());
+        }
+        // files manager will be called to delete the file from the database. 
+        // Even if the file does not exist in storage we need to remove the file's database entry as it can be an older file version.
+        filesManager.deleteFile(file.getId());
+    }
 }
 
