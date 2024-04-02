@@ -548,8 +548,8 @@
         </plugins>
     </build>
 
-    <!--<scm>
-        <connection>scm:svn:http://none</connection>
-        <url>scm:svn:https://none</url>
-    </scm>-->
+    <scm>
+        <connection>scm:git:http://none</connection>
+        <url>scm:git:https://none</url>
+    </scm>
 </project>
