@@ -35,5 +35,31 @@ public interface IFileStorageManager {
 
     public abstract String getFileFolderPathInBaseFolder(String username, String uploadId,
             String fileId);
+    
+    /**
+     * Method to delete a file from storage
+     * 
+     * @param username
+     *            username of user who uploaded an image
+     * @param uploadId
+     *            id of upload a file was part of
+     * @param documentId
+     *            id of document
+     * @param fileId
+     *            id of file
+     * @param deleteEmptyFolders
+     *            if empty folders need to be deleted 
+     * @throws NepomukFileStorageException 
+     */
+    public abstract void deleteFile(String username, String uploadId, String documentId, String fileId) throws NepomukFileStorageException;
 
+    /**
+     * Checks if a file exists at the specified location.
+     * @param username   The username associated with the file.
+     * @param uploadId   The unique identifier for the upload.
+     * @param documentId The identifier for the document.
+     * @param fileName   The name of the file to check.
+     * @return {@code true} if the file exists at the specified location, {@code false} otherwise.
+     */
+    public abstract boolean checkIfFileExists(String username, String uploadId, String documentId, String fileName);
 }

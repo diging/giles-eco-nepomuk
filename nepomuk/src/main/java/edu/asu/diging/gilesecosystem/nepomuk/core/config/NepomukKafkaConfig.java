@@ -15,6 +15,7 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import edu.asu.diging.gilesecosystem.nepomuk.core.service.properties.Properties;
+import edu.asu.diging.gilesecosystem.nepomuk.core.kafka.impl.StorageDeletionRequestReceiver;
 import edu.asu.diging.gilesecosystem.nepomuk.core.kafka.impl.StorageRequestReceiver;
 import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
 
@@ -64,6 +65,11 @@ public class NepomukKafkaConfig implements KafkaConfig {
     @Bean
     public StorageRequestReceiver receiver() {
         return new StorageRequestReceiver();
+    }
+    
+    @Bean
+    public StorageDeletionRequestReceiver deletionReceiver() {
+        return new StorageDeletionRequestReceiver();
     }
 
     @Override

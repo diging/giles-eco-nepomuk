@@ -35,4 +35,14 @@ public interface IFilesManager {
             throws NoUniqueResultException;
 
     List<String> getKnownUsernames();
+    
+    /**
+     * Delete a file given the file ID.
+     * @param fileId 
+     *         ID of the file to be deleted
+     */
+
+    public abstract void deleteFile(String fileId);
+
+    public abstract List<IFile> getFilesByDocumentId(String documentId);
 }
